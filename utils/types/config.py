@@ -16,6 +16,7 @@ try:
 except ImportError:
     logger = None
 from utils.types.base import DictCFG, BaseCFG
+from utils import HOME_DIR
 from utils.types.exception import ConfigTypeError, ConfigError
 
 Admin: TypeAlias = Union[str, int]
@@ -23,7 +24,7 @@ User: TypeAlias = Union[str, int]
 DEFAULT_SPEEDFILE: str = "https://dl.google.com/dl/android/studio/install/3.4.1.0/" \
                          "android-studio-ide-183.5522156-windows.exe"
 DEFAULT_PING_ADDRESS: str = "https://cp.cloudflare.com/generate_204"
-DEFAULT_FONT_PATH: str = str(Path("./resources/alibaba-Regular.ttf").absolute())
+DEFAULT_FONT_PATH: str = str(Path(HOME_DIR).joinpath("./resources/alibaba-Regular.ttf").absolute())
 
 
 class OrderedSafeDumper(SafeDumper):
@@ -37,12 +38,6 @@ OrderedSafeDumper.add_representer(OrderedDict, lambda self, data: self.represent
 class CoreCFG(DictCFG):
     vendor: str = None
     path: str = None
-
-    def from_obj(self, obj: dict) -> "DictCFG":
-        if not isinstance(obj, dict):
-            return self
-        if "vendor" in obj:
-            a = obj.pop("vendor")
 
 
 @dataclass
@@ -59,7 +54,7 @@ class Mihomo(ClashCFG):
 
 
 @dataclass
-class FullTCore(CoreCFG):
+class FullTCoreCFG(CoreCFG):
     vendor: str = "fulltcore"
 
 
@@ -201,9 +196,16 @@ class WMCFG(DictCFG):
 
 
 @dataclass
+class EmojiCFG(DictCFG):
+    enable: bool = True
+    source: str = "TwemojiLocalSource"
+
+
+@dataclass
 class ImageCFG(DictCFG):
-    title: str = "FullTclash"
+    title: str = "Koipy"
     font: str = DEFAULT_FONT_PATH
+    emoji: EmojiCFG = EmojiCFG()
     speedEndColorSwitch: bool = False
     endColorsSwitch: bool = False
     compress: bool = False
@@ -341,7 +343,7 @@ class KoiConfig(DictCFG):
     admin: List[Admin] = field(default_factory=list)
     user: List[User] = field(default_factory=list)
     bot: BotCFG = BotCFG()
-    core: ClashCFG = ClashCFG()
+    core: CoreCFG = FullTCoreCFG()
     socks5Proxy: str = None
     httpProxy: str = None
     anti_group: bool = False
@@ -377,28 +379,37 @@ class KoiConfig(DictCFG):
                 self.slaveConfig[k] = a_slave
         return self
 
+    def padding_core(self, key, obj):
+        __raw_v_ = obj.pop(key)
+        if isinstance(__raw_v_, dict):
+            vendor = __raw_v_.get('vendor', "fulltcore")
+            if vendor == "fulltcore":
+                self.core = FullTCoreCFG()
+
+    def padding_admin_user(self, key: str, obj: dict):
+        _t_l = []
+        if key in obj:
+            _t_raw_v_ = obj.pop(key)
+            if isinstance(_t_raw_v_, list):
+                for _t_v in _t_raw_v_:
+                    if isinstance(_t_v, (str, int)):
+                        _t_l.append(_t_v)
+                setattr(self, key, _t_l)
+
     def from_obj(self, obj: dict) -> "KoiConfig":
         if not isinstance(obj, dict):
             return self
 
-        def padding_admin_user(key: str):
-            _t_l = []
-            if key in obj:
-                _t_raw_v_ = obj.pop(key)
-                if isinstance(_t_raw_v_, list):
-                    for _t_v in _t_raw_v_:
-                        if isinstance(_t_v, (str, int)):
-                            _t_l.append(_t_v)
-                    setattr(self, key, _t_l)
-
         if "admin" in obj:
-            padding_admin_user("admin")
+            self.padding_admin_user("admin", obj)
         if "user" in obj:
-            padding_admin_user("user")
+            self.padding_admin_user("user", obj)
         if "rule" in obj:
             _raw_v = obj.pop("rule")
             if isinstance(_raw_v, dict):
                 self.from_dict("rule", _raw_v, Rule())
+        if "core" in obj:
+            self.padding_core("core", obj)
         if "slaveConfig" in obj:
             _raw_v = obj.pop("slaveConfig")
             if isinstance(_raw_v, dict):
@@ -425,12 +436,13 @@ class KoiConfig(DictCFG):
         except Exception as e:
             raise ConfigError from e
 
-    def from_file(self, path: str | bytes | PathLike) -> None:
+    def from_file(self, path: str | bytes | PathLike) -> "KoiConfig":
         with open(path, 'r', encoding='utf-8') as __fp:
             rawcfg: dict = yaml.safe_load(__fp)
         self.with_logger(rawcfg)
+        return self
 
-    def from_yaml(self, yaml_str: str | bytes) -> None:
+    def from_yaml(self, yaml_str: str | bytes) -> "KoiConfig":
         """
         从yaml格式化字符串反序列化然后填充配置
         """
@@ -439,6 +451,7 @@ class KoiConfig(DictCFG):
         io_instance = io.BytesIO(yaml_str)
         rawcfg: dict = yaml.safe_load(io_instance)
         self.with_logger(rawcfg)
+        return self
 
     def to_json(self) -> str:
         json_str = json.dumps(self, default=lambda o: o.value if isinstance(o, Enum) else o.__dict__,
@@ -461,8 +474,6 @@ def test():
     print(_ftcfg.admin)
     for f in fields(_ftcfg):
         print(f.name, f.type)
-
-    _ftcfg = _ftcfg.from_obj("111")
     print(_ftcfg)
 
 
@@ -471,10 +482,12 @@ if __name__ == "__main__":
 
     t1 = time.time()
     test()
-    # ftcfg = KoiConfig()
-    # ftcfg.from_file("ftconfig.yml")
-    # print(ftcfg.bot)
-    # with open("ftconfig3.yml", 'wb') as _fp:
-    #     ftcfg.to_yaml(_fp)
+    ftcfg = KoiConfig()
+    ftcfg.from_file("ftconfig.yml")
+    print(ftcfg.image.color.outColor)
+    ftcfg.image.color.outColor.sort(key=lambda x: x.label)
+    print(ftcfg.image.color.outColor)
+    with open("ftconfig3.yml", 'wb') as _fp:
+        ftcfg.to_yaml(_fp)
 
     print("耗时: ", time.time() - t1)
