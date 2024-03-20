@@ -120,11 +120,23 @@ class RuntimeCFG(DictCFG):
 
 @dataclass
 class Color(DictCFG):
-    label: int = 0
+    label: float = 0
     name: str = ""
     value: str = "#ffffff"
     alpha: int = 255
     end_color: str = "#ffffff"
+
+    def from_obj(self, obj: dict) -> "DictCFG":
+        if 'label' in obj:
+            raw_v = obj.pop('label')
+            if isinstance(raw_v, int):
+                self.label = float(raw_v)
+        if 'alpha' in obj:
+            raw_v = obj.pop('alpha')
+            if isinstance(raw_v, float):
+                self.alpha = int(raw_v)
+        super().from_obj(obj)
+        return self
 
 
 @dataclass
