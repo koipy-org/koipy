@@ -381,7 +381,7 @@ class KoiDraw(BaseExport):
         for i in _info_list_width[2:]:
             x = start_x
             end = start_x + i
-            idraw.line([(x, _lspace), (x, self.height - _lspace * 2)], fill="#EAEAEA", width=2)
+            idraw.line([(x, _lspace), (x, self.height - _lspace * 3)], fill="#EAEAEA", width=2)
             start_x = end
 
     def draw_content(self, draw: Union[Pilmoji, ImageDraw.ImageDraw], xy: tuple, ct: str, fill=(0, 0, 0)):
@@ -408,9 +408,14 @@ class KoiDraw(BaseExport):
         :return:
         """
         _info_list_width = self.width_list
+
         _ignore = self.allinfo.get('percent_ignore', ['序号', self.primarykey, '平均速度', '每秒速度', '最大速度'
-                                                      '类型', 'HTTP(S)延迟', 'TLS RTT', '延迟RTT', 'HTTP延迟'])
+                                                                                             '类型', 'HTTP(S)延迟',
+                                                      'TLS RTT', '延迟RTT', 'HTTP延迟'])
         _key_list = self.get_key_list()
+        # if any((True for k in _key_list if isinstance(k, str) and "速度" in k)):
+        #     # 当有速度相关的矩阵时，不绘制解锁百分比
+        #     return
         _stats = unlock_stats(self.info)
         _height = self.get_height()
         ls = self.cfg.linespace
@@ -422,12 +427,16 @@ class KoiDraw(BaseExport):
                 continue
             else:
                 raw_percent = _stats.get(_k, {}).get('解锁', 0) / self.cfg.basedataNum
-                _percent = f"{(raw_percent * 100):.1f}%"
-                x = self.get_mid(start, start + _info_list_width[_i], _percent)
+                _percent = int(raw_percent * 100)
+                if _percent == 0:
+                    start += _info_list_width[_i]
+                    continue
+                _percent_str = f"{_percent}%"
+                x = self.get_mid(start, start + _info_list_width[_i], _percent_str)
                 block = c_block_grad((_info_list_width[_i], int(raw_percent * ls)), self.koicfg.image.color.yes,
                                      self._end_color_flag)
                 img.alpha_composite(block, (start, y - 7))
-                idraw.text((x, y), str(_percent), fill=(0, 0, 0), font=self._font)
+                idraw.text((x, y), str(_percent_str), fill=(0, 0, 0), font=self._font)
                 start += _info_list_width[_i]
 
     def hit_speed_color(self, speed_v: int):
