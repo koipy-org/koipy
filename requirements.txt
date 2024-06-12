@@ -1,0 +1,17 @@
+aiohttp>=3.9.2
+async_timeout>=4.0.2
+Pillow==10.1.0
+pilmoji>=2.0.4
+Pyrogram==2.0.106
+PyYAML>=6.0
+requests>=2.26.0
+tgcrypto>=1.2.3
+APScheduler==3.6.3
+emoji==1.7.0
+loguru>=0.6.0
+aiohttp_socks>=0.8.4
+tzlocal==4.1
+geoip2==4.6.0
+cryptography==42.0.4
+google-re2>=1.0
+psutil>=5.9.8

@@ -1,37 +1,26 @@
-"""配置反序列化后得到的类，参数意义请参阅 ./resources/config.yaml.example"""
-import json
-
-from collections import OrderedDict
-from dataclasses import field, dataclass, asdict, fields
-from enum import Enum
+"""配置反序列化后得到的类，参数意义请参阅 ./resources/config.example.yaml"""
+import os
+from dataclasses import field, dataclass
 from os import PathLike
-from pathlib import Path
-from typing import List, Any, Dict, TypeAlias, Union
 
-import yaml
-from yaml import SafeDumper
+from pathlib import Path
+from typing import List, Any, Dict, Union, Type
+
+from utils.types.manager import ConfigManager
+from utils.types.translation import Translation
 
 try:
     from loguru import logger
 except ImportError:
     logger = None
-from utils.types.base import DictCFG, BaseCFG
-from utils import HOME_DIR
-from utils.types.exception import ConfigTypeError, ConfigError
+from utils.types.base import DictCFG, BaseCFG, AdminList, UserList
 
-Admin: TypeAlias = Union[str, int]
-User: TypeAlias = Union[str, int]
+HOME_DIR = os.getcwd()
+
 DEFAULT_SPEEDFILE: str = "https://dl.google.com/dl/android/studio/install/3.4.1.0/" \
                          "android-studio-ide-183.5522156-windows.exe"
 DEFAULT_PING_ADDRESS: str = "https://cp.cloudflare.com/generate_204"
-DEFAULT_FONT_PATH: str = str(Path(HOME_DIR).joinpath("./resources/alibaba-Regular.ttf").absolute())
-
-
-class OrderedSafeDumper(SafeDumper):
-    pass
-
-
-OrderedSafeDumper.add_representer(OrderedDict, lambda self, data: self.represent_dict(data.items()))
+DEFAULT_FONT_PATH: str = str(Path(HOME_DIR).joinpath("./resources/alibaba-Regular.ttf").absolute().as_posix())
 
 
 @dataclass
@@ -43,7 +32,6 @@ class CoreCFG(DictCFG):
 @dataclass
 class ClashCFG(CoreCFG):
     vendor: str = "clash"
-    allowCaching: bool = False
     branch: str = "origin"
 
 
@@ -56,6 +44,8 @@ class Mihomo(ClashCFG):
 @dataclass
 class FullTCoreCFG(CoreCFG):
     vendor: str = "fulltcore"
+    buildtoken: str = "c7004ded9db897e538405c67e50e0ef0c3dbad717e67a92d02f6ebcfd1022a5ad1d2c4419541f538ff623051759" \
+                      "ec000d2f426e03f9709a6608570c5b9141a6b"
 
 
 @dataclass
@@ -72,10 +62,12 @@ class BotCFG(DictCFG):
     api_hash: str = None
     bot_token: str = None
     proxy: str = None
-    strictmode: bool = False
-    scripttext: str = "⏳连通性测试进行中..."
-    analyzetext: str = "⏳节点测试拓扑进行中..."
-    speedtext: str = "⏳速度测试进行中..."
+    ipv6: bool = False
+    antiGroup: bool = False
+    strictMode: bool = False
+    scriptText: str = "⏳连通性测试进行中..."
+    analyzeText: str = "⏳节点测试拓扑进行中..."
+    speedText: str = "⏳速度测试进行中..."
     bar: str = "="
     bleft: str = "["
     bright: str = "]"
@@ -93,10 +85,10 @@ class BotCFG(DictCFG):
 
 @dataclass
 class RuntimeCFG(DictCFG):
-    pingurl: str = "https://www.gstatic.com/generate_204"
-    speedfile: List[str] = field(default_factory=lambda: [DEFAULT_SPEEDFILE])
-    speednodes: int = 300
-    speedthread: int = 4
+    pingURL: str = "https://www.gstatic.com/generate_204"
+    speedFiles: List[str] = field(default_factory=lambda: [DEFAULT_SPEEDFILE])
+    speedNodes: int = 300
+    speedThreads: int = 4
     nospeed: bool = False
     ipstack: bool = False
     localip: bool = False
@@ -105,14 +97,19 @@ class RuntimeCFG(DictCFG):
     dcity: str = None
     interval: int = 10
     entrance: str = "ip"
+    geoipAPI: str = "ip-api.com"
+    geoipKey: str = None
+
+    def from_list(self, attr: str, obj: list, cls=None) -> "RuntimeCFG":
+        if isinstance(obj, list):
+            self.speedFiles = obj
+        elif isinstance(obj, str):
+            self.speedFiles = [obj]
+        return self
 
     def from_obj(self, obj: dict) -> "RuntimeCFG":
-        if "speedfile" in obj:
-            raw_v = obj.pop("speedfile")
-            if isinstance(raw_v, list):
-                self.speedfile = raw_v
-            elif isinstance(raw_v, str):
-                self.speedfile = [raw_v]
+        if "speedFiles" in obj:
+            self.from_list("speedFiles", obj.pop("speedFiles"))
         else:
             super().from_obj(obj)
         return self
@@ -144,13 +141,13 @@ class BackGroundColor(DictCFG):
     """
     背景图颜色配置
     """
-    script: Color = Color()
-    inbound: Color = Color()
-    outbound: Color = Color()
-    speed: Color = Color()
-    speedTitle: Color = Color(value="#EAEAEA")
-    scriptTitle: Color = Color(value="#EAEAEA")
-    topoTitle: Color = Color(value="#EAEAEA")
+    script: Color = field(default_factory=Color)
+    inbound: Color = field(default_factory=Color)
+    outbound: Color = field(default_factory=Color)
+    speed: Color = field(default_factory=Color)
+    speedTitle: Color = field(default_factory=lambda: Color(value="#EAEAEA"))
+    scriptTitle: Color = field(default_factory=lambda: Color(value="#EAEAEA"))
+    topoTitle: Color = field(default_factory=lambda: Color(value="#EAEAEA"))
 
 
 @dataclass
@@ -158,16 +155,16 @@ class ColorCFG(DictCFG):
     speed: List[Color] = field(default_factory=list)
     delay: List[Color] = field(default_factory=list)
     outColor: List[Color] = field(default_factory=list)
-    yes: Color = Color(value="#bee47e", end_color="#bee47e")
-    no: Color = Color(value="#ee6b73", end_color="#ee6b73")
-    na: Color = Color(value="#8d8b8e", end_color="#8d8b8e")
-    wait: Color = Color(value="#dcc7e1", end_color="#dcc7e1")
-    ipriskLow: Color = Color()
-    ipriskMedium: Color = Color()
-    ipriskHigh: Color = Color()
-    ipriskVeryHigh: Color = Color()
-    warn: Color = Color(value="#fcc43c", end_color="#fcc43c")
-    background: "BackGroundColor" = BackGroundColor()
+    yes: Color = field(default_factory=lambda: Color(value="#bee47e", end_color="#bee47e"))
+    no: Color = field(default_factory=lambda: Color(value="#ee6b73", end_color="#ee6b73"))
+    na: Color = field(default_factory=lambda: Color(value="#8d8b8e", end_color="#8d8b8e"))
+    wait: Color = field(default_factory=lambda: Color(value="#dcc7e1", end_color="#dcc7e1"))
+    ipriskLow: Color = field(default_factory=Color)
+    ipriskMedium: Color = field(default_factory=Color)
+    ipriskHigh: Color = field(default_factory=Color)
+    ipriskVeryHigh: Color = field(default_factory=Color)
+    warn: Color = field(default_factory=lambda: Color(value="#fcc43c", end_color="#fcc43c"))
+    background: BackGroundColor = field(default_factory=lambda: BackGroundColor())
 
     def from_obj(self, obj: dict) -> "ColorCFG":
         def _temp(key: str, instance: BaseCFG):
@@ -190,8 +187,8 @@ class WMCFG(DictCFG):
     """
     enable: bool = False
     text: str = "只是一个水印"
-    color: Color = Color(value="#000000", alpha=16)
-    alpha: int = color.alpha
+    color: Color = field(default_factory=lambda: Color(value="#000000", alpha=16))
+    alpha: int = 16
     size: int = 64
     angle: Union[float, int] = -16.0
     row_spacing: int = 1
@@ -217,13 +214,13 @@ class EmojiCFG(DictCFG):
 class ImageCFG(DictCFG):
     title: str = "Koipy"
     font: str = DEFAULT_FONT_PATH
-    emoji: EmojiCFG = EmojiCFG()
+    emoji: EmojiCFG = field(default_factory=lambda: EmojiCFG())
     speedEndColorSwitch: bool = False
     endColorsSwitch: bool = False
     compress: bool = False
-    color: ColorCFG = ColorCFG()
-    watermark: WMCFG = WMCFG()
-    nonCommercialWatermark: WMCFG = WMCFG(text="请勿用于商业用途")
+    color: ColorCFG = field(default_factory=lambda: ColorCFG())
+    watermark: WMCFG = field(default_factory=lambda: WMCFG())
+    nonCommercialWatermark: WMCFG = field(default_factory=lambda: WMCFG(text="请勿用于商业用途"))
 
 
 @dataclass
@@ -238,14 +235,14 @@ class SlaveOption(DictCFG):
 
 
 @dataclass
-class MiaoSpeedOption(DictCFG):
+class MiaoSpeedOption(SlaveOption):
     downloadDuration: int = 8
     downloadThreading: int = 4
     pingAverageOver: int = 3
     taskRetry: int = 3
     downloadURL: str = DEFAULT_SPEEDFILE
     pingAddress: str = DEFAULT_PING_ADDRESS
-    stunURL: str = "udp://stun.ideasip.com:3478"
+    stunURL: str = "udp://stunserver.stunprotocol.org:3478"
 
 
 @dataclass
@@ -256,10 +253,10 @@ class Slave(DictCFG):
     token: str = None
     type: str = None
     address: str = None
-    option: SlaveOption = SlaveOption()
+    option: SlaveOption = field(default_factory=lambda: SlaveOption())
 
 
-DEFAULT_SLAVE: Slave = Slave("default-slave", "本地后端")
+DEFAULT_SLAVE: Slave = Slave("Local", "本地后端")
 
 
 @dataclass
@@ -284,12 +281,12 @@ class AiohttpWSSlave(Slave):
 @dataclass
 class MiaoSpeedSlave(Slave):
     type: str = "miaospeed"
-    skip_cert_verify: bool = True
+    skipCertVerify: bool = True
     tls: bool = True
     invoker: str = None
     branch: str = "fulltclash"
     buildtoken: str = None
-    option: MiaoSpeedOption = MiaoSpeedOption()
+    option: MiaoSpeedOption = field(default_factory=lambda: MiaoSpeedOption())
 
 
 @dataclass
@@ -322,8 +319,8 @@ class UserbotCFG(DictCFG):
 
 
 class ScriptType:
-    PYTHON: int = 0
-    GOJA_JS: int = 1
+    CPython: str = "cpython"
+    GoJajs: int = "gojajs"
 
 
 class SortType:
@@ -338,7 +335,8 @@ class SortType:
 
 @dataclass
 class Script(DictCFG):
-    type: str = ScriptType.PYTHON
+    type: str = ScriptType.CPython
+    name: str = None
 
 
 @dataclass
@@ -351,155 +349,85 @@ class Rule(DictCFG):
 
 
 @dataclass
-class KoiConfig(DictCFG):
-    admin: List[Admin] = field(default_factory=list)
-    user: List[User] = field(default_factory=list)
-    bot: BotCFG = BotCFG()
-    core: CoreCFG = FullTCoreCFG()
-    socks5Proxy: str = None
-    httpProxy: str = None
-    anti_group: bool = False
-    subconverter: SubConverterCFG = SubConverterCFG()
-    geoipAPI: str = "ip-api.com"
-    geoipKey: str = None
-    runtime: RuntimeCFG = RuntimeCFG()
-    buildtoken: str = "c7004ded9db897e538405c67e50e0ef0c3dbad717e67a92d02f6ebcfd1022a5ad1d2c4419541f538ff623051759" \
-                      "ec000d2f426e03f9709a6608570c5b9141a6b"
-    rule: Dict[str, Rule] = field(default_factory=dict)
-    slaveConfig: Dict[str, Slave] = field(default_factory=lambda: {DEFAULT_SLAVE.id: DEFAULT_SLAVE})
-    userConfig: Dict[str, Any] = field(default_factory=lambda: {"rule": {}, "usage-ranking": {}})
-    subinfo: Dict[str, SubInfoCFG] = field(default_factory=dict)
-    userbot: UserbotCFG = UserbotCFG()
-    image: ImageCFG = ImageCFG()
+class SlaveConfig(DictCFG):
+    default: str = ""
+    slaves: List[Slave] = None
 
-    def from_slaveConfig(self, obj: dict) -> "KoiConfig":
-        self.slaveConfig = {}
-        for k, v in obj.items():
-            s_type = v.get('type', None)
-            if isinstance(s_type, str) or k == "default":
-                if s_type == AiohttpWSSlave.type:
-                    a_slave = AiohttpWSSlave()
-                elif s_type == MiaoSpeedSlave.type:
-                    a_slave = MiaoSpeedSlave()
-                elif s_type == BotSlave.type:
-                    a_slave = BotSlave()
-                elif s_type == LocalSlave.type and k == "default":
-                    a_slave = LocalSlave()
-                else:
-                    a_slave = Slave()
-                a_slave.from_obj(v)
-                self.slaveConfig[k] = a_slave
+
+@dataclass
+class TranslationCFG(DictCFG):
+    lang: str = "zh_CN"
+    resources: Dict[str, str] = field(default_factory=dict)
+
+    def from_obj(self, obj: dict) -> "TranslationCFG":
+        if "resources" in obj:
+            raw_v = obj.pop("resources")
+            if not isinstance(raw_v, dict):
+                return self
+            for k, v in raw_v.items():
+                if not isinstance(v, str):
+                    continue
+                self.resources[k] = v
+        super().from_obj(obj)
         return self
 
-    def padding_core(self, key, obj):
-        __raw_v_ = obj.pop(key)
-        if isinstance(__raw_v_, dict):
-            vendor = __raw_v_.get('vendor', "fulltcore")
-            if vendor == "fulltcore":
-                self.core = FullTCoreCFG()
 
-    def padding_admin_user(self, key: str, obj: dict):
-        _t_l = []
-        if key in obj:
-            _t_raw_v_ = obj.pop(key)
-            if isinstance(_t_raw_v_, list):
-                for _t_v in _t_raw_v_:
-                    if isinstance(_t_v, (str, int)):
-                        _t_l.append(_t_v)
-                setattr(self, key, _t_l)
+@dataclass
+class KoiConfig(DictCFG, ConfigManager):
+    admin: AdminList = field(default_factory=AdminList)
+    user: UserList = field(default_factory=UserList)
+    socks5Proxy: str = None
+    httpProxy: str = None
+    bot: BotCFG = field(default_factory=lambda: BotCFG())
+    core: CoreCFG = field(default_factory=lambda: FullTCoreCFG())
+    subconverter: SubConverterCFG = field(default_factory=lambda: SubConverterCFG())
+    runtime: RuntimeCFG = field(default_factory=lambda: RuntimeCFG())
+    rules: List[Rule] = field(default_factory=list)
+    slaveConfig: SlaveConfig = field(default_factory=lambda: SlaveConfig())
+    userConfig: Dict[str, Any] = field(default_factory=lambda: {"rule": {}, "usageRanking": {}})
+    subinfo: Dict[str, SubInfoCFG] = field(default_factory=dict)
+    translation: TranslationCFG = field(default_factory=lambda: TranslationCFG())
+    userbot: UserbotCFG = field(default_factory=lambda: UserbotCFG())
+    image: ImageCFG = field(default_factory=lambda: ImageCFG())
+    _raw_config: dict = field(default_factory=dict)
 
     def from_obj(self, obj: dict) -> "KoiConfig":
         if not isinstance(obj, dict):
             return self
-
-        if "admin" in obj:
-            self.padding_admin_user("admin", obj)
-        if "user" in obj:
-            self.padding_admin_user("user", obj)
-        if "rule" in obj:
-            _raw_v = obj.pop("rule")
-            if isinstance(_raw_v, dict):
-                self.from_dict("rule", _raw_v, Rule())
-        if "core" in obj:
-            self.padding_core("core", obj)
-        if "slaveConfig" in obj:
-            _raw_v = obj.pop("slaveConfig")
-            if isinstance(_raw_v, dict):
-                self.from_slaveConfig(_raw_v)
-        if "userConfig" in obj:
-            _raw_v = obj.pop("userConfig")
-            if isinstance(_raw_v, dict):
-                self.from_obj(_raw_v)
-        if "subinfo" in obj:
-            _raw_v = obj.pop("subinfo")
-            if isinstance(_raw_v, dict):
-                self.from_dict("subinfo", _raw_v, SubInfoCFG())
         super().from_obj(obj)
         return self
 
-    def with_logger(self, cfg: Any) -> None:
-        try:
-            if logger is None:
-                self.from_obj(cfg)
-            else:
-                logger.catch()(self.from_obj)(cfg)
-        except TypeError as e:
-            raise ConfigTypeError from e
-        except Exception as e:
-            raise ConfigError from e
-
-    def from_file(self, path: str | bytes | PathLike) -> "KoiConfig":
-        with open(path, 'r', encoding='utf-8') as __fp:
-            rawcfg: dict = yaml.safe_load(__fp)
-        self.with_logger(rawcfg)
+    def from_file(self, path: Union[str, bytes, PathLike]) -> "KoiConfig":
+        super().from_file(path)
         return self
 
-    def from_yaml(self, yaml_str: str | bytes) -> "KoiConfig":
-        """
-        从yaml格式化字符串反序列化然后填充配置
-        """
-        import io
-        yaml_str = yaml_str.encode() if isinstance(yaml_str, str) else yaml_str if isinstance(yaml_str, bytes) else ""
-        io_instance = io.BytesIO(yaml_str)
-        rawcfg: dict = yaml.safe_load(io_instance)
-        self.with_logger(rawcfg)
+
+@dataclass
+class SystemCFG(DictCFG, ConfigManager):
+    translation: Dict[str, Translation] = field(default_factory=dict)
+
+    def from_obj(self, obj: dict) -> "SystemCFG":
+        if not isinstance(obj, dict):
+            return self
+        super().from_obj(obj)
         return self
 
-    def to_json(self) -> str:
-        json_str = json.dumps(self, default=lambda o: o.value if isinstance(o, Enum) else o.__dict__,
-                              ensure_ascii=True, separators=(',', ':'))
-        return json_str
-
-    def to_yaml(self, stream=None) -> bytes:
-        """
-        返回此对象的序列化字符串，如果提供IO流，则将输出重定向至给定的流，此时将返回 None
-        """
-        dictobj = asdict(self, dict_factory=OrderedDict)
-        dictobj = self.rename_to_yaml(dictobj)
-        yaml_str: bytes = yaml.dump(dictobj, stream, Dumper=OrderedSafeDumper, encoding="utf-8", allow_unicode=True)
-        return yaml_str
-
-
-def test():
-    _ftcfg = KoiConfig()
-    _ftcfg.from_yaml("admin: [11111, 2222]")
-    print(_ftcfg.admin)
-    for f in fields(_ftcfg):
-        print(f.name, f.type)
-    print(_ftcfg)
+    def load_tr_config(self, obj: Dict[str, str], _class_or_instance: Union[Type[BaseCFG], BaseCFG]) -> "SystemCFG":
+        if isinstance(_class_or_instance, Translation):
+            trclass = _class_or_instance.__class__
+        elif issubclass(_class_or_instance, Translation):
+            trclass = _class_or_instance
+        else:
+            return self
+        self.translation['zh_CN'] = Translation()
+        if not isinstance(obj, dict):
+            return self
+        for k, v in obj.items():
+            if not isinstance(k, str) or not isinstance(v, str):
+                continue
+            self.translation[k] = trclass().from_file(v)
+        return self
 
 
 if __name__ == "__main__":
-    import time
-
-    t1 = time.time()
-    test()
-    ftcfg = KoiConfig()
-    ftcfg.from_file("ftconfig.yml")
-    print(ftcfg.image.color.outColor)
-    ftcfg.image.color.outColor.sort(key=lambda x: x.label)
-    print(ftcfg.image.color.outColor)
-    with open("ftconfig3.yml", 'wb') as _fp:
-        ftcfg.to_yaml(_fp)
-
-    print("耗时: ", time.time() - t1)
+    pass

@@ -9,10 +9,10 @@ from typing import Union, Tuple, List
 from PIL import Image, ImageDraw, ImageFont, ImageColor
 from pilmoji import Pilmoji
 
-from utils import emoji, __version__, HOME_DIR
-from utils.types import Color
+from utils import myemoji, __version__, HOME_DIR
+from utils.types.config import Color, KoiConfig
 from utils.algorithm import atoi
-from utils.types.draw import KoiConfig, DrawConfig
+from utils.types.draw import DrawConfig
 
 _clock_emoji_list = ["🕛", "🕐", "🕑", "🕒", "🕓", "🕔", "🕕", "🕖", "🕗", "🕘", "🕙", "🕚"]
 
@@ -27,8 +27,11 @@ def getrgb(hexcolor: str):
     """
     转换16进制格式的颜色值到RGB格式
     """
+    _t = list()
     if hexcolor.startswith('#'):
-        return tuple(int(hexcolor.lstrip('#')[i:i + 2], 16) for i in (0, 2, 4))
+        for i in (0, 2, 4):
+            _t.append(int(hexcolor.lstrip('#')[i:i + 2], 16))
+        return _t[0], _t[1], _t[2]
     else:
         raise ValueError("颜色值必须为十六进制")
 
@@ -41,6 +44,7 @@ def color_block(size: Tuple[int, int], c: Color):
     :return: Image
     """
     rgba = getrgb(c.value) + (c.alpha,)
+    rgba = rgba[:3]
     return Image.new('RGBA', size, rgba)
 
 
@@ -95,9 +99,9 @@ class BaseExport:
         self.primarykey = str(primarykey)
         self.basedata = list(allinfo.pop(primarykey))
         self.allinfo = allinfo
-        self.info = self.getPrintinfo()
+        self.info = self.get_printinfo()
 
-    def getPrintinfo(self):
+    def get_printinfo(self):
         """
         为了统一长度，self.info 一定和主键长度对齐
         """
@@ -132,7 +136,7 @@ class KoiDraw(BaseExport):
         self.color.outColor.sort(key=lambda x: x.label)
         self.emoji_enable = self.koicfg.image.emoji.enable
         _source = self.koicfg.image.emoji.source
-        self.emoji_source = getattr(emoji, _source) if _source in emoji.__all__ else emoji.TwemojiLocalSource
+        self.emoji_source = getattr(myemoji, _source) if _source in myemoji.__all__ else myemoji.TwemojiLocalSource
         self.width, self.width_list = self.get_width()  # width_list包含主键和序号
         self.height = self.get_height()
 
@@ -227,7 +231,7 @@ class KoiDraw(BaseExport):
         img_width = maxwidth
         return int(img_width), width_list
 
-    def get_mid(self, start_x: Union[int, float], end_x: Union[int, float], str_name: str) -> Union[int, float]:
+    def get_mid(self, start_x: Union[int, float], end_x: Union[int, float], str_name: str) -> int:
         """
         居中对齐的起始位置
         :param start_x:
@@ -238,6 +242,7 @@ class KoiDraw(BaseExport):
         mid_xpath = (end_x + start_x) / 2
         strname_width = self.text_width(str_name)
         xpath = mid_xpath - strname_width / 2
+        xpath = int(xpath)
         return xpath
 
     def draw_watermark(self, original_image: Image.Image) -> Image.Image:
@@ -248,7 +253,7 @@ class KoiDraw(BaseExport):
         uid = self.allinfo.get('task', {}).get('initiator', '')
         if uid and uid not in self.koicfg.user:
             watermark = self.koicfg.image.nonCommercialWatermark
-        if watermark.enable:
+        if not watermark.enable:
             return original_image
         watermark_text = watermark.text
         shadow = bool(watermark.shadow)  # 是否是盲水印
@@ -303,13 +308,21 @@ class KoiDraw(BaseExport):
     def get_footer(self, style: int) -> str:
         if style == 1:
             _wtime = self.allinfo.get('wtime', 0)
-            _default_slavename = self.koicfg.slaveConfig.get('default-slave', {}).get('comment', 'Local')
+            _default_slavename = 'Local'
             _slavename = self.allinfo.get('slave', {}).get('comment', _default_slavename)
             _sort = self.allinfo.get('sort', '订阅原序')
+            _traffic_used = self.allinfo.get('消耗流量', "")
+            _traffic_used = f"消耗流量={_traffic_used:.1f}MB" if _traffic_used else ''
             _filter_include = self._filter.get('include', '')
             _filter_exclude = self._filter.get('exclude', '')
-            footer = f"🧬版本={__version__}  后端={_slavename}  排序={_sort}  耗时={_wtime}s  " + \
-                     f"过滤器={_filter_include} <-> {_filter_exclude}"
+            _thread = self.allinfo.get('线程', '')
+            _thread = f"线程={_thread}" if _thread else ''
+            footer = (f"🧬版本={__version__}  "
+                      f"后端={_slavename}  " + f"{_traffic_used}  " + f"{_thread}  " +
+                      f"排序={_sort}  "
+                      f"耗时={_wtime}s  "
+                      f"过滤器={_filter_include} <-> {_filter_exclude}"
+                      )
             return footer
         elif style == 2:
             _e_time = get_clock_emoji()
@@ -357,7 +370,7 @@ class KoiDraw(BaseExport):
         _key_list = self.get_key_list()
         if "HTTP(S)延迟" in _key_list:
             # key标签值重命名
-            new_text = "HTTPS延迟" if self.koicfg.runtime.pingurl.startswith("https") else "HTTP延迟"
+            new_text = "HTTPS延迟" if self.koicfg.runtime.pingURL.startswith("https") else "HTTP延迟"
             _key_list[_key_list.index("HTTP(S)延迟")] = new_text
         text_list = []
         start_x = 0
@@ -384,7 +397,7 @@ class KoiDraw(BaseExport):
             idraw.line([(x, _lspace), (x, self.height - _lspace * 3)], fill="#EAEAEA", width=2)
             start_x = end
 
-    def draw_content(self, draw: Union[Pilmoji, ImageDraw.ImageDraw], xy: tuple, ct: str, fill=(0, 0, 0)):
+    def draw_content(self, draw: Union[Pilmoji, ImageDraw.ImageDraw], xy: Tuple[int, int], ct: str, fill=(0, 0, 0)):
         """
         绘制具体内容
         ct: content内容
@@ -409,13 +422,10 @@ class KoiDraw(BaseExport):
         """
         _info_list_width = self.width_list
 
-        _ignore = self.allinfo.get('percent_ignore', ['序号', self.primarykey, '平均速度', '每秒速度', '最大速度'
-                                                                                             '类型', 'HTTP(S)延迟',
-                                                      'TLS RTT', '延迟RTT', 'HTTP延迟'])
+        _ignore = self.allinfo.get('percent_ignore', [self.primarykey, '序号', '类型',
+                                                      '平均速度', '每秒速度', '最大速度'
+                                                      'HTTP(S)延迟', 'TLS RTT', '延迟RTT', 'HTTP延迟'])
         _key_list = self.get_key_list()
-        # if any((True for k in _key_list if isinstance(k, str) and "速度" in k)):
-        #     # 当有速度相关的矩阵时，不绘制解锁百分比
-        #     return
         _stats = unlock_stats(self.info)
         _height = self.get_height()
         ls = self.cfg.linespace
@@ -558,9 +568,11 @@ class KoiDraw(BaseExport):
         # 在一个大循环里绘制，主要思路是按行绘制
         for t in range(self.cfg.basedataNum):
             # 序号
-            self.draw_content(idraw, (self.get_mid(0, _width_list[0], str(t + 1)), ls * (t + 2) + ctofs), str(t + 1))
+            self.draw_content(idraw,
+                              (self.get_mid(0, _width_list[0], str(t + 1)), int(ls * (t + 2) + ctofs)),
+                              str(t + 1))
             # 主键内容
-            self.draw_content(pilmoji, (_width_list[0] + 10, ls * (t + 2) + ctofs), self.basedata[t])
+            self.draw_content(pilmoji, (_width_list[0] + 10, int(ls * (t + 2) + ctofs)), self.basedata[t])
             # 绘制颜色块
             self.draw_block(img, t, _key_list, _width_list)
             # 其他文本内容
@@ -573,7 +585,7 @@ class KoiDraw(BaseExport):
                     continue
                 else:
                     x = self.get_mid(width, width + _width_list[i2], self.info[t2][t])
-                    self.draw_content(idraw, (x, ls * (t + 2) + ctofs), self.info[t2][t])
+                    self.draw_content(idraw, (x, int(ls * (t + 2) + ctofs)), self.info[t2][t])
                 width += _width_list[i2]
 
         self.draw_line(idraw)  # 绘制线条
