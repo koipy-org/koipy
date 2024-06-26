@@ -64,41 +64,6 @@ jobs:
         run: |
           pip install Nuitka
           python -m nuitka --version
-      - name: Install project dependencies
-        if: runner.os != 'Linux'
-        run: |
-          pip install -r requirements.txt
-      - name: Compile project with Windows
-        if: runner.os == 'Windows'
-        uses: Nuitka/Nuitka-Action@main
-        with:
-          nuitka-version: main
-          script-name: main.py
-          onefile: false
-          standalone: true
-          output-dir: o
-          include-data-files: "libs/*=libs/"
-          include-data-dir: |
-            resources=resources
-            bin=bin
-          nofollow-import-to: requests,async_timeout,Pillow,pilmoji,yaml,tgcrypto,apscheduler,email,emoji,loguru,websockets,tzlocal,PIL,pkg_resources,pyrogram,geoip,encodings,google-re2,asyncio,aiohttp,addons
-      - name: Compile updater in Windows
-        if: runner.os != 'Linux'
-        uses: Nuitka/Nuitka-Action@main
-        with:
-          nuitka-version: main
-          script-name: updater.py
-          onefile: false
-          standalone: true
-          output-dir: o2
-      - name: process project with pybuild-win.ps1
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: '.github/pybuild-win.ps1'
-#      - name: Compile updater
-#        if: runner.os != 'Windows'
-#        run: |
-#          python -m nuitka --standalone --output-dir=o2 updater.py
       - name: Compile project
         if: runner.os != 'Windows'
         run: |
@@ -106,8 +71,6 @@ jobs:
       - name: Process some files
         if: runner.os != 'Windows'
         run: |
-#          mkdir o/main.dist/addons
-#          cp -r ./addons/* o/main.dist/addons/
           cp -r ${{ env.pythonLocation }}/lib/python3.11/* o/main.dist/
           mv o/main.dist/lib-dynload/_sqlite3.*.so o/main.dist/
           mv o/main.dist/lib-dynload/pyexpat.*.so o/main.dist/
@@ -152,10 +115,3 @@ jobs:
         with:
           name: koipy-${{ matrix.platform }}-amd64
           path: o/main.dist/
-
-      - name: Upload artifact with Windows
-        if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v4
-        with:
-          name: fulltclash-${{ matrix.platform }}-amd64
-          path: o/*.zip
