@@ -1,4 +1,3 @@
-
 from urllib.parse import urlparse
 
 from loguru import logger
@@ -11,6 +10,8 @@ class ParseProxyError(Exception):
 
 
 def parse_proxy(url: str):
+    if url is None:
+        return None
     parsed = urlparse(url)
     scheme = parsed.scheme
 
@@ -49,9 +50,6 @@ def gen_key(msg: Message):
         return str(msg.chat.id) + ":" + str(msg.id)
     else:
         return None
-
-
-
 
 
 if __name__ == "__main__":

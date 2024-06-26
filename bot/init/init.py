@@ -151,7 +151,7 @@ class Init:
             if not os.path.isdir('./resources/emoji/twemoji'):
                 twemoji = TwemojiLocalSource()
                 logger.info("检测到未安装emoji资源包，正在初始化本地emoji...")
-                await twemoji.download_emoji(proxy=CONFIG.httpProxy)
+                await twemoji.download_emoji(proxy=CONFIG.network.httpProxy)
                 if twemoji.init_emoji(twemoji.savepath):
                     logger.info("初始化emoji成功")
                 else:

@@ -2,7 +2,7 @@ import copy
 import json
 import io
 from collections import OrderedDict
-from dataclasses import fields, field
+from dataclasses import fields
 from enum import Enum
 from io import StringIO
 from os import PathLike
