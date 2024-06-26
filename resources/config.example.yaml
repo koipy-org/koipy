@@ -1,0 +1,357 @@
+admin: # 管理员，可以不填，不填删掉。首次启动自动设置管理员。
+- 12345678
+network: # 网络
+  httpProxy: "http://host:port" # http代理，如果设置的话，bot会用这个拉取订阅
+  socks5Proxy: "scoks5://host:port" # socks5代理， bot的代理在下面bot那一栏填
+  userAgent: "ClashMetaForAndroid/2.8.9.Meta Mihomo/0.16" # UA设置，影响订阅获取
+bot:
+  api_id:  # 首次启动必填
+  api_hash:  # 首次启动必填
+  bot_token: str = None # bot的token
+  proxy: socks5://127.0.0.1:11112 # socks5代理
+  ipv6: false #是否使用ipv6连接
+  antiGroup: false
+  strictMode: false
+  scriptText: "" # 进度条文本
+  analyzeText: ""  # 分析进度条文本
+  speedText: "" # 速度进度条文本
+  bar: str = "=" # 进度条
+  bleft: str = "[" # 进度条
+  bright: str = "]" # 进度条
+  bspace: str = "  " # 进度条
+  command: [] # 保留配置，以后用
+image:
+  color: # 颜色配置
+    background: # 背景颜色
+      inbound: # 入口背景
+        alpha: 255 # 透明度
+        end-color: '#ffffff' # 透明度
+        label: 0 # 值
+        name: '' # 名称随意
+        value: '#ffffff'
+      outbound: #出口背景
+        alpha: 255
+        end-color: '#ffffff'
+        label: 0
+        name: ''
+        value: '#ffffff'
+      script: # 连通性测试图
+        alpha: 255
+        end-color: '#ffffff'
+        label: 0
+        name: ''
+        value: '#ffffff'
+      scriptTitle: # 连通性图标题栏颜色
+        alpha: 255
+        end-color: '#ffffff'
+        label: 0
+        name: ''
+        value: '#EAEAEA'
+      speed: # 速度图内容颜色
+        alpha: 255
+        end-color: '#ffffff'
+        label: 0
+        name: ''
+        value: '#ffffff'
+      speedTitle: # 速度图标题栏颜色
+        alpha: 255
+        end-color: '#ffffff'
+        label: 0
+        name: ''
+        value: '#EAEAEA'
+      topoTitle: # 拓扑图标题栏颜色
+        alpha: 255
+        end-color: '#ffffff'
+        label: 0
+        name: ''
+        value: '#EAEAEA'
+    delay: # 延迟配色
+    - label: 1 # 延迟的值， >1 就采用这个颜色 单位ms
+      name: '1'
+      value: '#e4f8f9'
+    - label: 50 # 延迟的值， >50 就采用这个颜色 单位ms
+      name: '2'
+      value: '#e4f8f9'
+    - label: 100 # 以此类推
+      name: '2'
+      value: '#bdedf1'
+    - label: 200
+      name: '3'
+      value: '#96e2e8'
+    - label: 300
+      name: '4'
+      value: '#78d5de'
+    - label: 500
+      name: '5'
+      value: '#67c2cf'
+    - label: 1000
+      name: '6'
+      value: '#61b2bd'
+    - label: 2000
+      name: '7'
+      value: '#466463'
+    - label: 0
+      name: '8'
+      value: '#8d8b8e'
+    ipriskHigh: # ip风险非常高的颜色
+      alpha: 255
+      end-color: '#ffffff'
+      label: 0
+      name: ''
+      value: '#ffffff'
+    ipriskLow: # ip风险最低的颜色
+      alpha: 255
+      end-color: '#ffffff'
+      label: 0
+      name: ''
+      value: '#ffffff'
+    ipriskMedium: # ip风险其他颜色同理
+      alpha: 255
+      end-color: '#ffffff'
+      label: 0
+      name: ''
+      value: '#ffffff'
+    ipriskVeryHigh:
+      alpha: 255
+      end-color: '#ffffff'
+      label: 0
+      name: ''
+      value: '#ffffff'
+    na: # na的颜色
+      alpha: 255
+      end-color: '#8d8b8e'
+      label: 0
+      name: ''
+      value: '#8d8b8e'
+    'no': # 解锁失败的颜色
+      alpha: 255
+      end-color: '#ee6b73'
+      label: 0
+      name: ''
+      value: '#ee6b73'
+    outColor: []
+    speed: # 速度值颜色
+    - label: 0.0
+      name: '1'
+      value: '#fae0e4'
+      alpha: 255
+      end_color: '#ffffff'
+    - label: 0
+      name: '2'
+      value: '#f7cad0'
+      alpha: 255
+      end_color: '#ffffff'
+    - label: 0.0
+      name: '3'
+      value: '#f9bec7'
+      alpha: 255
+      end_color: '#ffffff'
+    - label: 0.0
+      name: '4'
+      value: '#ff85a1'
+      alpha: 255
+      end_color: '#ffffff'
+    - label: 0.0
+      name: '5'
+      value: '#ff7096'
+      alpha: 255
+      end_color: '#ffffff'
+    - label: 0.0
+      name: '6'
+      value: '#ff5c8a'
+      alpha: 255
+      end_color: '#ffffff'
+    - label: 0.0
+      name: '7'
+      value: '#ff477e'
+      alpha: 255
+      end_color: '#ffffff'
+    wait:
+      alpha: 255
+      end-color: '#dcc7e1'
+      label: 0
+      name: ''
+      value: '#dcc7e1'
+    warn:
+      alpha: 255
+      end-color: '#fcc43c'
+      label: 0
+      name: ''
+      value: '#fcc43c'
+    'yes':
+      alpha: 255
+      end-color: '#bee47e'
+      label: 0
+      name: ''
+      value: '#bee47e'
+  compress: false # 是否压缩
+  emoji: # emoji是否开启，建议开启，就这样设置
+    enable: true
+    source: TwemojiLocalSource
+  endColorsSwitch: false
+  font: ./resources/alibaba-Regular.ttf #字体路径
+  nonCommercialWatermark:
+    alpha: 16
+    angle: -16.0
+    color:
+      alpha: 16
+      end-color: '#ffffff'
+      label: 0
+      name: ''
+      value: '#000000'
+    enable: false
+    row-spacing: 1
+    shadow: false
+    size: 64
+    start-y: 0
+    text: 请勿用于商业用途
+    trace: false
+  speedEndColorSwitch: false
+  title: 节点测试机器人 # 绘图标题
+  watermark: # 水印
+    alpha: 32 # 透明度
+    angle: -16.0 # 旋转角度
+    color: # 颜色
+      alpha: 16
+      end-color: '#ffffff'
+      label: 0
+      name: ''
+      value: '#000000'
+    enable: true #是否启用
+    row-spacing: 0 # 行间距
+    shadow: false # 暂时未实现
+    size: 64 # 水印大小
+    start-y: 0 # 开始坐标
+    text: FullTclash dev # 水印内容
+    trace: false # UID追踪开启，测试图结果显示任务发起人的UID
+rules: []
+runtime: # 测速任务可以动态调整的配置
+  entrance: ip # 暂时无用
+  geoipAPI: ip-api.com # 暂时无用
+  interval: 10 # 暂时无用
+  ipstack: false # 暂时无用
+  localip: false # 暂时无用
+  nospeed: false # 暂时无用
+  pingURL: https://www.gstatic.com/generate_204 # 延迟测试地址
+  speedFiles: # 速度测试的大文件下载地址
+  - https://dl.google.com/dl/android/studio/install/3.4.1.0/android-studio-ide-183.5522156-windows.exe
+  speedNodes: 300 # 暂时无用
+  speedThreads: 4 # 暂时无用
+scriptConfig:
+  scripts: # 脚本载入
+    - type: gojajs # 暂时为此固定值
+      name: "Netflix" # 脚本名称
+      rank: 0 # 排序，越小排在越前面
+      content: | # 脚本内容
+        const C_NA = '142,140,142';
+        const C_UNL = '186,230,126';
+        const C_FAIL = '239,107,115';
+        const C_UNK = '92,207,230';
+
+        function handler() {
+          const content = fetch('https://www.netflix.com/title/80113701', {
+            headers: {
+              'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+              'accept-language': 'zh-CN,zh;q=0.9',
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36',
+            },
+            noRedir: false,
+            retry: 3,
+            timeout: 5000,
+          });
+
+          if (!content) {
+            return {
+              text: 'N/A',
+              background: C_NA,
+            };
+          } else if (content.statusCode == 200) {
+            let index1 = content.body.indexOf('preferredLocale')
+            let region = content.body.substring(index1 + 29, index1 + 31);
+            return index1 > 0 ? {text: "解锁(" + region + ")",background: C_UNL} : {text: "未知",background: C_FAIL}
+          } else {
+                return {
+                    text: '失败',
+                    background: C_UNK,
+                };
+            }
+        }
+    - type: gojajs
+      name: "Youtube"
+      rank: 0
+      content: "resources/scripts/gojajs/youtube.js" # 也可以指定一个文件路径
+    - type: gojajs
+      name: "Disney+"
+      rank: 1
+      content: "resources/scripts/gojajs/disney.js"
+    - type: gojajs
+      name: "OpenAI"
+      rank: 2
+      content: "resources/scripts/gojajs/openai.js"
+    - type: gojajs
+      name: "Tiktok"
+      rank: 3
+      content: "resources/scripts/gojajs/tiktok.js"
+    - type: gojajs
+      name: "维基百科"
+      rank: 4
+      content: "resources/scripts/gojajs/维基百科.js"
+    - type: gojajs
+      name: "Claude"
+      rank: 5
+      content: "resources/scripts/gojajs/Claude.js"
+    - type: gojajs
+      name: "Bilibili"
+      rank: 6
+      content: "resources/scripts/gojajs/bilibili.js"
+    - type: gojajs
+      name: "微软Copilot"
+      rank: 7
+      content: "resources/scripts/gojajs/copilot.js"
+    - type: gojajs
+      name: "Spotify"
+      rank: 8
+      content: "resources/scripts/gojajs/spotify.js"
+    - type: gojajs
+      name: "Viu"
+      rank: 9
+      content: "resources/scripts/gojajs/viu.js"
+    - type: gojajs
+      name: "IP风险"
+      rank: 11
+      content: "resources/scripts/gojajs/落地IP风险.js"
+    - type: gojajs
+      name: "DNS区域"
+      rank: 10
+      content: "resources/scripts/gojajs/dns.js"
+slaveConfig: # 后端配置
+  default: '' # 默认后端设置，未实现
+  slaves: # 后端列表，注意是数组类型
+    - type: miaospeed # 固定值，目前只这个支持
+      id: "localmiaospeed" # 后端id
+      token: "ZfffaQ4/E-7S" # 连接密码
+      address: "127.0.0.1:8765" # 后端地址
+      skipCertVerify: true # 跳过证书验证，如果你不知道在做什么，请写此默认值
+      tls: true # 启用加密连接，如果你不知道在做什么，请写此默认值
+      invoker: "1114514" # bot调用者，请删掉此行或者随便填一个字符串
+      branch: "fulltclash" # 默认值，或者填数字 1
+      buildtoken: "MIAOKO4|580JxAo049R|GEnERAl|1X571R930|T0kEN" # 默认编译token  如果你不知道在做什么，请写此默认值
+      comment: "\u672C\u5730miaospeed\u540E\u7AEF [meta]" # 后端备注，显示在bot页面的
+      hidden: false # 是否隐藏此后端
+      option: # 可选配置
+        downloadDuration: 8 # 测试时长
+        downloadThreading: 4 # 测速线程
+        downloadURL: https://dl.google.com/dl/android/studio/install/3.4.1.0/android-studio-ide-183.5522156-windows.exe # 测速文件
+        pingAddress: https://cp.cloudflare.com/generate_204 # 延迟测试地址
+        pingAverageOver: 3 # ping多少次取平均
+        stunURL: udp://stun.ideasip.com:3478 # STUN地址，测udp连通性的
+        taskRetry: 3 # 后端任务重试
+subconverter: # 订阅转换
+  address: 127.0.0.1:25500 # 地址
+  enable: false # 是否启用
+  tls: false # 是否启用安全加密HTTPS协议，如果不知道的话， https 开头就设为true，否则默认false
+translation: # 翻译语言包
+  lang: zh-CN # 启用选项
+  resources: # 翻译包在哪加载
+    zh-CN: ./resources/i18n/zh-CN.yml # 键随便填，值填文件路径
+user: [] # 用户权限名单，不用自己设
