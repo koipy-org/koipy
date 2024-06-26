@@ -1,10 +1,12 @@
 """配置反序列化后得到的类，参数意义请参阅 ./resources/config.example.yaml"""
 import os
+import pathlib
 from dataclasses import field, dataclass
+from enum import Enum
 from os import PathLike
 
 from pathlib import Path
-from typing import List, Any, Dict, Union, Type
+from typing import List, Any, Dict, Union, Type, TypeVar
 
 from utils.types.manager import ConfigManager
 from utils.types.translation import Translation
@@ -50,10 +52,12 @@ class FullTCoreCFG(CoreCFG):
 
 @dataclass
 class SubConverterCFG(DictCFG):
+    include: str = ""
+    exclude: str = ""
     enable: bool = False
     address: str = "127.0.0.1:25500"
     tls: bool = False
-    remoteconfig: str = None
+    remoteConfig: str = None
 
 
 @dataclass
@@ -65,9 +69,9 @@ class BotCFG(DictCFG):
     ipv6: bool = False
     antiGroup: bool = False
     strictMode: bool = False
-    scriptText: str = "⏳连通性测试进行中..."
-    analyzeText: str = "⏳节点测试拓扑进行中..."
-    speedText: str = "⏳速度测试进行中..."
+    scriptText: str = ""
+    analyzeText: str = ""
+    speedText: str = ""
     bar: str = "="
     bleft: str = "["
     bright: str = "]"
@@ -81,6 +85,16 @@ class BotCFG(DictCFG):
                 self.command = raw_v
         super().from_obj(obj)
         return self
+
+
+class SortType:
+    ORIGIN: str = "订阅原序"
+    HTTP: str = "HTTP升序"
+    HTTP_R: str = "HTTP降序"  # http降序
+    AVERAGE_SPEED: str = "平均速度升序"
+    AVERAGE_SPEED_R: str = "平均速度降序"  # 平均速度降序
+    MAX_SPEED: str = "最大速度升序"
+    MAX_SPEED_R: str = "最大速度降序"  # 最大速度降序
 
 
 @dataclass
@@ -99,6 +113,10 @@ class RuntimeCFG(DictCFG):
     entrance: str = "ip"
     geoipAPI: str = "ip-api.com"
     geoipKey: str = None
+    includeFilter: str = ""
+    excludeFilter: str = ""
+    items: List[str] = field(default_factory=list)
+    sort: str = SortType.ORIGIN
 
     def from_list(self, attr: str, obj: list, cls=None) -> "RuntimeCFG":
         if isinstance(obj, list):
@@ -234,6 +252,13 @@ class SlaveOption(DictCFG):
     pass
 
 
+class MiaoSpeedBranch(Enum):
+    Origin: int = 0
+    MoShaoLi: int = Origin
+    PMN: int = Origin
+    FullTClash: int = 1
+
+
 @dataclass
 class MiaoSpeedOption(SlaveOption):
     downloadDuration: int = 8
@@ -247,7 +272,7 @@ class MiaoSpeedOption(SlaveOption):
 
 @dataclass
 class Slave(DictCFG):
-    id: Union[str, int] = None
+    id: str = None
     comment: str = ""
     hidden: bool = False
     token: str = None
@@ -284,7 +309,7 @@ class MiaoSpeedSlave(Slave):
     skipCertVerify: bool = True
     tls: bool = True
     invoker: str = None
-    branch: str = "fulltclash"
+    branch: int = 1
     buildtoken: str = None
     option: MiaoSpeedOption = field(default_factory=lambda: MiaoSpeedOption())
 
@@ -320,23 +345,36 @@ class UserbotCFG(DictCFG):
 
 class ScriptType:
     CPython: str = "cpython"
-    GoJajs: int = "gojajs"
-
-
-class SortType:
-    ORIGIN: str = "订阅原序"
-    HTTP: str = "HTTP升序"
-    HTTP_R: str = "HTTP降序"  # http降序
-    AVERAGE_SPEED: str = "平均速度升序"
-    AVERAGE_SPEED_R: str = "平均速度降序"  # 平均速度降序
-    MAX_SPEED: str = "最大速度升序"
-    MAX_SPEED_R: str = "最大速度降序"  # 最大速度降序
+    GoJajs: str = "gojajs"
+    GoBuiltin: str = "gofunc"
 
 
 @dataclass
 class Script(DictCFG):
-    type: str = ScriptType.CPython
-    name: str = None
+    type: str = ScriptType.GoJajs
+    name: str = ""
+    rank: int = 0
+    content: str = ""
+
+    def from_obj(self, obj: dict) -> "Script":
+        if "content" in obj:
+            raw_v = obj.pop("content")
+            if isinstance(raw_v, str):
+                is_path = False
+                try:
+                    is_path = pathlib.Path(raw_v).exists()
+                except (FileNotFoundError, RuntimeError, Exception):
+                    pass
+                if is_path:
+                    self.from_file(raw_v)
+                else:
+                    self.content = raw_v
+        super().from_obj(obj)
+        return self
+
+    def from_file(self, path: str):
+        with open(path, 'r', encoding="utf-8") as fp:
+            self.content = fp.read()
 
 
 @dataclass
@@ -348,10 +386,42 @@ class Rule(DictCFG):
     sort: str = SortType.ORIGIN
 
 
+SlaveType = TypeVar('SlaveType', bound='Slave')
+
+
 @dataclass
 class SlaveConfig(DictCFG):
     default: str = ""
-    slaves: List[Slave] = None
+    slaves: List[SlaveType] = None
+
+    def from_obj(self, obj: dict) -> "DictCFG":
+        self.convert(obj)
+        super().from_obj(obj)
+        return self
+
+    def convert(self, obj: dict):
+        """
+        转换基类到子类
+        :param obj:
+        :return:
+        """
+        if "slaves" in obj:
+            self.slaves = []
+            raw_v = obj.pop("slaves")
+            if not isinstance(raw_v, list):
+                return self
+            for slave_c in raw_v:
+                if not isinstance(slave_c, dict):
+                    continue
+                slave_type = slave_c.get("type", "")
+                if slave_type == "miaospeed":
+                    slave = MiaoSpeedSlave()
+                    slave.from_obj(slave_c)
+                    self.slaves.append(slave)
+                elif slave_type == "fulltclash":
+                    slave = AiohttpWSSlave()
+                    slave.from_obj(slave_c)
+                    self.slaves.append(slave)
 
 
 @dataclass
@@ -373,11 +443,31 @@ class TranslationCFG(DictCFG):
 
 
 @dataclass
+class ScriptCFG(DictCFG):
+    scripts: List[Script] = field(default_factory=list)
+
+    def from_obj(self, obj: dict) -> "ScriptCFG":
+        if "scripts" in obj:
+            raw_v = obj.pop("scripts")
+            if isinstance(raw_v, list):
+                self.from_list("scripts", raw_v, Script)
+        self.scripts = sorted(self.scripts, key=lambda x: x.rank)
+        super().from_obj(obj)
+        return self
+
+
+@dataclass
+class NetworkCFG(DictCFG):
+    socks5Proxy: str = None
+    httpProxy: str = None
+    userAgent: str = "ClashMetaForAndroid/2.8.9.Meta Mihomo/0.16"
+
+
+@dataclass
 class KoiConfig(DictCFG, ConfigManager):
     admin: AdminList = field(default_factory=AdminList)
     user: UserList = field(default_factory=UserList)
-    socks5Proxy: str = None
-    httpProxy: str = None
+    network: NetworkCFG = field(default_factory=lambda: NetworkCFG())
     bot: BotCFG = field(default_factory=lambda: BotCFG())
     core: CoreCFG = field(default_factory=lambda: FullTCoreCFG())
     subconverter: SubConverterCFG = field(default_factory=lambda: SubConverterCFG())
@@ -387,6 +477,7 @@ class KoiConfig(DictCFG, ConfigManager):
     userConfig: Dict[str, Any] = field(default_factory=lambda: {"rule": {}, "usageRanking": {}})
     subinfo: Dict[str, SubInfoCFG] = field(default_factory=dict)
     translation: TranslationCFG = field(default_factory=lambda: TranslationCFG())
+    scriptConfig: ScriptCFG = field(default_factory=lambda: ScriptCFG())
     userbot: UserbotCFG = field(default_factory=lambda: UserbotCFG())
     image: ImageCFG = field(default_factory=lambda: ImageCFG())
     _raw_config: dict = field(default_factory=dict)

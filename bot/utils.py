@@ -1,6 +1,9 @@
+
 from urllib.parse import urlparse
 
 from loguru import logger
+
+from pyrogram.types import Message
 
 
 class ParseProxyError(Exception):
@@ -39,6 +42,16 @@ def parse_proxy(url: str):
     else:
         logger.warning(f"此代理类型缺少协议头：{url} \n"
                        f"考虑如下格式: socks5://user:pass@proxy.example.com:1080 (user:pass@可省略)")
+
+
+def gen_key(msg: Message):
+    if isinstance(msg, Message):
+        return str(msg.chat.id) + ":" + str(msg.id)
+    else:
+        return None
+
+
+
 
 
 if __name__ == "__main__":

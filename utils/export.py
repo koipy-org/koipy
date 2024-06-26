@@ -388,7 +388,7 @@ class KoiDraw(BaseExport):
         _nodename_width = self.get_basedata_width()
         _info_list_width = self.width_list
         for t in range(self.cfg.basedataNum + 3):
-            idraw.line([(0, _lspace * (t + 1)), (_image_width, _lspace * (t + 1))], fill="#e1e1e1", width=2)
+            idraw.line([(0, _lspace * (t + 1)), (_image_width, _lspace * (t + 1))], fill="#e1e1e1", width=3)
         # 绘制竖线
         start_x = _info_list_width[0] + _info_list_width[1]
         for i in _info_list_width[2:]:

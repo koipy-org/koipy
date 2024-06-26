@@ -6,4 +6,4 @@ CONFIG.translation.lang = CONFIG.translation.lang.replace("-", "_")
 SYS_CONFIG = SystemCFG().load_tr_config(CONFIG.translation.resources, Translation)
 lang = TRANSLATE_CONFIG = SYS_CONFIG.translation.get(CONFIG.translation.lang, Translation())
 admin = CONFIG.admin
-print(lang)
+print("翻译已加载: ", lang)

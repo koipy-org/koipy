@@ -1,2 +1,2 @@
 
-from bot.init.init import __version__
+from bot.init.init import __version__, app

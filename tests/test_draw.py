@@ -4,7 +4,7 @@ from loguru import logger
 @logger.catch()
 def test():
     from random import randint
-    koicfg = KoiConfig().from_file("utils/types/ftconfig.yml")
+    koicfg = KoiConfig().from_file("resources/config.yaml")
 
     koicfg.image.color.delay.sort(key=lambda x: x.label)
     koicfg.image.color.speed.sort(key=lambda x: x.label)
@@ -40,5 +40,4 @@ if __name__ == "__main__":
     print(os.getcwd())
     from utils.export import KoiDraw
     from utils.types.config import KoiConfig
-
     test()

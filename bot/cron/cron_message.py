@@ -49,11 +49,14 @@ async def cron_delete_message(app: Client, message_delete_queue: "MessageDeleteQ
             break
 
     for delete_message in delete_messages:
+        chat_id = delete_message[0]
+        msg_id = delete_message[1]
+        is_revoke = bool(delete_message[3]) if len(delete_message) > 3 else False
         try:
-            message = await app.get_messages(delete_message[0], delete_message[1])
+            message = await app.get_messages(chat_id, msg_id)
             if int(message.date.timestamp()) + delete_message[2] < int(time.time()):
                 try:
-                    await app.delete_messages(delete_message[0], delete_message[1], revoke=False)
+                    await app.delete_messages(delete_message[0], delete_message[1], revoke=is_revoke)
                 except forbidden_403.MessageDeleteForbidden:
                     continue
                 except Exception as e:

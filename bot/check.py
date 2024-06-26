@@ -18,7 +18,7 @@ from pyrogram.errors import RPCError, MessageDeleteForbidden
 from loguru import logger
 from pyrogram.filters import private_filter
 
-from bot.config import CONFIG
+from bot.config import CONFIG, lang
 from bot.queue import message_delete_queue
 from utils.types.config import UserList, AdminList
 
@@ -333,28 +333,26 @@ async def check_photo(app: "Client", msg_id: int, botmsg_id: int, chat_id: int, 
     :param size: 图片大小
     :return:
     """
-    image_name = fr'./results/{name}.png'
-    caption = f"⏱️总共耗时: {wtime}s"
+    image_name = name
+    caption = f"{lang.time_used} {wtime}"
+    if "s" != caption[-1]:
+        caption += "s"
     try:
         if name == '' or name is None:
-            await app.edit_message_text(chat_id, botmsg_id, "⚠️生成图片失败,可能原因: 节点过多/网络不稳定")
-            # await back_message.edit_text("⚠️生成图片失败,可能原因: 节点过多/网络不稳定")
+            await app.edit_message_text(chat_id, botmsg_id, lang.error_2)
         else:
             x, y = size if size is not None else (0, 0)
             if x > 0 and y > 0:
                 if x < 2500 and y < 3500:
                     await app.send_chat_action(chat_id, ChatAction.UPLOAD_PHOTO)
-                    await app.send_photo(chat_id, image_name, caption=f"⏱️总共耗时: {wtime}s",
+                    await app.send_photo(chat_id, image_name, caption=f"{lang.time_used} {wtime}",
                                          reply_to_message_id=msg_id)
-                    # await message.reply_photo(fr'./results/{name}.png', caption=f"⏱️总共耗时: {wtime}s")
                 else:
                     await app.send_chat_action(chat_id, ChatAction.UPLOAD_DOCUMENT)
                     await app.send_document(chat_id, image_name, caption=caption, reply_to_message_id=msg_id)
-                    # await message.reply_document(fr"./results/{name}.png", caption=f"⏱️总共耗时: {wtime}s")
             else:
                 await app.send_chat_action(chat_id, ChatAction.UPLOAD_DOCUMENT)
                 await app.send_document(chat_id, image_name, caption=caption, reply_to_message_id=msg_id)
-                # await message.reply_document(fr"./results/{name}.png", caption=f"⏱️总共耗时: {wtime}s")
             try:
                 bot_msg = await app.get_messages(chat_id, botmsg_id)
                 await bot_msg.delete()
@@ -391,3 +389,4 @@ def checkIPv4(ip):
         if _ip.group(0) == ip:
             return True
     return False
+

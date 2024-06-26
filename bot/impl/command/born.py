@@ -5,7 +5,7 @@ from pyrogram import filters, Client
 from pyrogram.types import Message
 
 from bot.config import CONFIG, lang, CONFIG_PATH
-from bot.impl import restart
+from bot.impl.command import restart
 from utils.types import Admin
 
 _Lock = asyncio.Lock()

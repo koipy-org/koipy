@@ -2,7 +2,6 @@ import json
 import os
 import sys
 from pathlib import Path
-from subprocess import check_output
 
 import tzlocal
 from loguru import logger
@@ -38,7 +37,7 @@ async def check_init():
     Init.init_cron()
     Init.init_dir()
     Init.init_user()
-    # await Init.init_emoji()
+    await Init.init_emoji()
     # await Init.init_proxy_client()  # init_permission 的顺序和这里不能调换
     # Init.init_permission()
     return True
@@ -144,19 +143,19 @@ class Init:
             os.mkdir("results")
             logger.info("创建文件夹: results 用于保存测试结果")
 
-    # @staticmethod
-    # async def init_emoji():
-    #     emoji_source = GCONFIG.config.get('emoji', {}).get('emoji-source', 'TwemojiLocalSource')
-    #     if GCONFIG.config.get('emoji', {}).get('enable', True) and emoji_source == 'TwemojiLocalSource':
-    #         from utils.myemoji import TwemojiLocalSource
-    #         if not os.path.isdir('./resources/emoji/twemoji'):
-    #             twemoji = TwemojiLocalSource()
-    #             logger.info("检测到未安装emoji资源包，正在初始化本地emoji...")
-    #             await twemoji.download_emoji(proxy=GCONFIG.get_proxy())
-    #             if twemoji.init_emoji(twemoji.savepath):
-    #                 logger.info("初始化emoji成功")
-    #             else:
-    #                 logger.warning("初始化emoji失败")
+    @staticmethod
+    async def init_emoji():
+        emoji_source = "TwemojiLocalSource"
+        if CONFIG.image.emoji.enable and emoji_source == 'TwemojiLocalSource':
+            from utils.myemoji import TwemojiLocalSource
+            if not os.path.isdir('./resources/emoji/twemoji'):
+                twemoji = TwemojiLocalSource()
+                logger.info("检测到未安装emoji资源包，正在初始化本地emoji...")
+                await twemoji.download_emoji(proxy=CONFIG.httpProxy)
+                if twemoji.init_emoji(twemoji.savepath):
+                    logger.info("初始化emoji成功")
+                else:
+                    logger.warning("初始化emoji失败")
     #
     # @staticmethod
     # def init_permission():

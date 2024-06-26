@@ -13,9 +13,10 @@ import psutil
 from pyrogram import Client
 from pyrogram.types import Message
 
-from bot.config import CONFIG, lang
+from bot.config import lang
 from bot import __version__, COMMIT, BUILD_TIME
 from bot.queue import message_delete_queue
+
 
 def sysinfo():
     # 系统名称和版本
@@ -54,13 +55,14 @@ async def info(_: "Client", msg: "Message"):
     sys_info = sysinfo()
     bot_info = botinfo()
     bot_msg = await msg.reply(sys_info + "\n" + bot_info)
-    message_delete_queue.put(bot_msg, 10)
+    message_delete_queue.put(bot_msg, 10, revoke=True)
 
 
 async def version(_: "Client", msg: "Message"):
     bot_info = botinfo()
     bot_msg = await msg.reply(bot_info)
     message_delete_queue.put(bot_msg, 10)
+
 
 if __name__ == "__main__":
     sysinfo()
