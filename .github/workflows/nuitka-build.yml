@@ -79,12 +79,12 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           rm -r o/main.dist/turtle*
-#          rm -r o/main.dist/importlib
+          rm -r o/main.dist/importlib
           rm -r o/main.dist/encodings
           rm -r o/main.dist/pydoc_data
           rm -r o/main.dist/ensurepip
-#          rm -r o/main.dist/ctypes/test
-#          rm -r o/main.dist/distutils
+          rm -r o/main.dist/ctypes/test
+          rm -r o/main.dist/distutils
           rm -r o/main.dist/tkinter
           rm -r o/main.dist/unittest
           rm -r o/main.dist/lib2to3
