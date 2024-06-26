@@ -9,7 +9,6 @@ import asyncio
 from copy import deepcopy
 from typing import List, Union
 
-
 from loguru import logger
 from pyrogram import Client
 from pyrogram.types import Message, InlineKeyboardMarkup, CallbackQuery, InlineKeyboardButton
@@ -25,7 +24,6 @@ from bot.queue import handler_delete_queue
 from bot.backend import miaospeed_client
 from utils.types.config import SortType, MiaoSpeedSlave
 from utils.types.task import SlaveRequest
-
 
 SELECTOR_HANDLER_GROUP = 3
 ACCEPT_CACHE = {}
@@ -223,7 +221,8 @@ class ScriptSelector(BaseSelector):
         msg_key = gen_key(call.message.reply_to_message)
         if msg_key is None:
             return
-        await call.message.edit_text(lang.script_ok)
+        # await call.message.edit_text(lang.script_ok)
+
         msg_cache = ACCEPT_CACHE.get(msg_key, {})
         if not msg_cache or not isinstance(msg_cache, dict):
             logger.warning(lang.cache_not_found)
@@ -241,8 +240,8 @@ class ScriptSelector(BaseSelector):
         slavereq.merge_items(selected, CONFIG)
         if slavereq.task.messageID and slavereq.task.chatID:
             target = await app.get_messages(slavereq.task.chatID, slavereq.task.messageID)
+            await call.message.delete(revoke=True)
             await submit(app, target, slavereq)
-        await call.message.delete(revoke=True)
 
 
 class SortSelector(BaseSelector):
