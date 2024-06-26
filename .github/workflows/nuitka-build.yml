@@ -67,7 +67,7 @@ jobs:
       - name: Compile project
         if: runner.os != 'Windows'
         run: |
-          python -m nuitka --standalone --output-dir=o --include-data-dir=resources=resources --nofollow-import-to=requests,async_timeout,Pillow,pilmoji,yaml,tgcrypto,apscheduler,email,emoji,loguru,aiohttp_socks,websockets,tzlocal,cryptography,PIL,pkg_resources,pyrogram,geoip,aiohttp,encodings,google-re2,asyncio,psutil,addons main.py
+          python -m nuitka --standalone --output-dir=o --include-data-dir=resources=resources --nofollow-import-to=requests,async_timeout,Pillow,pilmoji,yaml,tgcrypto,apscheduler,email,emoji,loguru,aiohttp_socks,websockets,tzlocal,cryptography,PIL,pkg_resources,pyrogram,geoip,aiohttp,encodings,google-re2,asyncio,addons main.py
       - name: Process some files
         if: runner.os != 'Windows'
         run: |
@@ -75,26 +75,26 @@ jobs:
           mv o/main.dist/lib-dynload/_sqlite3.*.so o/main.dist/
           mv o/main.dist/lib-dynload/pyexpat.*.so o/main.dist/
           pip install -r requirements.txt -t o/main.dist/
-#      - name: Remove some packages
-#        if: runner.os != 'Windows'
-#        run: |
-#          rm -r o/main.dist/turtle*
+      - name: Remove some packages
+        if: runner.os != 'Windows'
+        run: |
+          rm -r o/main.dist/turtle*
 #          rm -r o/main.dist/importlib
-#          rm -r o/main.dist/encodings
-#          rm -r o/main.dist/pydoc_data
-#          rm -r o/main.dist/ensurepip
+          rm -r o/main.dist/encodings
+          rm -r o/main.dist/pydoc_data
+          rm -r o/main.dist/ensurepip
 #          rm -r o/main.dist/ctypes/test
 #          rm -r o/main.dist/distutils
-#          rm -r o/main.dist/tkinter
-#          rm -r o/main.dist/unittest
-#          rm -r o/main.dist/lib2to3
-#          rm -r o/main.dist/setuptools
-#          rm -r o/main.dist/idlelib
-#          rm -r o/main.dist/lib-dynload
-#          rm -r o/main.dist/site-packages
-#          rm -r o/main.dist/test
-#          rm -r o/main.dist/config-3.11*
-#          rm -r o/main.dist/__pycache__
+          rm -r o/main.dist/tkinter
+          rm -r o/main.dist/unittest
+          rm -r o/main.dist/lib2to3
+          rm -r o/main.dist/setuptools
+          rm -r o/main.dist/idlelib
+          rm -r o/main.dist/lib-dynload
+          rm -r o/main.dist/site-packages
+          rm -r o/main.dist/test
+          rm -r o/main.dist/config-3.11*
+          rm -r o/main.dist/__pycache__
       - name: Run UPX
         if: runner.os != 'macOS'
         uses: crazy-max/ghaction-upx@v3
