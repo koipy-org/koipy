@@ -27,7 +27,7 @@ app = Client(
     bot_token=CONFIG.bot.bot_token,
     proxy=parse_proxy(CONFIG.bot.proxy),
     app_version=__version__,
-    ipv6=False
+    ipv6=CONFIG.bot.ipv6
 )
 
 

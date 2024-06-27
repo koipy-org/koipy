@@ -1,6 +1,6 @@
 ## 介绍
 
-koipy是一个Telegram 节点测速、连通性测试机器人，同时提供对接[Miaospeed](https://github.com/AirportR/miaospeed)后端的开源实现。
+koipy是一个Telegram 节点测速、连通性测试机器人，同时提供对接[miaospeed](https://github.com/AirportR/miaospeed)后端的开源实现。
 koipy是[fulltclash](https://github.com/AirportR/FullTclash)的下游分支。
 
 ## 功能
@@ -15,7 +15,7 @@ bot主端可以接收你的节点信息，构造测试请求发送到后端，�
 ![测试](https://raw.githubusercontent.com/koipy-org/koipy/master/resources/image/example.png)
 ## 基本使用
 
-前往配置文件示例 ./resources/config.yaml.example
+前往配置文件示例 ./resources/config.example.yaml
 
 搭建好机器人，并配置好后端以及脚本信息。
 
