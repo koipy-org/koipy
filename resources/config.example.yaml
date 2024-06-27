@@ -5,9 +5,9 @@ network: # 网络
   socks5Proxy: "scoks5://host:port" # socks5代理， bot的代理在下面bot那一栏填
   userAgent: "ClashMetaForAndroid/2.8.9.Meta Mihomo/0.16" # UA设置，影响订阅获取
 bot:
-  api_id:  # 首次启动必填
-  api_hash:  # 首次启动必填
-  bot_token: str = None # bot的token
+  api-id:  # telegram的 api_id 首次启动必填
+  api-hash:  # telegram的 api_hash 首次启动必填
+  bot-token: null # bot的token, 首次启动必填
   proxy: socks5://127.0.0.1:11112 # socks5代理
   ipv6: false #是否使用ipv6连接
   antiGroup: false
@@ -249,32 +249,10 @@ scriptConfig:
         const C_UNK = '92,207,230';
 
         function handler() {
-          const content = fetch('https://www.netflix.com/title/80113701', {
-            headers: {
-              'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-              'accept-language': 'zh-CN,zh;q=0.9',
-              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36',
-            },
-            noRedir: false,
-            retry: 3,
-            timeout: 5000,
-          });
-
-          if (!content) {
-            return {
-              text: 'N/A',
-              background: C_NA,
-            };
-          } else if (content.statusCode == 200) {
-            let index1 = content.body.indexOf('preferredLocale')
-            let region = content.body.substring(index1 + 29, index1 + 31);
-            return index1 > 0 ? {text: "解锁(" + region + ")",background: C_UNL} : {text: "未知",background: C_FAIL}
-          } else {
-                return {
-                    text: '失败',
-                    background: C_UNK,
-                };
-            }
+          return {
+              text: '失败',
+              background: C_UNK,
+          }
         }
     - type: gojajs
       name: "Youtube"
@@ -336,7 +314,7 @@ slaveConfig: # 后端配置
       invoker: "1114514" # bot调用者，请删掉此行或者随便填一个字符串
       branch: "fulltclash" # 默认值，或者填数字 1
       buildtoken: "MIAOKO4|580JxAo049R|GEnERAl|1X571R930|T0kEN" # 默认编译token  如果你不知道在做什么，请写此默认值
-      comment: "\u672C\u5730miaospeed\u540E\u7AEF [meta]" # 后端备注，显示在bot页面的
+      comment: "本地miaospeed后端" # 后端备注，显示在bot页面的
       hidden: false # 是否隐藏此后端
       option: # 可选配置
         downloadDuration: 8 # 测试时长
