@@ -58,7 +58,6 @@ class MiaoSpeed:
                  ssl_type: SSLType = SSLType.SECURE,
                  slave_config: SlaveRequestConfigs = None,
                  debug: bool = False,
-                 branch: int = MiaoSpeedBranch.FullTClash.value
                  ):
         """
         初始化miaospeed
@@ -80,7 +79,6 @@ class MiaoSpeed:
         self.nodes = proxyconfig
         self.ssl_type = ssl_type
         self._debug = debug
-        self.branch = branch
         self.slaveRequestNode = [SlaveRequestNode(str(i), str(node)) for i, node in enumerate(self.nodes)]
         # self.slaveRequestNode = [{'Name': f'{i}', 'Payload': str(node)} for i, node in enumerate(self.nodes)]
         self.SlaveRequest = MSSlaveRequest()
@@ -112,12 +110,7 @@ class MiaoSpeed:
         copysrt = deepcopy(self.SlaveRequest)  # 用深拷贝复制一份请求体数据，python拷贝行为涉及可变和不可变序列。
         copysrt.Challenge = ""  # 置为空是因为要与这个值进行比较，要是不为空，大概永远也过不了验证
         copysrt.Vendor = ""  # 因为miaospeed在这里拷贝的时候，并没有拷贝原来的Vendor值
-        new_branch = branch or self.branch
-        if new_branch == MiaoSpeedBranch.FullTClash.value:
-            copysrt.Configs.Scripts = []  # 这个地方为FullTclash独家修改，因为json反序列化的结果每个编程语言实现的默认行为都有差异
-            copysrt.Nodes = []  # 理由同上
         srt_json = copysrt.to_json()
-
         signed_req = self.hash_miaospeed(self.token, srt_json)
         self.SlaveRequest.Challenge = signed_req
         return signed_req
@@ -414,13 +407,6 @@ async def miaospeed_client(app: Client, slavereq: SlaveRequest):
     flt_obj = {"include": slavereq.runtime.includeFilter, "exclude": slavereq.runtime.excludeFilter}
     key = slavereq.slave.token
     tls = slavereq.slave.tls
-    bh = slavereq.slave.branch
-    if isinstance(bh, str):
-        if bh == "fulltclash":
-            bh = 1
-        else:
-            bh = 0
-
     if tls:
         ssl_opt = SSLType.SECURE if not slavereq.slave.skipCertVerify else SSLType.SELF_SIGNED
     else:
@@ -447,8 +433,7 @@ async def miaospeed_client(app: Client, slavereq: SlaveRequest):
         temp_text = "❌MiaoSpeed后端暂不支持发起拓扑测试"
         await app.edit_message_text(slavereq.task.botMsgChatID, slavereq.task.botMsgID, temp_text)
         return
-    ms = MiaoSpeed(msbuild_token, slavereq.proxies, srme_list, host, ws_port, key, ssl_opt, srcfg,
-                   branch=bh)
+    ms = MiaoSpeed(msbuild_token, slavereq.proxies, srme_list, host, ws_port, key, ssl_opt, srcfg)
     ms.SlaveRequest.Basics = SlaveRequestBasics(
         ID="114514",
         Slave=str(slavereq.slave.id),

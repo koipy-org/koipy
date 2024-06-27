@@ -312,7 +312,6 @@ slaveConfig: # 后端配置
       skipCertVerify: true # 跳过证书验证，如果你不知道在做什么，请写此默认值
       tls: true # 启用加密连接，如果你不知道在做什么，请写此默认值
       invoker: "1114514" # bot调用者，请删掉此行或者随便填一个字符串
-      branch: "fulltclash" # 默认值，或者填数字 1
       buildtoken: "MIAOKO4|580JxAo049R|GEnERAl|1X571R930|T0kEN" # 默认编译token  如果你不知道在做什么，请写此默认值
       comment: "本地miaospeed后端" # 后端备注，显示在bot页面的
       hidden: false # 是否隐藏此后端

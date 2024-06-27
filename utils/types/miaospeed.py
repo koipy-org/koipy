@@ -125,5 +125,5 @@ class SlaveRequest:
     def to_json(self):
         json_str = json.dumps(self, default=lambda o: o.value if isinstance(o, Enum) else o.__dict__,
                               ensure_ascii=False, separators=(',', ':'))
-        json_str.replace('<', r'\u003c').replace('>', r'\u003e')  # .replace('[', r'\u005b').replace(']', r'\u005d')
+        json_str = json_str.replace('<', r'\u003c').replace('>', r'\u003e').replace('&', r'\u0026')
         return json_str

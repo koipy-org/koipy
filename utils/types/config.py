@@ -309,7 +309,6 @@ class MiaoSpeedSlave(Slave):
     skipCertVerify: bool = True
     tls: bool = True
     invoker: str = None
-    branch: int = 1
     buildtoken: str = None
     option: MiaoSpeedOption = field(default_factory=lambda: MiaoSpeedOption())
 
