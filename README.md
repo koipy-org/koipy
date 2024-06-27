@@ -15,7 +15,7 @@ bot主端可以接收你的节点信息，构造测试请求发送到后端，�
 ![测试](https://raw.githubusercontent.com/koipy-org/koipy/master/resources/image/example.png)
 ## 基本使用
 
-前往配置文件示例 ./resources/config.example.yaml
+前往配置文件示例 ./resources/config.example.yaml 查看必填配置，将配置文件命名为 config.yaml ，并放在项目根目录（和resources同级目录）。
 
 搭建好机器人，并配置好后端以及脚本信息。
 

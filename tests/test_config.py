@@ -2,7 +2,6 @@ import os
 import time
 from dataclasses import fields
 
-from utils.types import AdminList, UserList
 from utils.types.config import KoiConfig
 
 
