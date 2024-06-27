@@ -30,7 +30,7 @@ from utils.types.items import ScriptItem, BaseItem, ItemType
 from utils.types.miaospeed import SlaveRequestMatrixEntry, SlaveRequestConfigs, SlaveRequestNode, \
     SlaveRequest as MSSlaveRequest, SlaveRequestMatrixType, SSLType, SlaveRequestBasics, Script as MSScript
 from utils.types.task import SlaveRequest
-from utils.types.config import MiaoSpeedSlave, MiaoSpeedBranch
+from utils.types.config import MiaoSpeedSlave
 
 DEFAULT_DOWNLOAD_URL = CONFIG.runtime.speedFiles
 MS_BUILDTOKEN = "MIAOKO4|580JxAo049R|GEnERAl|1X571R930|T0kEN"  # miaospeed的build_token

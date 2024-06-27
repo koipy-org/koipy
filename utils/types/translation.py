@@ -88,6 +88,7 @@ class Translation(DictCFG, ConfigManager):
     ws_conn_msg: str = "\n🎗️提示: 更少的节点数量将获得更高的测试优先级"
     ms_type_err: str = "SlaveType must be MiaoSpeed. Please check your SlaveRequest Object."
     ms_type_err2: str = "MiapSpeed.ssl_type value is invalid."
+    tr_ok = "Translation loaded: "
 
 
 if __name__ == "__main__":
