@@ -2,7 +2,7 @@ admin: # 管理员，可以不填，不填删掉。首次启动自动设置管�
 - 12345678
 network: # 网络
   httpProxy: "http://host:port" # http代理，如果设置的话，bot会用这个拉取订阅
-  socks5Proxy: "scoks5://host:port" # socks5代理， bot的代理在下面bot那一栏填
+  socks5Proxy: "socks5://host:port" # socks5代理， bot的代理在下面bot那一栏填
   userAgent: "ClashMetaForAndroid/2.8.9.Meta Mihomo/0.16" # UA设置，影响订阅获取
 bot:
   api-id:  # telegram的 api_id 首次启动必填
