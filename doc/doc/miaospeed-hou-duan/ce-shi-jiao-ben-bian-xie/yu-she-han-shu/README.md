@@ -33,4 +33,4 @@ ms有三个预设脚本：
 
 [default\_ip.js](https://github.com/AirportR/miaospeed/blob/master/engine/embeded/default_ip.js) 用于获取当前节点的出口IP
 
-[predefined.js](https://github.com/AirportR/miaospeed/blob/master/engine/embeded/predefined.js) 预设的清洗函数，方便安全的返回解析内容
+[predefined.js](https://github.com/AirportR/miaospeed/blob/master/engine/embeded/predefined.js) 预设的清洗函数，方便安全地返回解析内容
