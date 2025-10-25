@@ -14,4 +14,4 @@
 
 <figure><img src="../../.gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>
 
-然后你就可以开测了
+然后你就可以使用 /test 开测了
