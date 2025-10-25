@@ -38,6 +38,7 @@
 * [以旁路模式运行bot](doc/yi-pang-lu-mo-shi-yun-xing-bot.md)
 * [MiaoSpeed后端](doc/miaospeed-hou-duan/README.md)
   * [介绍](doc/miaospeed-hou-duan/jie-shao.md)
+  * [快速体验](doc/miaospeed-hou-duan/kuai-su-ti-yan.md)
   * [搭建指南](doc/miaospeed-hou-duan/da-jian-zhi-nan/README.md)
     * [docker使用](doc/miaospeed-hou-duan/da-jian-zhi-nan/docker-shi-yong.md)
   * [测试脚本编写](doc/miaospeed-hou-duan/ce-shi-jiao-ben-bian-xie/README.md)

@@ -131,3 +131,7 @@ docker logs -f koipy-app
 
 配置文件示例位于 ./resources/config.example.yaml
 
+## 快速体验
+
+想要立马开测看看效果？
+
