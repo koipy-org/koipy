@@ -135,3 +135,9 @@ docker logs -f koipy-app
 
 想要立马开测看看效果？
 
+参阅：
+
+{% content-ref url="doc/miaospeed-hou-duan/kuai-su-ti-yan.md" %}
+[kuai-su-ti-yan.md](doc/miaospeed-hou-duan/kuai-su-ti-yan.md)
+{% endcontent-ref %}
+
