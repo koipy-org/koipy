@@ -176,5 +176,235 @@ bot: #此行不需要重复写，配置文件有一行就行
 {% endtab %}
 {% endtabs %}
 
+## bot.antiGroup
 
+{% tabs %}
+{% tab title="解释" %}
+1. 是否开启防拉群功能。bot运行期间，非管理员的拉群行为会提示，然后bot会自行退出那个群
+2. 开启后可以防止未经过同意把测试bot拉入其他群造成困扰
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型： bool
+2. 如果bot没有运行，无法在软件层面阻止拉群，但是可以通过@botfather 进行设置一律不允许加入群组
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+bot: #此行不需要重复写，配置文件有一行就行
+  antiGroup: false #启用的话改成 true
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+## bot.strictMode
+
+{% tabs %}
+{% tab title="解释" %}
+1. 是否启用严格模式，在此模式下，bot的所有按钮只能触发消息对话的那个人点，否则是全体用户权限均可点击。默认 **false**
+2. 严格模式会对bot的执行策略产生影响，具体查看‘特性’一栏
+3. 严格模式产生的背景是，一个bot的按钮操作可以帮新手进行，这在/invite的操作流程得以体现。
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型： bool
+2. 严格模式下还会对订阅其中的代理类型进行检测和过滤，过滤其中不支持的代理类型。采用白名单模式，白名单目前维护在程序内部，会根据Clash（mihomo）版本迭代更新。
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+bot: #此行不需要重复写，配置文件有一行就行
+  strictMode: false #启用的话改成 true
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+## bot.bypassMode
+
+{% tabs %}
+{% tab title="解释" %}
+1. 是否将bot设置为旁路模式，设置为旁路模式后，bot原本内置的所有指令都将失效。取而代之仅生效下面bot.commands配置的指令。
+2. 关于旁路模式有什么用，请查阅：[旁路模式](https://koipy.gitbook.io/koipy/doc/yi-pang-lu-mo-shi-yun-xing-bot)
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型： bool
+2. 旁路模式可以使用同一个bot-token运行多个bot实例，这在多客户端实现配合中往往有奇效。例如，有其他测试bot实现了基本测试功能，可使用koipy bot进行功能补充，互不影响。
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+bot: #此行不需要重复写，配置文件有一行就行
+  bypassMode: false #启用的话改成 true
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+## bot.parseMode
+
+{% tabs %}
+{% tab title="解释" %}
+1. bot的文本解析模式。决定bot在发送消息或者处理消息时以什么格式进行处理
+2. 可选值如下： \[DEFAULT, MARKDOWN, HTML, DISABLED]
+   1. MARKDOWN 使用markdown语法进行解析
+   2. HTML 使用html语法进行解析
+   3. DEFAULT 以上两者混合模式，即都支持
+   4. DISABLED 禁用文本解析
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型： str
+2. 此配置的默认值为：DEFAULT&#x20;
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+bot: #此行不需要重复写，配置文件有一行就行
+  parseMode: "MARKDOWN"
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+## bot.cacheTime
+
+{% tabs %}
+{% tab title="解释" %}
+1. 订阅缓存的最大时长
+2. bot有订阅拉取缓存机制，当从远程地址获取一个订阅时，会先检查之前有没有缓存，如果有就不会重复请求获取。这种机制可以优化测试体验，让测试更丝滑。
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型： int
+2. 此配置的默认值为：60  ，单位秒
+3. 值为负数时配置不生效
+4. 目前订阅缓存保存在内存中，未来会支持保存在外部数据库中
+5. 从TG获取的订阅文件也支持缓存
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+bot: #此行不需要重复写，配置文件有一行就行
+  cacheTime: 60
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+## bot.echoLimit
+
+{% tabs %}
+{% tab title="解释" %}
+1. 限制bot响应消息的频率
+2. 如果bot短时间内响应大量无用消息，这会造成更多的计算资源浪费，产生类似DDOS的效果。开启后可以过滤大量重复性或者超过响应频率的消息。
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型： int
+2. 此配置的默认值为：0.8  ，单位秒
+3. 值为负数时配置不生效
+4. 默认每0.8秒内只会响应一次消息，超过限制时bot不会在前端做出任何回应
+5. 触发限制时会写入消息到后台日志
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+bot: #此行不需要重复写，配置文件有一行就行
+  echoLimit: 0.8
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+## bot.inviteBlacklistURL
+
+{% tabs %}
+{% tab title="解释" %}
+1. 当使用/invite指令时，会对本次测试进行黑名单匹配，如果命中，则不允许继续测试
+2. 这个配置填一个远程链接，将用来获取链接对应的文件内容
+3. 文件内容应该每行为一个URL
+4. 此项配置个人使用场景用不到，一般是公开群组测试时用到
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型： str
+2. 此配置的默认值为：[https://raw.githubusercontent.com/koipy-org/koihub/master/proxypool\_url.txt](https://raw.githubusercontent.com/koipy-org/koihub/master/proxypool_url.txt)
+3. 默认值里的URL文件内容是仅供测试的，你不应该将它用作生成环境
+4. 设置为 "" 空字符串代表不启用黑名单URL
+5. 黑名单只会在每次启动时加载一次，热更新配置时，黑名单不会生效重新获取，需要重启bot
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+bot: #此行不需要重复写，配置文件有一行就行
+  inviteBlacklistURL: "https://raw.githubusercontent.com/koipy-org/koihub/master/proxypool_url.txt"
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+## bot.inviteBlacklistDomain
+
+{% tabs %}
+{% tab title="解释" %}
+1. 和bot.inviteBlacklistURL配置类似，但是黑名单每行是域名，表示整个域名都是invite的黑名单范围，这对禁用测试某系列公共订阅/代理提供商尤为有效
+2. 此项配置个人使用场景用不到，一般是公开群组测试时用到
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型： str
+2. 此配置的默认值为：[https://raw.githubusercontent.com/koipy-org/koihub/master/proxypool\_domain.txt](https://raw.githubusercontent.com/koipy-org/koihub/master/proxypool_domain.txt)
+3. 默认值里的URL文件内容是仅供测试的，你不应该将它用作生成环境
+4. 设置为 "" 空字符串代表不启用黑名单域名
+5. 黑名单只会在每次启动时加载一次，热重载配置时，黑名单不会生效重新获取，需要重启bot
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+bot: #此行不需要重复写，配置文件有一行就行
+  inviteBlacklistDomain: "https://raw.githubusercontent.com/koipy-org/koihub/master/proxypool_domain.txt"
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+## bot.autoResetCommands
+
+{% tabs %}
+{% tab title="解释" %}
+1. 是否自动重置bot固定的指令
+2. 在bot.commands的配置中，自定义指令在设置固定(commands\[x].pin)时默认不会清除原有固定指令，此项配置可以改变此行为，让其每次设置指令是都先清除一遍原有指令
+3. 之所以有这个考虑，是因为[旁路模式](https://koipy.gitbook.io/koipy/doc/yi-pang-lu-mo-shi-yun-xing-bot)下，不同bot实例之间可能会互相设置指令，如果贸然清除原有固定的指令，可能会产生意想不到的bug
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型： bool
+2. 此配置的默认值为：false
+3. 此配置生效时机是在启动bot固定指令时，热重载配置也不会生效，需要重启bot
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+bot: #此行不需要重复写，配置文件有一行就行
+  autoResetCommands: false
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+
+
+##
 
