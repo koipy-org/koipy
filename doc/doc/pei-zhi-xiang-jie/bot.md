@@ -154,27 +154,27 @@ bot: #此行不需要重复写，配置文件有一行就行
 {% endtab %}
 {% endtabs %}
 
+## bot.ipv6
 
+{% tabs %}
+{% tab title="解释" %}
+1. 启用IPV6连接，对于某些地区网络连通性可能有优化，但也可能是负面效果，默认不启用（false）
+{% endtab %}
 
+{% tab title="特性" %}
+1. 类型： bool
+2. 启用后仅使用ipv6连接到TG，不会回落到ipv4
+{% endtab %}
 
-
-## bot.inviteGroup
-
-此项配置让 /invite指令的权限范围从用户降低到游客，但仅限你填入的群组id里的群组人员使用。群组id均为-100开头，TG群组id的获取请Google搜索
-
-单个群组:
-
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
 ```yaml
-bot:
- inviteGroup:
- - -1001111111111
+bot: #此行不需要重复写，配置文件有一行就行
+  ipv6: false #启用的话改成 true
 ```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
 
-多个群组:&#x20;
 
-```yaml
-bot:
- inviteGroup:
- - -100222222222
- - -100333333333
-```
+
