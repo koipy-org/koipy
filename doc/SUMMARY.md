@@ -66,4 +66,4 @@
   * [v1.4](doc/geng-xin-ri-zhi/v1.4.md)
   * [v1.3](doc/geng-xin-ri-zhi/v1.3.md)
 * [合作开发](doc/he-zuo-kai-fa.md)
-* [赞赏支持](doc/zan-shang-zhi-chi.md)
+* [赞助支持](doc/zan-zhu-zhi-chi.md)
