@@ -12,7 +12,7 @@
 
 
 
-```
+```yaml
 # 文档地址，有疑问先看文档：https://koipy.gitbook.io/koipy
 license: "YOUR_LICENSE_CODE" # 激活码，必填，否则无法使用。
 admin: # 管理员，可以不填，不填删掉。首次启动自动设置管理员。
