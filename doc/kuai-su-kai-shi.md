@@ -107,6 +107,12 @@ docker run -itd \
 koipy/koipy:arm64
 ```
 
+{% hint style="info" %}
+Windows 用户注意
+
+在Windows上使用Docker时，需要自己解决网络路由问题，否则可能无法后端
+{% endhint %}
+
 检查是否成功启动：
 
 
