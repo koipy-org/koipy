@@ -6,31 +6,35 @@ description: 此项是bot的核心配置，决定了能否让bot成功运行
 
 bot作为一个大项，它下面拥有许多子配置，其中有一些会特别说明：
 
+<details>
+
+<summary>bot</summary>
+
 ```yaml
 bot:
   bot-token: null # bot的token, 首次启动必填
   api-id:  # telegram的 api_id 可选，想用自己的api可以填，默认内置
-  api-hash:  # telegram的 api_hash 可选， 可选，想用自己的api可以填，默认内置
-  proxy: socks5://127.0.0.1:11112 # socks5代理
+  api-hash:  # telegram的 api_hash 可选，想用自己的api可以填，默认内置
+  proxy: socks5://127.0.0.1:11112 # bot的代理设置，推荐socks5代理，http代理也可以，目前仅支持这两种代理
   ipv6: false #是否使用ipv6连接
-  antiGroup: false
+  antiGroup: false # 是否开启防拉群模式，默认false
   strictMode: false # 严格模式，在此模式下，bot的所有按钮只能触发消息对话的那个人点，否则是全体用户权限均可点击。默认false
   bypassMode: false # 是否将bot设置为旁路模式，设置为旁路模式后，bot原本内置的所有指令都将失效。取而代之仅生效下面bot.commands配置的指令。关于旁路模式有什么用，请查阅在线文档。
   parseMode: MARKDOWN # bot的文本解析模式，可选值如下： [DEFAULT, MARKDOWN, HTML, DISABLED]
-  scriptText: "" # 进度条文本
-  analyzeText: ""  # 分析进度条文本
-  speedText: "" # 速度进度条文本
-  bar: "=" # 进度条
-  bleft: "[" # 进度条
-  bright: "]" # 进度条
-  bspace: "  " # 进度条
   inviteGroup: [] # invite指令权限覆写群组白名单，写上对应群组id，那个群所有人都将可以使用/invite指令，默认只能用户权限使用。 群组id以-100开头
   cacheTime: 60 # 订阅缓存的最大时长，默认60秒。一个订阅不会重复拉取，在60秒内使用缓存值，超过60秒重新获取。
+  echoLimit: 0.8 # 限制响应速度，单位秒，默认0.8秒，即bot每0.8秒最多响应一条消息。每0.8/2秒内按钮最多响应一次
   inviteBlacklistURL: [] # 邀请测试里禁止测试的URL链接远程更新地址，多个用逗号隔开。样例： https://raw.githubusercontent.com/koipy-org/koihub/master/proxypool_url.txt
   inviteBlacklistDomain: [] # 邀请测试里禁止测试包含的域名远程更新地址，多个用逗号隔开。样例：https://raw.githubusercontent.com/koipy-org/koihub/master/proxypool_domain.txt
+  autoResetCommands: false # 是否自动重置bot指令，默认false。开启后，每次启动时会清除原来固定在TG前端的指令
   commands: # bot的指令设置
+    # 特殊情况说明：1. 当name=invite的内置规则 enable=false attachToInvite=ture rule=任意，会禁用内置的invite按钮
+    # 2. 当name=invite的内置规则 enable=true attachToInvite=true rule=任意，text=任意，即可更改内置invite按钮的文本
+    # 3. 当name=invite的内置规则 enable=true attachToInvite=true rule=invite内置规则 ，会复写内置invite的规则，后台会有DEBUG日志提示
+    # 内置invite规则名称：['test', 'analyze', 'speed', 'full', 'ping', 'udptype']
     - name: "ping" # 指令名称
-      enable: true # 是否启用该指令， 默认true。未启用时，无法使用该指令
+      title: "PING测试" # 绘图时任务标题
+      enable: true # 是否启用该指令， 默认true。未启用时，无法使用该指令。
       rule: "ping" # 将该指令升级为测试指令，写对应的规则名，会读取你配置好的规则，读取不到则判定该指令为普通指令，而非测试指令。普通指令相当于 /help /version 这些，等于仅修改描述文本，而无实际测试功能
       pin: true # 是否固定指令，固定指令后会始终显示在TG客户端的指令列表中，默认false
       text: "" # 指令的提示文本，默认空时自动使用name的值
@@ -41,17 +45,36 @@ bot:
       pin: false # 不固定指令时，相当于隐藏指令，只有你自己知道
 ```
 
+</details>
+
 ## bot.api-id 与 bot.api-hash
 
-这两项配置是成对绑定的，要么不填，要么都填。
+{% tabs %}
+{% tab title="解释" %}
+1. bot依赖于[MTProto协议](https://core.telegram.org/mtproto)运行，接入官方Telegram平台时需要提供开发的API，bot.api-id 与 bot.api-hash是成对绑定的，要么不填，要么都填。
+2. 你可以前往[这里](https://my.telegram.org/auth?to=apps)获取自己api-id和api-hash 。但是IP最好干净，否则申请过程会提示“ERROR”
+3. api-id和api-hash属于**敏感信息**，请勿泄露。一旦泄露，TG账号被注销也无法重置！
+{% endtab %}
 
-你可以前往[这里](https://my.telegram.org/auth?to=apps)获取自己api-id和api-hash
+{% tab title="特性" %}
+1. api-id 是整型的
+2. api-hash 是字符串
+3. koipy程序内部维护了自己的api-id和api-hash，所以你只需要填入bot-token即可开始玩耍，此项配置不是必须填的。当然你也可以使用自己api。
+4.
+{% endtab %}
 
-koipy程序内部维护了自己的api-id和api-hash，所以你只需要填入bot-token即可开始玩耍。当然你也可以使用自己api。
+{% tab title="配置示例" %}
+```yaml
+bot:
+  api-id: 123456
+  api-hash: 91eda59826c80a7bee5fe80967df3253
+```
+{% endtab %}
+{% endtabs %}
 
-⚠️注意
 
-api-id和api-hash属于**敏感信息**，请勿泄露。一旦泄露，TG账号被注销也无法重置！
+
+
 
 ## bot.bot-token
 
