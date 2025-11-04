@@ -65,56 +65,98 @@ bot:
 
 {% tab title="配置示例" %}
 ```yaml
-bot:
+bot: #此行不需要重复写，配置文件有一行就行
   api-id: 123456
   api-hash: 91eda59826c80a7bee5fe80967df3253
 ```
 {% endtab %}
 {% endtabs %}
 
-
-
-
-
 ## bot.bot-token
 
-关于bot-token，需要注意的是，koipy会使用bot-token在首次启动时生成一个 .seesion后缀文件，它相当于bot的会话密钥，它生成在koipy的工作目录，文件名为: my\_bot.session。它同样是敏感文件，请勿泄露。
+{% tabs %}
+{% tab title="解释" %}
+1. bot运行所必须的通信令牌
+{% endtab %}
 
-这个文件存在时，每次bot重启将会直接读取这里的文件内容作为登录凭据，而不会重新生成。这有助于提升bot的启动速度。因此，当你想要重新生成session会话文件时，请先删除原来生成的。
+{% tab title="特性" %}
+1. 类型： str
+2. koipy会使用bot-token在首次启动时生成一个 .seesion后缀文件，它相当于bot的会话密钥，它生成在koipy的工作目录，文件名为: my\_bot.session。它同样是敏感文件，请勿泄露。
+3. mybot.session文件存在时，每次bot重启将会直接读取这里的文件内容作为登录凭据，而不会重新生成，这有助于提升bot的启动速度。因此，当你想要重新生成session会话文件时，请先删除原来生成的。
+{% endtab %}
+
+{% tab title="配置示例" %}
+```yaml
+bot: #此行不需要重复写，配置文件有一行就行
+  bot-token: 123456789:AAEakOyFndt9G8kO1zmIY-UFcWpAzOXmipk
+  
+```
+{% endtab %}
+{% endtabs %}
 
 ## bot.proxy
 
-你是否位于中国大陆等对Telegram访问受限的地区？
+{% tabs %}
+{% tab title="解释" %}
+1. 你是否位于中国大陆等对Telegram访问受限的地区？那么这项配置就很有帮助，它可以让你通过socks5或http代理来访问Telegram，前提是你的代理服务器能连上Telegram。
+2. 通常情况下，socks5代理端口由Clash等代理软件提供
+{% endtab %}
 
-那么这项配置就很有帮助，它可以让你通过socks5或http代理来访问Telegram，前提是你的代理服务器能连上Telegram。
+{% tab title="特性" %}
+1. 类型： str
+2. bot运行的代理类型仅支持socks5和http类型
+{% endtab %}
 
-格式如下:&#x20;
-
-```
-socks5://username:password@hostname:port
-http://myusername:mypassword@proxy.example.com:8080
-```
-
-socks5代理例子:
-
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
 ```yaml
-bot:
- proxy: socks5://127.0.0.1:7890
+bot: #此行不需要重复写，配置文件有一行就行
+  proxy: socks5://username:password@hostname:port
+  # 以下是http类型 
+  #proxy: http://myusername:mypassword@proxy.example.com:8080
+  # 对于Clash，其默认端口为7890
+  #proxy: socks5://127.0.0.1:7890
+  # 需要身份认证的代理
+  #proxy: socks5://user1:123456@127.0.0.1:
 ```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
 
-需要身份认证的代理：
+## bot.inviteGroup
 
+{% tabs %}
+{% tab title="解释" %}
+1. 此项配置让 /invite指令的权限范围从用户降低到游客，但仅限你填入的群组id里的群组人员使用。群组id均为-100开头，TG群组id的获取请Google搜索
+2. 群组id获取方法，在想要的群组发送/id，就会有bot给你发送相关的群组信息，其中就有群组id
+3.  群组id如图所示
+
+    <figure><img src="../../.gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型： list\[int]
+2. 🌟群组测试目前是赞助用户所持有，个人用户无法使用群组测试，所以这项配置对于个人无法生效。
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
 ```yaml
-bot:
- proxy: socks5://user1:123456@127.0.0.1:7890
-```
+bot: #此行不需要重复写，配置文件有一行就行
+  inviteGroup: 
+  - -1001111111111 #格式注意事项，两个短横线‘-’之间有个空格
+  #- -1001111111112 #第二个群组
+  # 或者你也可以这么写：
+  #inviteGroup: [-1001111111111,-1001111111112]
 
-http代理例子:
-
-```yaml
-bot:
- proxy: http://127.0.0.1:7891
 ```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+
+
+
 
 ## bot.inviteGroup
 

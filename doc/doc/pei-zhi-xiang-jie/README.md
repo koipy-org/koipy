@@ -24,7 +24,9 @@ koipy的配置文件名为 **config.yaml** 它需要你在首次搭建Bot时自�
 
 你可以在 ./resources/config.example.yaml 查看koipy支持的所有配置。它们都有着简要的说明以及默认值。你甚至可以直接复制一份，改自己想改的。
 
+## 编辑器
 
+善用编辑器，例如VS Code，它可以帮助你很好地格式化配置文件
 
 ## koipy 配置相关细节
 
