@@ -6,7 +6,14 @@
 
 ⚠️注意，此文档上的模板可能不是最新的，一切**以最新版koipy的resources/config.example.yaml为准**
 
-```yaml
+<details>
+
+<summary>config.yaml</summary>
+
+
+
+```
+# 文档地址，有疑问先看文档：https://koipy.gitbook.io/koipy
 license: "YOUR_LICENSE_CODE" # 激活码，必填，否则无法使用。
 admin: # 管理员，可以不填，不填删掉。首次启动自动设置管理员。
 - 12345678
@@ -211,10 +218,12 @@ image:
       label: 0
       name: ''
       value: '#bee47e'
-    "xline": # x轴线条颜色
+    'xline': # x轴线条颜色
       value: '#E1E1E1'
-    "yline": # y轴线条颜色
+    'yline': # y轴线条颜色
       value: '#EAEAEA'
+    'font': # 字体颜色
+      value: '#000000'
   compress: false # 是否压缩
   emoji: # emoji是否开启，建议开启，就这样设置
     enable: true
@@ -241,10 +250,10 @@ image:
     size: 64 # 水印大小
     start-y: 0 # 开始坐标
     text: koipy # 水印内容
-    trace: false # UID追踪开启，测试图结果显示任务发起人的UID
+    trace: false # UID追踪开启，测试图结果显示任务发起人的UID，同时会在TG客户端发送图片时打上关联UID的tag
 runtime: # 测速任务可以动态调整的配置
   entrance: true # 是否显示入口IP段
-  interval: 10 # 暂时无用
+  duration: 10 # 测速时长，优先级高于后端单独设置的测速时长
   ipstack: true # 是否启用双栈检测
   localip: false # 暂时无用
   nospeed: false # 暂时无用
@@ -252,10 +261,11 @@ runtime: # 测速任务可以动态调整的配置
   speedFiles: # 速度测试的大文件下载地址，写多个地址后，在后端设置里 option.DownloadURL="DYNAMIC:ALL" 表示用runtime.speedFiles里随机一个地址
   - https://dl.google.com/dl/android/studio/install/3.4.1.0/android-studio-ide-183.5522156-windows.exe
   speedNodes: 300 # 最大测速节点数量
-  speedThreads: 4 # 暂时无用
-  output: image # 输出类型，目前支持 image 和 json 两种
+  speedThreads: 4 # 后端测速线程数量，优先级高于后端单独设置的
+  output: image # 输出类型，目前支持 image 和 json 和 video 三种，其中video如果你用的不是docker镜像启动的，需要自己单独安装 ffmepg，然后设置好 ffmepg 的环境变量
   realtime: false # 是否实时渲染测试结果
   disableSubCvt: false # 是否针对单次测试禁用订阅转换，默认false。开启后，假如全局订阅转换开启，则单次测试不会进行订阅转换。配合rule或者指令参数使用
+  protectContent: false # bot输出的所有图片设置为保护内容，默认false。设置为 true后，bot输出的图片不允许进行转发，复制。
 scriptConfig:
   scripts: # 脚本载入
     - type: gofunc # 表示是miaospeed的内置实现
@@ -357,13 +367,16 @@ slaveConfig: # 后端配置
         stunURL: udp://stunserver2025.stunprotocol.org:3478 # STUN地址，测udp连通性的，格式: udp://host:port
         taskRetry: 3 # 后端任务重试，单位秒(s)
         taskTimeout: 2500 # 后端任务超时判定时长，单位毫秒(ms)
-        dnsServer: [] # 后端指定dns服务器，解析节点域名时会用到。例子: ["119.29.29.29:53", "223.5.5.5:53"]
-        apiVersion: 1 # 后端Api版本，设置为 0或者1可以适配旧版后端兼容性，默认为2，如无必要请勿修改。如果要对接其他分支miaospeed请设置为0或者1
+        dnsServer: [] # 后端指定dns服务器，解析节点域名时会用到。例子: ["119.29.29.29:53", "223.5.5.5:53"]，也支持DoH格式的域名，例如：["https://dns.google/dns-query"]
+        apiVersion: 1 # 后端Api版本，设置为 0或者1可以适配旧版后端兼容性，默认为1，如无必要请勿修改。如果要对接其他分支miaospeed请设置为0或者1
+        uploadURL: https://speed.cloudflare.com/__up # 旧版/其他分支不兼容，apiVersion=3 独有配置，上行速度测试的自定义URL
+        uploadDuration: 8 # 旧版/其他分支不兼容，apiVersion=3 独有配置。上行速度测试的测速时长
+        uploadThreading: 4 # 旧版/其他分支不兼容，apiVersion=3 独有配置。上行速度测试的测速线程
 rules:
   - name: 订阅名1 # 规则名称
     url: https://www.google.com  # 订阅链接
     owner: 1111111111 # 规则创建者
-    slaveid: local # 写你在后端配置里设置的后端id
+    slaveid: [local] # 写你在后端配置里设置的后端id，如果用数组形式写多个后端id，就代表为多后端联测。
     runtime: null # 支持主配置runtime的所有值
     script: [] # 写你在后端配置里设置的脚本配置名称，也支持预保留的名称TEST_PING_RTT等
   - name: 订阅名2 # 规则名称2
@@ -391,3 +404,5 @@ translation: # 翻译语言包
 log-level: INFO # 日志文件日志等级，共有以下日志等级： [DEBUG, INFO, WARNING, ERROR, CRITICAL, DISABLE]，越后的等级日志越严重，DISABLE会禁用日志文件，日志存放在logs目录下。控制台日志等级不受此配置影响，始终为DEBUG等级
 user: [] # 用户权限名单，不用自己设，推荐使用 /grant 指令添加用户权限
 ```
+
+</details>
