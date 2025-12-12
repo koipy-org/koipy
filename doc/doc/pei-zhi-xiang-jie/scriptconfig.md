@@ -60,9 +60,9 @@ scriptConfig:
 | `TEST_PING_CONN`        | HTTP 请求体感延迟测试               |
 | `GEOIP_INBOUND`         | 入口拓扑测试（地理IP路径分析）            |
 | `GEOIP_OUTBOUND`        | 出口拓扑测试（地理IP路径分析）            |
-| `SPEED_AVERAGE`         | 平均传输速度                      |
-| `SPEED_MAX`             | 最大传输速度                      |
-| `SPEED_PER_SECOND`      | 每秒实时传输速度                    |
+| `SPEED_AVERAGE`         | 平均下行速度                      |
+| `SPEED_MAX`             | 最大下行速度                      |
+| `SPEED_PER_SECOND`      | 每秒下行速度                      |
 | `UDP_TYPE`              | UDP行为发现                     |
 | `TEST_PING_MAX_CONN`    | HTTP请求体感最大延迟                |
 | `TEST_PING_MAX_RTT`     | 最大RTT（往返时延峰值）               |
@@ -72,6 +72,10 @@ scriptConfig:
 | `TEST_PING_SD_CONN`     | HTTP请求延迟标准差（访问网页稳定性）        |
 | `TEST_PING_PACKET_LOSS` | RTT丢包率（数据包丢失百分比）            |
 | `TEST_HTTP_CODE`        | 目标PING地址的HTTP状态码（如200、404等） |
+| `USPEED_AVERGE`         | 平均上行速度                      |
+| `USPEED_MAX`            | 最大上行速度                      |
+| `USPEED_PER_SECOND`     | 每秒上行速度                      |
+| `TEST_HIJACK_DETECTION` | 测速劫持检测                      |
 
 
 
