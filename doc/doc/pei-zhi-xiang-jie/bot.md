@@ -404,6 +404,42 @@ bot: #此行不需要重复写，配置文件有一行就行
 {% endtab %}
 {% endtabs %}
 
+## bot.commands
+
+{% tabs %}
+{% tab title="解释" %}
+1. 设置自定义指令
+2. 可以让你随心所欲地增添指令，可以将大部分测试操作绑定在测试指令上，从而简化流程
+3. 专门开了一页来讲述这个配置，请查阅：[https://koipy.gitbook.io/koipy/doc/zi-ding-yi-zhi-ling](https://koipy.gitbook.io/koipy/doc/zi-ding-yi-zhi-ling)
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型： list\[Command]
+2. 此配置的默认值为：\[] 即不配置任何自定义指令
+3. 指令可绑定一个\[规则]\([https://koipy.gitbook.io/koipy/doc/guan-yu-gui-ze](https://koipy.gitbook.io/koipy/doc/guan-yu-gui-ze)) ，从而可被视作 “测试”指令，就像自带的 /speed /topo 那样
+4. 当command.name=\<invite的内置规则>、 enable=false 、attachToInvite=ture rule=<任意名称>，会禁用内置的invite按钮
+5. 当name=invite的内置规则 enable=true attachToInvite=true rule=任意，text=任意，即可更改内置invite按钮的文本
+6. 当name=invite的内置规则 enable=true attachToInvite=true rule=invite内置规则 ，会复写内置invite的规则，后台会有DEBUG日志提示
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+bot: #此行不需要重复写，配置文件有一行就行
+  commands: # bot的指令设置
+  # 内置invite规则名称：['test', 'analyze', 'speed', 'full', 'ping', 'udptype']
+  - name: "ping" # 指令名称
+    title: "PING测试" # 绘图时任务标题
+    enable: true # 是否启用该指令， 默认true。未启用时，无法使用该指令。
+    rule: "ping" # 将该指令升级为测试指令，写对应的规则名，会读取你配置好的规则，读取不到则判定该指令为普通指令，而非测试指令。普通指令相当于 /help /version 这些，等于仅修改描述文本，而无实际测试功能
+    pin: true # 是否固定指令，固定指令后会始终显示在TG客户端的指令列表中，默认false
+    text: "" # 指令的提示文本，默认空时自动使用name的值
+    attachToInvite: true # 是否附加到invite指令中选择的按钮，让invite也能享受到此规则背后的script选择，默认true
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
 
 
 ##
