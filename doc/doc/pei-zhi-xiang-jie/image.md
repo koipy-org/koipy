@@ -4,6 +4,7 @@ description: 这里的配置是关于绘图的
 
 # image
 
+{% code expandable="true" %}
 ```yaml
 image:
   speedFormat: "byte/decimal" # 速度结果绘图格式，共有以下可用值： ["byte/binary", "byte/decimal", "bit/binary", "bit/decimal"] 具体解释请查看文档
@@ -204,12 +205,17 @@ image:
     text: koipy # 水印内容
     trace: false # UID追踪开启，测试图结果显示任务发起人的UID，同时会在TG客户端发送图片时打上关联UID的tag
 ```
+{% endcode %}
 
-## image.speedFormat
 
-速度结果绘图格式，共有以下可用值： \["byte/binary", "byte/decimal", "bit/binary", "bit/decimal"]
 
-解释如下：
+### image.speedFormat
+
+{% tabs %}
+{% tab title="解释" %}
+1. 绘图结果中，上行速度和下行速度的速度显示单位
+2. 只有4个可选值： \["byte/binary", "byte/decimal", "bit/binary", "bit/decimal"]
+3. 速度单位解释如下：
 
 ```
 byte/decimal 速度单位为兆字节/秒，并且使用人类可读的单位换算
@@ -221,14 +227,33 @@ byte/binary 速度单位变成MB/s 兆字节每秒，并且换算基数为二进
 bit/binary 速度单位变成Mbps 兆比特每秒，并且换算基数为二进制，如：1024Mbps ==> 1Gpbs
 ```
 
-为什么有这个格式区别？
+* 为什么有这个格式区别？
 
-1. 传统计算机科学使用: 1024 (2^10) 作为换算基数。这种方法被称为二进制前缀。
-2. 网络和存储设备制造商通常使用: 1000 作为换算基数。这种方法被称为十进制前缀。
+> 传统计算机科学使用: 1024 (2^10) 作为换算基数。这种方法被称为二进制前缀。
 
-在网络测速软件中：
+> 网络和存储设备制造商通常使用: 1000 作为换算基数。这种方法被称为十进制前缀。
+
+&#x20;    在网络测速软件中：
 
 * 大多数测速软件使用 1000 作为基数。这是因为网络速度通常以比特（bit）为单位，而不是字节（byte）。网络设备制造商和互联网服务提供商（ISP）也倾向于使用这种方式。
 * 例如，当测速软件显示 100 Mbps（兆比特每秒）时，它通常表示 100,000,000 比特每秒，而不是 104,857,600 比特每秒。
+* 当然koipy的默认值为byte/decimal，以确保与主流测速软件显示一致
+{% endtab %}
 
-当然koipy的默认值为byte/decimal，以确保与主流测速软件显示一致。
+{% tab title="特性" %}
+1. 类型：str
+2. 如果不是4个可选值中的其中一个，则会使用默认值：`byte/decimal`
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+image:
+  speedFormat: "byte/decimal"
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+
+
