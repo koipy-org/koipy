@@ -4,6 +4,10 @@ description: 这里的配置是关于绘图的
 
 # image
 
+<details>
+
+<summary>image</summary>
+
 {% code expandable="true" %}
 ```yaml
 image:
@@ -207,7 +211,7 @@ image:
 ```
 {% endcode %}
 
-
+</details>
 
 ### image.speedFormat
 
@@ -255,5 +259,22 @@ image:
 {% endtab %}
 {% endtabs %}
 
+### image.color
 
+{% tabs %}
+{% tab title="解释" %}
+1. 此项配置是绘图配色相关
+{% endtab %}
+
+{% tab title="特性" %}
+1.
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
 
