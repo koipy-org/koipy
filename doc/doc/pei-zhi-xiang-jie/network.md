@@ -11,11 +11,11 @@ network: # 网络
   userAgent: "ClashMetaForAndroid/2.8.9.Meta Mihomo/0.16" # UA设置，影响订阅获取
 ```
 
-## network.userAgent
+### network.userAgent
 
 {% tabs %}
 {% tab title="解释" %}
-1. 自定义内部程序部分请求头的user-agent字段
+1. 此项配置会覆写bot内部拉取订阅时设置的user-agent，它是HTTP请求头的一部分。
 {% endtab %}
 
 {% tab title="特性" %}
@@ -33,13 +33,50 @@ network: # 网络配置
 {% endtab %}
 {% endtabs %}
 
-此项配置会覆写bot内部拉取订阅时设置的user-agent，它是HTTP请求头的一部分。
+### network.httpProxy
 
+{% tabs %}
+{% tab title="解释" %}
+1. http代理，如果设置的话，bot会用这个拉取订阅
+{% endtab %}
 
+{% tab title="特性" %}
+1. 类型：str
+2. 此配置影响 /subinfo 指令，当<mark style="color:red;">没有</mark>配置时，游客权限无法使用该指令
+{% endtab %}
 
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+network: # 网络配置
+  httpProxy: "http://127.0.0.1:7890"
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
 
+### network.socks5Proxy
 
-## 关于订阅拉取
+{% tabs %}
+{% tab title="解释" %}
+1. socks5代理，目前koipy没有任何地方用到此配置，属于未来保留配置字段（意思就是暂时无用）
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型：str
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+network: # 网络配置
+  socks5Proxy: "http://127.0.0.1:7890"
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+### 关于订阅拉取
 
 一种名为机场（跨境网络代理提供商）的存在，可以让你获取到http协议的url。它的用户面板（如V2board、Xboard、SSPanel）等会根据HTTP客户端的请求头下发对应的订阅格式。
 
