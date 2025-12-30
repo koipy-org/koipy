@@ -6,6 +6,7 @@ description: 这里的配置是关于绘图的
 
 ```yaml
 image:
+  speedFormat: "byte/decimal" # 速度结果绘图格式，共有以下可用值： ["byte/binary", "byte/decimal", "bit/binary", "bit/decimal"] 具体解释请查看文档
   color: # 颜色配置
     background: # 背景颜色
       inbound: # 入口背景
@@ -169,14 +170,22 @@ image:
       label: 0
       name: ''
       value: '#bee47e'
-  speedFormat: "byte/decimal" # 速度结果绘图格式，共有以下可用值： ["byte/binary", "byte/decimal", "bit/binary", "bit/decimal"] 具体解释请查看文档
+    'xline': # x轴线条颜色
+      value: '#E1E1E1'
+    'yline': # y轴线条颜色
+      value: '#EAEAEA'
+    'font': # 字体颜色
+      value: '#000000'
   compress: false # 是否压缩
   emoji: # emoji是否开启，建议开启，就这样设置
     enable: true
     source: TwemojiLocalSource
   endColorsSwitch: false
-  font: ./resources/alibaba-Regular.ttf #字体路径
-  speedEndColorSwitch: false # 开启渐变色
+  font: ./resources/alibaba-Regular.otf #字体路径
+  speedEndColorSwitch: false # 是否开启渐变色
+  invert: false # 是否将图片取反色，与透明度模式不兼容，开启此项透明度将失效
+  save: true # 是否保存图片到本地，设置为false时，图片将不会保存到本地，默认保存到本地备份(true)
+  pixelThreshold: 2500x3500 # 图片像素阈值，超过阈值则发送原图，否则发送压缩图片，发送压缩图有助于让TG客户端自动下载图片以提升视觉体验。格式：宽的像素x高的像素，例如：2500x3500
   title: 节点测试机器人 # 绘图标题
   watermark: # 水印
     alpha: 32 # 透明度
@@ -193,7 +202,7 @@ image:
     size: 64 # 水印大小
     start-y: 0 # 开始坐标
     text: koipy # 水印内容
-    trace: false # UID追踪开启，测试图结果显示任务发起人的UID
+    trace: false # UID追踪开启，测试图结果显示任务发起人的UID，同时会在TG客户端发送图片时打上关联UID的tag
 ```
 
 ## image.speedFormat

@@ -11,9 +11,31 @@ network: # 网络
   userAgent: "ClashMetaForAndroid/2.8.9.Meta Mihomo/0.16" # UA设置，影响订阅获取
 ```
 
-## userAgent
+## network.userAgent
+
+{% tabs %}
+{% tab title="解释" %}
+1. 自定义内部程序部分请求头的user-agent字段
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型：str
+2. 此配置影响拉取订阅时的UA
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+network: # 网络配置
+  userAgent: "ClashMetaForAndroid/2.8.9.Meta Mihomo/0.16" # UA设置，影响订阅获取
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
 
 此项配置会覆写bot内部拉取订阅时设置的user-agent，它是HTTP请求头的一部分。
+
+
 
 
 
