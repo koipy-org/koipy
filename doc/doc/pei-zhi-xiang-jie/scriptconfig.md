@@ -64,7 +64,6 @@ scriptConfig:
 | `SPEED_MAX`             | 最大下行速度                      |
 | `SPEED_PER_SECOND`      | 每秒下行速度                      |
 | `UDP_TYPE`              | UDP行为发现                     |
-| `TEST_PING_MAX_CONN`    | HTTP请求体感最大延迟                |
 | `TEST_PING_MAX_RTT`     | 最大RTT（往返时延峰值）               |
 | `TEST_PING_TOTAL_CONN`  | 总HTTP请求延迟（所有请求的累计值）         |
 | `TEST_PING_TOTAL_RTT`   | 总RTT（所有数据包往返时延总和）           |
