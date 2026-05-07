@@ -21,6 +21,18 @@ network: # 网络配置
   httpProxy: "http://host:port" # http代理，如果设置的话，bot会用这个拉取订阅
   socks5Proxy: "socks5://host:port" # socks5代理， bot的代理在下面bot那一栏填
   userAgent: "ClashMetaForAndroid/2.8.9.Meta Mihomo/0.16" # UA设置，影响订阅获取
+webapp: # Web 配置管理面板（可选）
+  enable: false # 是否启用内置 Web 配置 API 服务，默认 false
+  address: 127.0.0.1:8899 # 监听地址（host:port）
+  password: "" # 访问密码。若设置，Web 端需输入访问密码后才能读写配置
+  tls: false # 是否启用 HTTPS（TLS）
+  tlsCertFile: "" # TLS 证书文件（PEM）。当 tls=true 时必填
+  tlsKeyFile: "" # TLS 私钥文件（PEM）。可选，若证书文件已包含私钥可留空
+  allowOrigins: # 允许跨域的来源列表
+  - http://127.0.0.1:8899
+  - http://localhost:8899
+  - https://127.0.0.1:8899
+  - https://localhost:8899
 bot:
   bot-token: null # bot的token, 首次启动必填
   api-id:  # telegram的 api_id 可选，想用自己的api可以填，默认内置
@@ -41,7 +53,7 @@ bot:
     # 特殊情况说明：1. 当name=invite的内置规则 enable=false attachToInvite=ture rule=任意，会禁用内置的invite按钮
     # 2. 当name=invite的内置规则 enable=true attachToInvite=true rule=任意，text=任意，即可更改内置invite按钮的文本
     # 3. 当name=invite的内置规则 enable=true attachToInvite=true rule=invite内置规则 ，会复写内置invite的规则，后台会有DEBUG日志提示
-    # 内置invite规则名称：['test', 'analyze', 'speed', 'full', 'ping', 'udptype']
+    # 内置invite规则名称：['test', 'analyze', 'speed', 'full', 'ping', 'udptype', 'uspeed']
     - name: "ping" # 指令名称
       title: "PING测试" # 绘图时任务标题
       enable: true # 是否启用该指令， 默认true。未启用时，无法使用该指令。
@@ -235,6 +247,7 @@ image:
   save: true # 是否保存图片到本地，设置为false时，图片将不会保存到本地，默认保存到本地备份(true)
   pixelThreshold: 2500x3500 # 图片像素阈值，超过阈值则发送原图，否则发送压缩图片，发送压缩图有助于让TG客户端自动下载图片以提升视觉体验。格式：宽的像素x高的像素，例如：2500x3500
   title: 节点测试机器人 # 绘图标题
+  logo: true # 是否在绘图的类型中显示协议相关的logo
   watermark: # 水印
     alpha: 32 # 透明度
     angle: -16.0 # 旋转角度
@@ -266,6 +279,7 @@ runtime: # 测速任务可以动态调整的配置
   realtime: false # 是否实时渲染测试结果
   disableSubCvt: false # 是否针对单次测试禁用订阅转换，默认false。开启后，假如全局订阅转换开启，则单次测试不会进行订阅转换。配合rule或者指令参数使用
   protectContent: false # bot输出的所有图片设置为保护内容，默认false。设置为 true后，bot输出的图片不允许进行转发，复制。
+  enableDNSInject: false # 是否启用 mihomo DNS 注入。开启后会读取订阅中的 dns 字段并编码成 mihomo://base64... 插入到后端 dnsServer 第一项。
 scriptConfig:
   scripts: # 脚本载入
     - type: gofunc # 表示是miaospeed的内置实现
@@ -345,6 +359,12 @@ slaveConfig: # 后端配置
     showStatusStyle: "default" # 在后端选择页面展示状态的样式，共有以下可用值： ["emoji", "number", "default"]，分别代表：展示emoji、展示延迟、不展示，默认default不展示
     autoHideOnFailure: false # 健康检查失败时是否自动隐藏后端，默认false。
   showID: true # 是否在选择后端页面展示slaveid
+  # 后端测速任务的调度模式，共有以下可用值：["concurrent", "pipeline", "sequential"]，默认pipeline，分别代表：
+  # 1. 并发模式（所有后端同时开始测速）
+  # 2. 流水线模式（当第一个测速后端测完第一个节点，第二个后端才开始发送测速任务，以此类推）
+  # 3. 串行模式（前一个后端全部测完后下一个才开始）
+  speedScheduling: pipeline 
+  geoClustering: true # 是否开启拓扑结果的聚类排序，默认为true。开启后会将结果相同或相近的后端排列在一起，提高绘图时的单元格合并率，使图片更整洁。
   slaves: # 后端列表，注意是数组类型
     - type: miaospeed # 固定值，目前只这个支持
       id: "localmiaospeed" # 后端id
@@ -368,6 +388,7 @@ slaveConfig: # 后端配置
         taskRetry: 3 # 后端任务重试，单位秒(s)
         taskTimeout: 2500 # 后端任务超时判定时长，单位毫秒(ms)
         dnsServer: [] # 后端指定dns服务器，解析节点域名时会用到。例子: ["119.29.29.29:53", "223.5.5.5:53"]，也支持DoH格式的域名，例如：["https://dns.google/dns-query"]
+        # dnsServer 也支持 mihomo的dns配置（后端版本至少为 4.6.5），经过base64编码后会发送给后端，后端支持解析： mihomo://ZG5zOgogIGVuYWJsZTogdHJ1ZQogIGRlZmF1bHQtbmFtZXNlcnZlcjoKICAgIC0gMjIzLjUuNS41
         apiVersion: 1 # 后端Api版本，设置为 0或者1可以适配旧版后端兼容性，默认为1，如无必要请勿修改。如果要对接其他分支miaospeed请设置为0或者1
         uploadURL: https://speed.cloudflare.com/__up # 旧版/其他分支不兼容，apiVersion=3 独有配置，上行速度测试的自定义URL
         uploadDuration: 8 # 旧版/其他分支不兼容，apiVersion=3 独有配置。上行速度测试的测速时长
@@ -382,17 +403,37 @@ rules:
   - name: 订阅名2 # 规则名称2
     url: https://www.google2.com  # 订阅链接
     owner: 2222222222 # 规则创建者
-subconverter: # 订阅转换，功能详情：https://github.com/tindy2013/subconverter
-  address: 127.0.0.1:25500 # 地址
+subconverter: # 订阅转换对接配置，可以把base64格式转换bot测试需要的Clash格式
   enable: false # 是否启用
-  tls: false # 是否启用安全加密HTTPS协议，如果不知道的话， https 开头就设为true，否则默认false
-substore: # 订阅转换2，功能详情：https://github.com/sub-store-org/Sub-Store
-  enable: false # 是否启用，默认false
-  backend: "http://127.0.0.1:3000/download/sub?target=ClashMeta" # 后端地址，bot会自动解析成 http://127.0.0.1:3000/download/sub
-  ua: "" # bot传递给订阅转换自定义的请求UA，留空则使用默认UA
-  autoDeploy: false # 是否自动部署sub-store，默认false，如果为true，bot启动时会自动下载sub-store后端和对应的javascript运行时(bun)，如果你自己手动部署sub-store，请设置为false
-  path: "sub-store.bundle.js" # sub-store后端主程序文件路径，自动部署时会自动生成，请勿修改
-  jsRuntime: "/usr/bin/node" # js运行时的可执行文件路径，默认留空。自动部署时会自动生成，请勿修改
+  mode: subconverter # 可选 subconverter / substore，仅用于推断默认 Host/Port/Target
+  # subconverter 功能详情：https://github.com/tindy2013/subconverter
+  # sub-store 功能详情：https://github.com/sub-store-org/Sub-Store
+  template:
+    backend: "http://$Host:$Port/sub?target=$Target&new_name=true&url=$EncodedURL"
+    # sub-store 模板样例: "http://$Host:$Port/download/sub?target=$Target&url=$EncodedURL"
+    # 协议兼容性提示：
+    #   subconverter 对 anytls:// 等新协议可能直接丢弃（返回空 proxies）
+    #   sub-store 对 anytls:// 可用，建议 target=ClashMeta
+    # 占位符说明（推荐在 query 参数里使用 Encoded 版本）：
+    #   $URL / $EncodedURL: 原始订阅链接 / URL编码后的订阅链接
+    #   [强提醒] 当链接作为 query 参数值传递时（如 ...&url=XXX），请使用 $EncodedURL
+    #            若误用 $URL，内层链接中的 ? & # % + 等字符会破坏外层参数解析，导致链接截断或失效
+    #            示例：...&url=$EncodedURL  (推荐)
+    #            示例：...&url=$URL         (仅在你确认无特殊字符时才可用，不推荐)
+    #   $Content / $EncodedContent: 与 URL 同义，兼容部分后端(sub-store)参数名
+    #   $Host / $Port / $Scheme: 后端地址参数（来自 defaults）
+    #   $Target: 转换目标（来自 defaults.target）
+    #   $Mode: 当前 mode 值（subconverter 或 substore）
+    #   $Key / $EncodedKey: 读取 defaults.<Key> 的原值/编码值，键名大小写不敏感
+    # 例如 defaults 里写 ua: clash-verge，可在模板里用 $UA 或 $EncodedUA
+  defaults:
+    target: ClashMeta
+    # 可选：host/port/scheme 以及你自定义的任意键
+    # 默认值规则：
+    #   host 默认 127.0.0.1
+    #   port 默认 25500；如果模板包含 /download/sub，默认端口会推断为 3000
+    #   scheme 默认取 template.backend 的 scheme；模板没写 scheme 时回落到 http
+    #   target 默认 clash；若 mode=substore 或模板包含 /download/sub，默认 ClashMeta
 #callbacks: # http回调功能支持
 #  onMessage: http://127.0.0.1:8080/onMessage # 回调地址，bot收到消息时,会向此地址发送POST请求，使用方法请看文档
 #  onPreSend: http://127.0.0.1:8080/onPreSend # 回调地址，bot处理所有任务的前置动作后（比如选定后端、选定规则等），会向此地址发送POST请求，来完成一些操作，使用方法请看文档
@@ -403,6 +444,7 @@ translation: # 翻译语言包
     zh-CN: ./resources/i18n/zh-CN.yml # 键随便填，值填文件路径，文件内容格式为yaml，具体请看文档
 log-level: INFO # 日志文件日志等级，共有以下日志等级： [DEBUG, INFO, WARNING, ERROR, CRITICAL, DISABLE]，越后的等级日志越严重，DISABLE会禁用日志文件，日志存放在logs目录下。控制台日志等级不受此配置影响，始终为DEBUG等级
 user: [] # 用户权限名单，不用自己设，推荐使用 /grant 指令添加用户权限
+
 ```
 
 </details>
