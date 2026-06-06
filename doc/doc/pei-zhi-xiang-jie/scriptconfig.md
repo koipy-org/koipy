@@ -6,9 +6,7 @@ description: 此配置涉及测试时的后端脚本配置
 
 ## 概要
 
-后端一般不存储脚本，所有的脚本文件都存放主端bot，在测试的时候根据你选择测的选项实时分发对应的脚本
-
-
+后端一般不存储脚本，所有脚本文件都存放在主端 bot 中，测试时会根据你选择的选项实时分发对应的脚本。
 
 ## 配置脚本
 
@@ -33,7 +31,7 @@ scriptConfig:
 
 ### scriptConfig.script\[0].type
 
-可用值:&#x20;
+可用值:
 
 * gojajs 表示这是miaospeed的支持的javascript脚本引擎类型，更多解释请前往文档编写miaospeed脚本页面
 * gofunc 表示这个脚本是miaospeed内部用Go语言实现的，仅能更改在主端的行为，例外排序等
@@ -44,7 +42,7 @@ scriptConfig:
 
 ### scriptConfig.script\[0].rank
 
-脚本返回给bot的内容在绘图上显示的相对位置排序，值是整数，默认值为1，数字越小越排在前面。
+脚本返回给 bot 的内容在绘图上显示的相对位置排序，值是整数，默认值为 1，数字越小越排在前面。
 
 ### scriptConfig.script\[0].content
 
@@ -52,7 +50,7 @@ scriptConfig:
 
 ## 脚本预保留名称
 
-以下这些字符串为bot的预保留脚本名称，当你使用这些预保留名称作为脚本名称时，会覆写内部程序的预留配置。
+以下这些字符串是 bot 的预保留脚本名称。当你使用这些名称作为脚本名称时，会覆写内部程序的预留配置。
 
 | 测试项                     | 描述                          |
 | ----------------------- | --------------------------- |
@@ -71,7 +69,7 @@ scriptConfig:
 | `TEST_PING_SD_CONN`     | HTTP请求延迟标准差（访问网页稳定性）        |
 | `TEST_PING_PACKET_LOSS` | RTT丢包率（数据包丢失百分比）            |
 | `TEST_HTTP_CODE`        | 目标PING地址的HTTP状态码（如200、404等） |
-| `USPEED_AVERGE`         | 平均上行速度                      |
+| `USPEED_AVERAGE`        | 平均上行速度                      |
 | `USPEED_MAX`            | 最大上行速度                      |
 | `USPEED_PER_SECOND`     | 每秒上行速度                      |
 | `TEST_HIJACK_DETECTION` | 测速劫持检测                      |

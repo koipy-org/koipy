@@ -1,10 +1,8 @@
 # 配置模板
 
-1. 以下是koipy启动配置文件模板，你也可以在安装包里的 resources/config.example.yaml 找到此模板文件
-2. 配置模板包含了所有koipy支持的配置选项，并且有对应作用的说明，除了快速开始那里要求必填的，其他均为选填。
-3. 如果你要开始测试，请至少配置一个后端。后端可以是搭建在本地，也可以是远程服务器。
-
-⚠️注意，此文档上的模板可能不是最新的，一切**以最新版koipy的resources/config.example.yaml为准**
+1. 以下是 koipy 启动配置文件模板，内容按最新版本整理。
+2. 这页只做当前模板的镜像说明，不再作为历史模板的长期参考。
+3. 如果你要开始测试，请至少配置一个后端。后端可以是本地，也可以是远程服务器。
 
 <details>
 
@@ -21,7 +19,7 @@ network: # 网络配置
   httpProxy: "http://host:port" # http代理，如果设置的话，bot会用这个拉取订阅
   socks5Proxy: "socks5://host:port" # socks5代理， bot的代理在下面bot那一栏填
   userAgent: "ClashMetaForAndroid/2.8.9.Meta Mihomo/0.16" # UA设置，影响订阅获取
-webapp: # Web 配置管理面板（可选）
+webapi: # Web 配置管理面板（可选）
   enable: false # 是否启用内置 Web 配置 API 服务，默认 false
   address: 127.0.0.1:8899 # 监听地址（host:port）
   password: "" # 访问密码。若设置，Web 端需输入访问密码后才能读写配置
@@ -50,7 +48,7 @@ bot:
   inviteBlacklistDomain: [] # 邀请测试里禁止测试包含的域名远程更新地址，多个用逗号隔开。样例：https://raw.githubusercontent.com/koipy-org/koihub/master/proxypool_domain.txt
   autoResetCommands: false # 是否自动重置bot指令，默认false。开启后，每次启动时会清除原来固定在TG前端的指令
   commands: # bot的指令设置
-    # 特殊情况说明：1. 当name=invite的内置规则 enable=false attachToInvite=ture rule=任意，会禁用内置的invite按钮
+    # 特殊情况说明：1. 当name=invite的内置规则 enable=false attachToInvite=false rule=任意，会禁用内置的invite按钮
     # 2. 当name=invite的内置规则 enable=true attachToInvite=true rule=任意，text=任意，即可更改内置invite按钮的文本
     # 3. 当name=invite的内置规则 enable=true attachToInvite=true rule=invite内置规则 ，会复写内置invite的规则，后台会有DEBUG日志提示
     # 内置invite规则名称：['test', 'analyze', 'speed', 'full', 'ping', 'udptype', 'uspeed']
@@ -264,6 +262,22 @@ image:
     start-y: 0 # 开始坐标
     text: koipy # 水印内容
     trace: false # UID追踪开启，测试图结果显示任务发起人的UID，同时会在TG客户端发送图片时打上关联UID的tag
+  nonCommercialWatermark: # 非商用水印
+    alpha: 16
+    angle: -16.0
+    color:
+      alpha: 16
+      end-color: '#ffffff'
+      label: 0
+      name: ''
+      value: '#000000'
+    enable: false
+    row-spacing: 1
+    shadow: false
+    size: 64
+    start-y: 0
+    text: 请勿用于商业用途
+    trace: false
 runtime: # 测速任务可以动态调整的配置
   entrance: true # 是否显示入口IP段
   duration: 10 # 测速时长，优先级高于后端单独设置的测速时长
@@ -363,7 +377,7 @@ slaveConfig: # 后端配置
   # 1. 并发模式（所有后端同时开始测速）
   # 2. 流水线模式（当第一个测速后端测完第一个节点，第二个后端才开始发送测速任务，以此类推）
   # 3. 串行模式（前一个后端全部测完后下一个才开始）
-  speedScheduling: pipeline 
+  speedScheduling: pipeline
   geoClustering: true # 是否开启拓扑结果的聚类排序，默认为true。开启后会将结果相同或相近的后端排列在一起，提高绘图时的单元格合并率，使图片更整洁。
   slaves: # 后端列表，注意是数组类型
     - type: miaospeed # 固定值，目前只这个支持

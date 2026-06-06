@@ -1,22 +1,22 @@
 # 介绍
 
-miaospeed是一款开源的通用代理服务器测试工具，它基于前后端模式运行，它作为后端实现，通常以websocket服务器后端运行。
+MiaoSpeed 是一款开源的通用代理服务器测试工具。它基于前后端模式运行，通常作为 WebSocket 后端提供服务。
 
-Github仓库如下（已停止维护）：
+GitHub 仓库如下（已停止维护）：
 
 {% @github-files/github-code-block url="https://github.com/miaokobot/miaospeed" %}
 
-由于作者于2024年正式对项目进行归档，不再进行维护。所以我们推荐使用还在维护的miaospeed分支：
+由于作者于 2024 年正式将项目归档，不再维护，所以我们推荐使用仍在维护的 miaospeed 分支：
 
-* 本项目在维护的分支（完全兼容）：
+* 本项目维护的分支（完全兼容）：
 
 {% @github-files/github-code-block url="https://github.com/AirportR/miaospeed" %}
 
-* moshaoli分支（兼容）：
+* moshaoli 分支（兼容）：
 
 {% @github-files/github-code-block url="https://github.com/moshaoli688/miaospeed" %}
 
-* paimonhub（兼容存疑？）：
+* paimonhub（兼容性存疑）：
 
 {% @github-files/github-code-block url="https://github.com/Paimonhub/miaospeed_community" %}
 

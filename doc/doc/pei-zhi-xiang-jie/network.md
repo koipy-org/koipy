@@ -4,6 +4,8 @@ description: 此配置下，会影响一些bot的网络通讯行为
 
 # network
 
+这一页说明网络通讯相关配置。
+
 ```yaml
 network: # 网络
   httpProxy: "http://host:port" # http代理，如果设置的话，bot会用这个拉取订阅

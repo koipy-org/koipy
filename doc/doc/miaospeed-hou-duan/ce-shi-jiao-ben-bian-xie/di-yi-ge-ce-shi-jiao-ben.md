@@ -1,11 +1,11 @@
 # 第一个测试脚本
 
-我们使用一个Youtube脚本作为例子，该脚本可以测试节点是否可以使用Youtube Premium：
+我们使用一个 YouTube 脚本作为例子，该脚本可以测试节点是否可以使用 YouTube Premium：
 
 ```javascript
 const C_NA = '142,140,142'; // N/A 不可用的颜色
 const C_UNL = '186,230,126'; // 解锁的颜色
-const C_FAIL = '239,107,115'; //  解锁失败的颜色
+const C_FAIL = '239,107,115'; // 解锁失败的颜色
 const C_UNK = '92,207,230'; // 解锁未知的颜色
 const C_CN = '250,213,149'; // 其他颜色
 
@@ -56,9 +56,7 @@ function handler() {
         if (/"countryCode":"(.*?)"/.test(body)) {
             region = body.match(/"countryCode":"(.*?)"/)[1];
             return {
-                text: `解锁 ($ {
-                    region.toUpperCase()
-                })`,
+                text: `解锁 (${region.toUpperCase()})`,
                 background: C_UNL,
             };
         }
@@ -69,9 +67,7 @@ function handler() {
             };
         }
         return {
-            text: `解锁 ($ {
-                region.toUpperCase()
-            })`,
+            text: `解锁 (${region.toUpperCase()})`,
             background: C_UNK,
         };
     } else if (content.statusCode == 302) {
@@ -90,19 +86,19 @@ function handler() {
 
 ## 脚本分析
 
-从以上例子可以看到，我们需要定义handler函数（必须得是这个名称），它相当于程序入口。在handler函数编写我们的业务逻辑。
+从以上例子可以看到，我们需要定义 `handler` 函数（必须是这个名称），它相当于程序入口。在 `handler` 函数里编写业务逻辑。
 
 ### 发起网络通信
 
-使用 fetch 内置函数发起网络通信，在上面的例子，通过调用fetch函数发起GET请求，返回响应体 **content** 。请注意，ms的fetch等内置函数是golang实现的，它不会返回Promise对象。响应数据通过：
+使用 `fetch` 内置函数发起网络通信。在上面的例子里，通过调用 `fetch` 函数发起 GET 请求，返回响应体 **content**。请注意，ms 的 `fetch` 等内置函数是 Go 实现的，它不会返回 Promise 对象。响应数据通过：
 
-```
+```javascript
 const body = content.body; // 拿到响应数据
 ```
 
 ### 返回值
 
-handler函数的返回值为一个Object （对象）。但miaospeed只会解析其中的三个键值对：
+`handler` 函数的返回值为一个 Object（对象）。但 MiaoSpeed 只会解析其中的三个键值对：
 
 ```javascript
 {
@@ -112,6 +108,6 @@ handler函数的返回值为一个Object （对象）。但miaospeed只会解析
 }
 ```
 
-* text 展示在绘图中的内容
-* background 背景颜色，格式为RGB，例如：(255,255,255)，koipy不使用该值。
-* color 意义暂不详，koipy不使用该值。
+* `text`：展示在绘图中的内容
+* `background`：背景颜色，格式为 RGB，例如 `(255,255,255)`，koipy 不使用该值。
+* `color`：意义暂不详，koipy 不使用该值。

@@ -6,13 +6,13 @@
 
 ping测试入口如图所示
 
-<figure><img src="../../.gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
+![](../../.gitbook/assets/image%20%2814%29.png)
 
 ### 测试项详情：
 
 请记住，上图点击后开测的按钮本质上都是规则的自动填充，所以你可以自己建立规则，实现上面按钮实现的效果。
 
-以下是所有koipy目前支持的内置测试项，大部分均为gofunc类型（除了GEOIP\_INBOUND和GEOIP\_OUBOUND），即miaospeed用golang自主实现的测试类型。
+以下是所有 koipy 目前支持的内置测试项，大部分均为 gofunc 类型（除了 `GEOIP_INBOUND` 和 `GEOIP_OUTBOUND`），即 miaospeed 用 golang 自主实现的测试类型。
 
 | 测试项                     | 描述                      |
 | ----------------------- | ----------------------- |
@@ -65,7 +65,7 @@ ping测试入口如图所示
 >
 > 有时候图片会显示此名称，意味着配置里pingURL是https开头的，koipy默认给所有未配置ping地址的后端一个缺省值：
 >
-> &#x20;https://cp.cloudflare.com/generate\_204
+>  https://cp.cloudflare.com/generate\_204
 >
 > TLS RTT是一个历史遗留名称，它的解释**根据源码中的算法解释为：**
 >

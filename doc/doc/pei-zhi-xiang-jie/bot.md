@@ -4,7 +4,7 @@ description: 此项是bot的核心配置，决定了能否让bot成功运行
 
 # bot
 
-bot作为一个大项，它下面拥有许多子配置，其中有一些会特别说明：
+bot 作为一个大项，下面包含很多子配置，其中有一些会特别说明：
 
 <details>
 
@@ -28,7 +28,7 @@ bot:
   inviteBlacklistDomain: [] # 邀请测试里禁止测试包含的域名远程更新地址，多个用逗号隔开。样例：https://raw.githubusercontent.com/koipy-org/koihub/master/proxypool_domain.txt
   autoResetCommands: false # 是否自动重置bot指令，默认false。开启后，每次启动时会清除原来固定在TG前端的指令
   commands: # bot的指令设置
-    # 特殊情况说明：1. 当name=invite的内置规则 enable=false attachToInvite=ture rule=任意，会禁用内置的invite按钮
+    # 特殊情况说明：1. 当name=invite的内置规则 enable=false attachToInvite=false rule=任意，会禁用内置的invite按钮
     # 2. 当name=invite的内置规则 enable=true attachToInvite=true rule=任意，text=任意，即可更改内置invite按钮的文本
     # 3. 当name=invite的内置规则 enable=true attachToInvite=true rule=invite内置规则 ，会复写内置invite的规则，后台会有DEBUG日志提示
     # 内置invite规则名称：['test', 'analyze', 'speed', 'full', 'ping', 'udptype']
@@ -51,9 +51,9 @@ bot:
 
 {% tabs %}
 {% tab title="解释" %}
-1. bot依赖于[MTProto协议](https://core.telegram.org/mtproto)运行，接入官方Telegram平台时需要提供开发的API，bot.api-id 与 bot.api-hash是成对绑定的，要么不填，要么都填。
-2. 你可以前往[这里](https://my.telegram.org/auth?to=apps)获取自己api-id和api-hash 。但是IP最好干净，否则申请过程会提示“ERROR”
-3. api-id和api-hash属于**敏感信息**，请勿泄露。一旦泄露，TG账号被注销也无法重置！
+1. bot 依赖于 [MTProto 协议](https://core.telegram.org/mtproto) 运行，接入官方 Telegram 平台时需要提供开发 API，`bot.api-id` 与 `bot.api-hash` 是成对绑定的，要么不填，要么都填。
+2. 你可以前往 [这里](https://my.telegram.org/auth?to=apps) 获取自己的 `api-id` 和 `api-hash`。不过 IP 最好干净，否则申请过程可能提示 “ERROR”。
+3. `api-id` 和 `api-hash` 属于**敏感信息**，请勿泄露。一旦泄露，TG 账号被注销也无法重置。
 {% endtab %}
 
 {% tab title="特性" %}
@@ -76,20 +76,20 @@ bot: #此行不需要重复写，配置文件有一行就行
 
 {% tabs %}
 {% tab title="解释" %}
-1. bot运行所必须的通信令牌
+1. bot 运行所必须的通信令牌。
 {% endtab %}
 
 {% tab title="特性" %}
 1. 类型： str
-2. koipy会使用bot-token在首次启动时生成一个 .seesion后缀文件，它相当于bot的会话密钥，它生成在koipy的工作目录，文件名为: my\_bot.session。它同样是敏感文件，请勿泄露。
-3. mybot.session文件存在时，每次bot重启将会直接读取这里的文件内容作为登录凭据，而不会重新生成，这有助于提升bot的启动速度。因此，当你想要重新生成session会话文件时，请先删除原来生成的。
+2. koipy 会使用 `bot-token` 在首次启动时生成一个 `.session` 后缀文件，它相当于 bot 的会话密钥，会生成在 koipy 的工作目录，文件名为 `my_bot.session`。它同样是敏感文件，请勿泄露。
+3. `my_bot.session` 文件存在时，每次 bot 重启都会直接读取它作为登录凭据，而不会重新生成，这有助于提升 bot 的启动速度。因此，当你想重新生成 session 会话文件时，请先删除原来生成的文件。
 {% endtab %}
 
 {% tab title="配置示例" %}
 ```yaml
 bot: #此行不需要重复写，配置文件有一行就行
   bot-token: 123456789:AAEakOyFndt9G8kO1zmIY-UFcWpAzOXmipk
-  
+
 ```
 {% endtab %}
 {% endtabs %}
@@ -98,8 +98,8 @@ bot: #此行不需要重复写，配置文件有一行就行
 
 {% tabs %}
 {% tab title="解释" %}
-1. 你是否位于中国大陆等对Telegram访问受限的地区？那么这项配置就很有帮助，它可以让你通过socks5或http代理来访问Telegram，前提是你的代理服务器能连上Telegram。
-2. 通常情况下，socks5代理端口由Clash等代理软件提供
+1. 如果你位于中国大陆等对 Telegram 访问受限的地区，这项配置就很有帮助，它可以让你通过 socks5 或 http 代理访问 Telegram，前提是你的代理服务器能连上 Telegram。
+2. 通常情况下，socks5 代理端口由 Clash 等代理软件提供。
 {% endtab %}
 
 {% tab title="特性" %}
@@ -112,7 +112,7 @@ bot: #此行不需要重复写，配置文件有一行就行
 ```yaml
 bot: #此行不需要重复写，配置文件有一行就行
   proxy: socks5://username:password@hostname:port
-  # 以下是http类型 
+  # 以下是http类型
   #proxy: http://myusername:mypassword@proxy.example.com:8080
   # 对于Clash，其默认端口为7890
   #proxy: socks5://127.0.0.1:7890
@@ -131,7 +131,7 @@ bot: #此行不需要重复写，配置文件有一行就行
 2. 群组id获取方法，在想要的群组发送/id，就会有bot给你发送相关的群组信息，其中就有群组id
 3.  群组id如图所示
 
-    <figure><img src="../../.gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
+    ![](../../.gitbook/assets/image%20%2822%29.png)
 {% endtab %}
 
 {% tab title="特性" %}
@@ -143,7 +143,7 @@ bot: #此行不需要重复写，配置文件有一行就行
 {% code title="config.yaml" lineNumbers="true" %}
 ```yaml
 bot: #此行不需要重复写，配置文件有一行就行
-  inviteGroup: 
+  inviteGroup:
   - -1001111111111 #格式注意事项，两个短横线‘-’之间有个空格
   #- -1001111111112 #第二个群组
   # 或者你也可以这么写：
@@ -260,7 +260,7 @@ bot: #此行不需要重复写，配置文件有一行就行
 
 {% tab title="特性" %}
 1. 类型： str
-2. 此配置的默认值为：DEFAULT&#x20;
+2. 此配置的默认值为：DEFAULT
 {% endtab %}
 
 {% tab title="配置示例" %}
@@ -417,7 +417,7 @@ bot: #此行不需要重复写，配置文件有一行就行
 1. 类型： list\[Command]
 2. 此配置的默认值为：\[] 即不配置任何自定义指令
 3. 指令可绑定一个\[规则]\([https://koipy.gitbook.io/koipy/doc/guan-yu-gui-ze](https://koipy.gitbook.io/koipy/doc/guan-yu-gui-ze)) ，从而可被视作 “测试”指令，就像自带的 /speed /topo 那样
-4. 当command.name=\<invite的内置规则>、 enable=false 、attachToInvite=ture rule=<任意名称>，会禁用内置的invite按钮
+4. 当command.name=\<invite的内置规则>、 enable=false 、attachToInvite=false rule=<任意名称>，会禁用内置的invite按钮
 5. 当name=invite的内置规则 enable=true attachToInvite=true rule=任意，text=任意，即可更改内置invite按钮的文本
 6. 当name=invite的内置规则 enable=true attachToInvite=true rule=invite内置规则 ，会复写内置invite的规则，后台会有DEBUG日志提示
 {% endtab %}
