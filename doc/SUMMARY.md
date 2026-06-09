@@ -13,6 +13,7 @@
   * [bot](doc/pei-zhi-xiang-jie/bot.md)
   * [network](doc/pei-zhi-xiang-jie/network.md)
   * [image](doc/pei-zhi-xiang-jie/image.md)
+  * [runtime](doc/pei-zhi-xiang-jie/runtime.md)
   * [scriptConfig](doc/pei-zhi-xiang-jie/scriptconfig.md)
 * [指令详解](doc/zhi-ling-xiang-jie/README.md)
   * [/test](doc/zhi-ling-xiang-jie/test.md)
