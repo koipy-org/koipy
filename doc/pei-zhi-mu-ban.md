@@ -19,10 +19,16 @@ network: # 网络配置
   httpProxy: "http://host:port" # http代理，如果设置的话，bot会用这个拉取订阅
   socks5Proxy: "socks5://host:port" # socks5代理， bot的代理在下面bot那一栏填
   userAgent: "ClashMetaForAndroid/2.8.9.Meta Mihomo/0.16" # UA设置，影响订阅获取
-webapi: # Web 配置管理面板（可选）
+subscription: # 订阅获取相关配置
+  age: # age 加密订阅解密配置，仅支持 age X25519 ASCII armor 格式；不依赖额外二进制
+    enable: false # 是否启用 age 解密。开启后，Koipy 会在订阅下载成功后、解析/订阅转换前尝试解密 age armor 内容
+    secretKey: "" # age X25519 私钥，格式 AGE-SECRET-KEY-...；启用 age 解密时必填
+    publicKey: "" # age 公钥，格式 age1...；填写后请求订阅时会通过下面的 publicKeyHeader 发给订阅服务端
+    publicKeyHeader: X-Age-Public-Key # 发送公钥使用的 HTTP 请求头名；服务端可用该公钥临时加密返回内容
+webapi: # Web 配置 API（可选；前端面板已独立部署/维护）
   enable: false # 是否启用内置 Web 配置 API 服务，默认 false
   address: 127.0.0.1:8899 # 监听地址（host:port）
-  password: "" # 访问密码。若设置，Web 端需输入访问密码后才能读写配置
+  password: "" # 访问密码；启用 webapi 时必填，留空会拒绝启动
   tls: false # 是否启用 HTTPS（TLS）
   tlsCertFile: "" # TLS 证书文件（PEM）。当 tls=true 时必填
   tlsKeyFile: "" # TLS 私钥文件（PEM）。可选，若证书文件已包含私钥可留空
@@ -38,7 +44,7 @@ bot:
   proxy: socks5://127.0.0.1:11112 # bot的代理设置，推荐socks5代理，http代理也可以，目前仅支持这两种代理
   ipv6: false #是否使用ipv6连接
   antiGroup: false # 是否开启防拉群模式，默认false
-  strictMode: false # 严格模式，在此模式下，bot的所有按钮只能触发消息对话的那个人点，否则是全体用户权限均可点击。默认false
+  strictMode: false # 严格模式，在此模式下，bot的所有按钮只能触发消息对话的那个人点，否则是全体用户权限均可点击。默认false 。此外，严格模式还被用于检查不支持的代理类型，如果你发现测不了新的代理协议，那就是这个起作用，等待开发者将新的代理协议加入内部名单
   bypassMode: false # 是否将bot设置为旁路模式，设置为旁路模式后，bot原本内置的所有指令都将失效。取而代之仅生效下面bot.commands配置的指令。关于旁路模式有什么用，请查阅在线文档。
   parseMode: MARKDOWN # bot的文本解析模式，可选值如下： [DEFAULT, MARKDOWN, HTML, DISABLED]
   inviteGroup: [] # invite指令权限覆写群组白名单，写上对应群组id，那个群所有人都将可以使用/invite指令，默认只能用户权限使用。 群组id以-100开头
@@ -246,6 +252,7 @@ image:
   pixelThreshold: 2500x3500 # 图片像素阈值，超过阈值则发送原图，否则发送压缩图片，发送压缩图有助于让TG客户端自动下载图片以提升视觉体验。格式：宽的像素x高的像素，例如：2500x3500
   title: 节点测试机器人 # 绘图标题
   logo: true # 是否在绘图的类型中显示协议相关的logo
+  showUnsafeTips: true # 是否在绘图的页脚里显示不安全的后端提示，不安全的后端是指：tls=true 并且 skipCertVerify=true 或者 tls=false
   watermark: # 水印
     alpha: 32 # 透明度
     angle: -16.0 # 旋转角度
@@ -262,22 +269,6 @@ image:
     start-y: 0 # 开始坐标
     text: koipy # 水印内容
     trace: false # UID追踪开启，测试图结果显示任务发起人的UID，同时会在TG客户端发送图片时打上关联UID的tag
-  nonCommercialWatermark: # 非商用水印
-    alpha: 16
-    angle: -16.0
-    color:
-      alpha: 16
-      end-color: '#ffffff'
-      label: 0
-      name: ''
-      value: '#000000'
-    enable: false
-    row-spacing: 1
-    shadow: false
-    size: 64
-    start-y: 0
-    text: 请勿用于商业用途
-    trace: false
 runtime: # 测速任务可以动态调整的配置
   entrance: true # 是否显示入口IP段
   duration: 10 # 测速时长，优先级高于后端单独设置的测速时长
@@ -293,7 +284,7 @@ runtime: # 测速任务可以动态调整的配置
   realtime: false # 是否实时渲染测试结果
   disableSubCvt: false # 是否针对单次测试禁用订阅转换，默认false。开启后，假如全局订阅转换开启，则单次测试不会进行订阅转换。配合rule或者指令参数使用
   protectContent: false # bot输出的所有图片设置为保护内容，默认false。设置为 true后，bot输出的图片不允许进行转发，复制。
-  enableDNSInject: false # 是否启用 mihomo DNS 注入。开启后会读取订阅中的 dns 字段并编码成 mihomo://base64... 插入到后端 dnsServer 第一项。
+  enableDNSInject: false # 此配置无法设置为全局runtime配置。是否启用 mihomo DNS 注入。开启后会读取订阅中的 dns 字段并编码成 mihomo://base64... 插入到后端 dnsServer 第一项。
 scriptConfig:
   scripts: # 脚本载入
     - type: gofunc # 表示是miaospeed的内置实现
@@ -419,12 +410,13 @@ rules:
     owner: 2222222222 # 规则创建者
 subconverter: # 订阅转换对接配置，可以把base64格式转换bot测试需要的Clash格式
   enable: false # 是否启用
-  mode: subconverter # 可选 subconverter / substore，仅用于推断默认 Host/Port/Target
+  mode: builtin # 可选 subconverter / substore / builtin，用于选择转换后端时自动推断端口，使用builtin代表用的内部自带的转换（实验性）
   # subconverter 功能详情：https://github.com/tindy2013/subconverter
   # sub-store 功能详情：https://github.com/sub-store-org/Sub-Store
+  # 本地内部转换器（实验性支持）：mode 填 builtin，不需要额外后端进程
   template:
     backend: "http://$Host:$Port/sub?target=$Target&new_name=true&url=$EncodedURL"
-    # sub-store 模板样例: "http://$Host:$Port/download/sub?target=$Target&url=$EncodedURL"
+    # sub-store 模板样例: "http://$Host:$Port/download/sub?target=$Target&url=$EncodedURL&fakeSub=true"
     # 协议兼容性提示：
     #   subconverter 对 anytls:// 等新协议可能直接丢弃（返回空 proxies）
     #   sub-store 对 anytls:// 可用，建议 target=ClashMeta
@@ -437,7 +429,7 @@ subconverter: # 订阅转换对接配置，可以把base64格式转换bot测试�
     #   $Content / $EncodedContent: 与 URL 同义，兼容部分后端(sub-store)参数名
     #   $Host / $Port / $Scheme: 后端地址参数（来自 defaults）
     #   $Target: 转换目标（来自 defaults.target）
-    #   $Mode: 当前 mode 值（subconverter 或 substore）
+    #   $Mode: 当前 mode 值（subconverter、substore 或本地转换器模式）
     #   $Key / $EncodedKey: 读取 defaults.<Key> 的原值/编码值，键名大小写不敏感
     # 例如 defaults 里写 ua: clash-verge，可在模板里用 $UA 或 $EncodedUA
   defaults:
@@ -455,7 +447,8 @@ subconverter: # 订阅转换对接配置，可以把base64格式转换bot测试�
 translation: # 翻译语言包
   lang: zh-CN # 启用哪个语言包，填的值为下面resources配置的键，默认zh-CN
   resources: # 翻译包在哪加载
-    zh-CN: ./resources/i18n/zh-CN.yml # 键随便填，值填文件路径，文件内容格式为yaml，具体请看文档
+    zh-CN: ./resources/localization/zh-CN.yml # 键随便填，值填文件路径，文件内容格式为yaml，具体请看文档
+    en-us: ./resources/localization/en-us.yml
 log-level: INFO # 日志文件日志等级，共有以下日志等级： [DEBUG, INFO, WARNING, ERROR, CRITICAL, DISABLE]，越后的等级日志越严重，DISABLE会禁用日志文件，日志存放在logs目录下。控制台日志等级不受此配置影响，始终为DEBUG等级
 user: [] # 用户权限名单，不用自己设，推荐使用 /grant 指令添加用户权限
 

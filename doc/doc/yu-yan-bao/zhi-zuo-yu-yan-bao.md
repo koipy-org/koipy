@@ -8,7 +8,7 @@
 
 ## 语言包示例
 
-你可以前往 `resources/i18n/zh-CN.yml`，在系统默认自带语言包的基础上进行修改。
+你可以前往 `resources/localization/zh-CN.yml`，在系统默认自带语言包的基础上进行修改。
 
 {% hint style="warning" %}
 此默认语言包会经常更新。如果你发现以前制作的语言包无法正常显示，请检查默认语言包是否有更新。

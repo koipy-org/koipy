@@ -429,6 +429,7 @@ runtime:
 2. 默认值：`false`
 3. 这项全局默认值是稳定生效的，也可以在 `rules[].runtime` 中单独开启。
 4. 它依赖后端对 `mihomo://` DNS格式的支持，要求较新的 miaospeed 后端版本。
+5. 当前版本里，顶层 `runtime.enableDNSInject` 会作为默认值参与任务回填；
 {% endtab %}
 
 {% tab title="配置示例" %}

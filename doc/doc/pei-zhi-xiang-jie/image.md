@@ -195,6 +195,7 @@ image:
   pixelThreshold: 2500x3500 # 图片像素阈值，超过阈值则发送原图，否则发送压缩图片，发送压缩图有助于让TG客户端自动下载图片以提升视觉体验。格式：宽的像素x高的像素，例如：2500x3500
   title: 节点测试机器人 # 绘图标题
   logo: true # 是否在绘图的类型中显示协议相关的logo
+  showUnsafeTips: true # 是否在绘图的页脚里显示不安全的后端提示
   watermark: # 水印
     alpha: 32 # 透明度
     angle: -16.0 # 旋转角度
@@ -293,6 +294,32 @@ image:
 ```yaml
 image:
   logo: true
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+## image.showUnsafeTips
+
+{% tabs %}
+{% tab title="解释" %}
+1. 控制结果图页脚是否显示“不安全后端”提示。
+2. 会根据后端 TLS 配置判断是否不安全，典型场景包括：`tls=false`，或者 `tls=true` 但 `skipCertVerify=true`。
+3. 这项配置只影响绘图页脚文案，不影响实际后端连接是否允许执行。
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型：`bool`
+2. 程序内部默认值：`true`
+3. 关闭后，即使后端被判定为不安全，结果图里也不会再显示对应警告提示。
+4. 它适合那些明确知道自己在使用内网、自签或测试环境后端的人。
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+image:
+  showUnsafeTips: true
 ```
 {% endcode %}
 {% endtab %}

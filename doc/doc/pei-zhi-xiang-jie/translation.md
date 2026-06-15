@@ -15,8 +15,8 @@ description: 这里的配置用于切换和加载 koipy 的语言包。
 translation:
   lang: zh_CN
   resources:
-    zh_CN: "./resources/i18n/zh_CN.yml"
-    en_us: "./resources/i18n/en_us.yml"
+    zh_CN: "./resources/localization/zh-CN.yml"
+    en_us: "./resources/localization/en-us.yml"
 ```
 {% endcode %}
 
@@ -48,7 +48,7 @@ translation:
 translation:
   lang: en_us
   resources:
-    en_us: "./resources/i18n/en_us.yml"
+    en_us: "./resources/localization/en-us.yml"
 ```
 {% endcode %}
 {% endtab %}
@@ -61,6 +61,7 @@ translation:
 1. 这是自定义语言资源映射表，格式是“语言键 -> 文件路径”。
 2. 当前实现只会保留值为字符串的条目，其它类型会被忽略。
 3. 如果你提供的键和 `lang` 最终归一化后的值一致，就能选中这套自定义语言包。
+4. 当前模板已统一把语言文件路径示例放在 `resources/localization/` 下。
 {% endtab %}
 
 {% tab title="特性" %}
@@ -76,8 +77,8 @@ translation:
 translation:
   lang: zh_CN
   resources:
-    zh_CN: "./resources/i18n/custom-zh_CN.yml"
-    en_us: "./resources/i18n/custom-en_us.yml"
+    zh_CN: "./resources/localization/custom-zh-CN.yml"
+    en_us: "./resources/localization/custom-en-us.yml"
 ```
 {% endcode %}
 {% endtab %}
@@ -105,7 +106,7 @@ translation:
 translation:
   lang: myteam
   resources:
-    myteam: "./resources/i18n/myteam.yml"
+    myteam: "./resources/localization/myteam.yml"
 ```
 {% endcode %}
 {% endtab %}

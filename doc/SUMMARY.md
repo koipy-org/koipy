@@ -12,6 +12,7 @@
   * [必填配置](doc/pei-zhi-xiang-jie/bi-tian-pei-zhi.md)
   * [bot](doc/pei-zhi-xiang-jie/bot.md)
   * [network](doc/pei-zhi-xiang-jie/network.md)
+  * [subscription](doc/pei-zhi-xiang-jie/subscription.md)
   * [image](doc/pei-zhi-xiang-jie/image.md)
   * [runtime](doc/pei-zhi-xiang-jie/runtime.md)
   * [scriptConfig](doc/pei-zhi-xiang-jie/scriptconfig.md)
