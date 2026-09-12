@@ -2,17 +2,19 @@
 
 如果觉得 koipy 好用的话，不妨请我喝杯咖啡：
 
-## TRX/TRC20
+### Polygon/Matic (推荐)
+
+```
+0x8E4279eE71143F9160661D0bD11E54124bb7F8d6
+```
+
+## TRX/TRC20 （手续费贵不推荐）
 
 ```
 TABvbVbJZFsRqgdivFgPagpqo4uR8aGGN8
 ```
 
-### Polygon/Matic
 
-```
-0x8E4279eE71143F9160661D0bD11E54124bb7F8d6
-```
 
 ### 赞助权益
 
@@ -31,6 +33,3 @@ TABvbVbJZFsRqgdivFgPagpqo4uR8aGGN8
 赞助后，多后端联测中选择后端的数量上限从 3 个变更为无限制。
 
 #### 4. 未来更多专属权益
-
-
-
