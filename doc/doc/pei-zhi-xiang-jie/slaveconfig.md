@@ -28,10 +28,19 @@ slaveConfig:
       path: "/"
       skipCertVerify: true
       tls: true
+      mtls: false
+      clientCertFile: ""
+      clientKeyFile: ""
+      caCertFile: ""
       invoker: "1114514"
       buildtoken: ""
       comment: "本地 miaospeed 后端"
       hidden: false
+      reverse: false
+      reverseListen: ""
+      reverseTLS: false
+      reverseCertFile: ""
+      reverseKeyFile: ""
       option:
         downloadDuration: 8
         downloadThreading: 4
@@ -360,6 +369,127 @@ slaveConfig:
       path: "/koipy/ws"
       tls: true
       skipCertVerify: false
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+## slaveConfig.slaves[n].mtls / clientCertFile / clientKeyFile
+
+{% tabs %}
+{% tab title="解释" %}
+1. 这三项用于开启**双向 TLS（mTLS）**，也就是在 `tls=true` 的基础上，koipy 额外提供自己的客户端证书给后端做协商验证。
+2. `mtls=true` 时，`clientCertFile` 必填。
+3. `clientKeyFile` 可选，如果证书文件本身已经包含私钥，可以留空。
+4. 相对路径以 koipy 的 `HOME_DIR` 为基准解析，而不是当前工作目录。
+5. 后端侧需要同步支持，miaospeed 版本至少 4.7.2。
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型：`bool` + `str`
+2. 默认值：`mtls=false`、`clientCertFile=""`、`clientKeyFile=""`
+3. `mtls=true` 必须同时 `tls=true`，否则启动时会直接报错。
+4. 这一项在早期版本里叫 `mwss`，v2.1.0 起统一改名为 `mtls`，功能不变。如果你的配置里还留着 `mwss`，建议改过来。
+5. mTLS 解决的是「后端也能验证客户端身份」，和 `skipCertVerify` 关注的方向相反，两者不冲突。
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+slaveConfig:
+  slaves:
+    - type: miaospeed
+      id: "mtls-1"
+      token: "secret"
+      address: "backend.example.com:443"
+      path: "/koipy/ws"
+      tls: true
+      skipCertVerify: false
+      mtls: true
+      clientCertFile: "./certs/koipy_mtls_client.crt"
+      clientKeyFile: "./certs/koipy_mtls_client.key"
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+## slaveConfig.slaves[n].caCertFile
+
+{% tabs %}
+{% tab title="解释" %}
+1. 为当前后端额外附加一个可信 CA 证书。
+2. 这个证书会**附加**在 koipy 自带的可信根证书之后，而不是替换它。
+3. 相对路径同样以 `HOME_DIR` 为基准。
+4. 适合用在后端使用自签证书、但你又不想打开 `skipCertVerify` 的场景。
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型：`str`
+2. 默认值：空字符串，表示不额外附加。
+3. 它只影响当前这一个后端，不会影响其它后端。
+4. koipy 自带一套固定的 CA 证书，系统根证书不在信任范围内。
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+slaveConfig:
+  slaves:
+    - type: miaospeed
+      id: "self-signed"
+      token: "secret"
+      address: "10.0.0.5:8765"
+      tls: true
+      skipCertVerify: false
+      caCertFile: "./certs/my_backend_ca.crt"
+```
+{% endcode %}
+{% endtab %}
+{% endtabs %}
+
+## slaveConfig.slaves[n].reverse / reverseListen / reverseTLS / reverseCertFile / reverseKeyFile
+
+{% tabs %}
+{% tab title="解释" %}
+1. 这五项用于**反向连接**（msr-v1）：后端位于 NAT 后方、koipy 无法主动访问到它时，改由后端主动连接 koipy。
+2. `reverse=true` 后，这个后端不再需要 `address` 和 `path`，因为它不需要能被 koipy 访问。
+3. `reverseListen` 是 koipy 侧的监听地址，格式 `host:port`；留空时使用默认的 `0.0.0.0:8766`。
+4. `reverseTLS=true` 时会启用 TLS，此时 `reverseCertFile` 必填，且证书要被后端主机信任（后端不会跳过证书校验）。
+5. `reverseKeyFile` 可选，证书文件已包含私钥时可以留空。
+6. 后端侧启动时需要加 `-connect` 参数，指向一个它能访问到的 koipy 地址。
+{% endtab %}
+
+{% tab title="特性" %}
+1. 类型：`bool` + `str`
+2. 默认值：`reverse=false`、`reverseListen=""`、`reverseTLS=false`、`reverseCertFile=""`、`reverseKeyFile=""`
+3. 每个反向后端必须使用**独立端口**，否则启动时会按后端逐个报端口冲突。
+4. 反向连接没有 IP 白名单，`token` 就是唯一的鉴权。监听在公网时请务必开启 `reverseTLS`。
+5. 反向端没有可探测的地址，因此 `/checkslave` 的网络测量会跳过它，只保留一行占位信息。
+6. `reverseCertFile` 与 `reverseKeyFile` 的相对路径以 `HOME_DIR` 为基准，和 `clientCertFile` 一致。
+{% endtab %}
+
+{% tab title="配置示例" %}
+{% code title="config.yaml" lineNumbers="true" %}
+```yaml
+slaveConfig:
+  slaves:
+    - type: miaospeed
+      id: "nat-backend"
+      token: "secret"
+      reverse: true
+      reverseListen: "0.0.0.0:8766"
+      reverseTLS: true
+      reverseCertFile: "./certs/koipy_tls.crt"
+      reverseKeyFile: "./certs/koipy_tls.key"
+      comment: "NAT 后的后端"
+```
+{% endcode %}
+{% endtab %}
+
+{% tab title="后端侧启动示例" %}
+{% code title="miaospeed" lineNumbers="true" %}
+```bash
+miaospeed -connect wss://your-koipy-host:8766/reverse -token "密码"
 ```
 {% endcode %}
 {% endtab %}

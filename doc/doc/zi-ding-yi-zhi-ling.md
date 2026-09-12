@@ -43,3 +43,14 @@ bot:
 
 ![附加到 invite 的按钮中](../.gitbook/assets/image%20%2812%29.png)
 
+`attachToInvite` 控制的是这条指令是否出现在 `/invite` 的测试项按钮里：
+
+* 自定义指令：只有 `enable: true`、`attachToInvite: true` 且配置了 `rule` 时，才会出现在 invite 的按钮中
+* 内置测试指令（`test`、`analyze`、`topo`、`speed`、`uspeed`）：只要为同名指令设置了 `attachToInvite: false`，对应的内置按钮就会被移除
+
+按钮上显示的文字取自该指令的 `text` 字段。
+
+{% hint style="info" %}
+`attachToInvite: false` 的移除效果从 v2.1.0 起才对内置测试指令生效，在此之前的版本无法通过该配置移除 invite 里的内置按钮。
+{% endhint %}
+

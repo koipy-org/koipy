@@ -39,11 +39,29 @@ callbacks:
 @dataclass
 class KoiCallbackData(DictCFG, ConfigManager):
     message: dict = field(default_factory=dict) # 来自 TG 的消息
+    replyToMessage: dict = field(default_factory=dict) # 被引用的消息，没有引用时为空字典
     config: KoiConfig = field(default_factory=lambda: KoiConfig()) # 你的配置文件
     slaveRequest: SlaveRequest = field(default_factory=lambda: SlaveRequest()) # 测试请求结构体，包含测试的所有细节
     result: dict = field(default_factory=dict) # 测试结果
     addons: dict = field(default_factory=dict) # 保留字段，当前无用
 ```
+
+`replyToMessage` 是 v2.1.0 起新增的字段，用于在引用消息测试的场景中把被引用的那条消息一并带给回调服务器。没有引用时它是一个空字典，因此判断时建议先做非空检查。
+
+## 请求头
+
+bot 发往回调地址的请求固定带有以下请求头：
+
+```http
+Content-Type: application/json
+User-Agent: <koipy 的默认 UA>
+```
+
+请求体通过 `data` 直接发送序列化后的 JSON 字符串。当配置了 `network.httpProxy` 时，回调请求会一并走该代理；回调地址为 `https` 时会使用 koipy 自带的 CA 证书进行校验。
+
+{% hint style="info" %}
+如果回调服务器需要区分来源，可以依据 `User-Agent` 判断，但请注意该值会随 koipy 版本变化，不建议写死。
+{% endhint %}
 
 
 
@@ -90,6 +108,15 @@ Content-Disposition: attachment; filename="test.jpg"
 ```
 
 
+
+## 访客模式
+
+访客模式下的测试同样会触发回调。区别在于「额外内容」的呈现方式：
+
+* 普通模式下，额外内容会作为一条新消息发送到聊天里
+* 访客模式下，bot 被召唤后只能回复一次，因此额外内容会通过**编辑同一条访客内联消息**的方式呈现
+
+除此之外，请求地址、请求体结构与响应约定都完全一致，回调服务器不需要为访客模式做额外适配。
 
 ## 测试例子
 

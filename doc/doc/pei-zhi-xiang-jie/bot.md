@@ -18,7 +18,7 @@ bot:
   proxy: socks5://127.0.0.1:11112 # bot的代理设置，推荐socks5代理，http代理也可以，目前仅支持这两种代理
   ipv6: false #是否使用ipv6连接
   antiGroup: false # 是否开启防拉群模式，默认false
-  strictMode: false # 严格模式，在此模式下，bot的所有按钮只能触发消息对话的那个人点，否则是全体用户权限均可点击。默认false
+  strictMode: false # 严格模式，在此模式下，bot的所有按钮只能触发消息对话的那个人点，否则是全体用户权限均可点击。默认false 。此外，严格模式还被用于检查不支持的代理类型，如果你发现测不了新的代理协议，那就是这个起作用，等待开发者将新的代理协议加入内部名单
   bypassMode: false # 是否将bot设置为旁路模式，设置为旁路模式后，bot原本内置的所有指令都将失效。取而代之仅生效下面bot.commands配置的指令。关于旁路模式有什么用，请查阅在线文档。
   parseMode: MARKDOWN # bot的文本解析模式，可选值如下： [DEFAULT, MARKDOWN, HTML, DISABLED]
   inviteGroup: [] # invite指令权限覆写群组白名单，写上对应群组id，那个群所有人都将可以使用/invite指令，默认只能用户权限使用。 群组id以-100开头
@@ -28,17 +28,17 @@ bot:
   inviteBlacklistDomain: [] # 邀请测试里禁止测试包含的域名远程更新地址，多个用逗号隔开。样例：https://raw.githubusercontent.com/koipy-org/koihub/master/proxypool_domain.txt
   autoResetCommands: false # 是否自动重置bot指令，默认false。开启后，每次启动时会清除原来固定在TG前端的指令
   commands: # bot的指令设置
-    # 特殊情况说明：1. 当name=invite的内置规则 enable=false attachToInvite=false rule=任意，会禁用内置的invite按钮
-    # 2. 当name=invite的内置规则 enable=true attachToInvite=true rule=任意，text=任意，即可更改内置invite按钮的文本
-    # 3. 当name=invite的内置规则 enable=true attachToInvite=true rule=invite内置规则 ，会复写内置invite的规则，后台会有DEBUG日志提示
-    # 内置invite规则名称：['test', 'analyze', 'speed', 'full', 'ping', 'udptype']
+    # invite按钮说明：1. 当name为某个invite内置按钮名且enable=false时，会同时禁用对应指令和invite按钮
+    # 2. 当name为某个invite内置按钮名、enable=true且attachToInvite=false时，仅隐藏invite按钮
+    # 3. enable=true、attachToInvite=true时，非空text会修改按钮文本，rule可指定invite使用的测试规则
+    # invite内置按钮名称：['test', 'analyze', 'speed', 'full', 'ping', 'udptype', 'uspeed']，其中拓扑按钮使用analyze
     - name: "ping" # 指令名称
       title: "PING测试" # 绘图时任务标题
       enable: true # 是否启用该指令， 默认true。未启用时，无法使用该指令。
       rule: "ping" # 将该指令升级为测试指令，写对应的规则名，会读取你配置好的规则，读取不到则判定该指令为普通指令，而非测试指令。普通指令相当于 /help /version 这些，等于仅修改描述文本，而无实际测试功能
       pin: true # 是否固定指令，固定指令后会始终显示在TG客户端的指令列表中，默认false
       text: "" # 指令的提示文本，默认空时自动使用name的值
-      attachToInvite: true # 是否附加到invite指令中选择的按钮，让invite也能享受到此规则背后的script选择，默认true
+      attachToInvite: true # 是否显示在invite按钮中，默认true；内置按钮设为false时仅隐藏按钮，不禁用对应指令
     - name: "nf"
       rule: "nf"
       enable: true
@@ -206,11 +206,14 @@ bot: #此行不需要重复写，配置文件有一行就行
 1. 是否启用严格模式，在此模式下，bot的所有按钮只能触发消息对话的那个人点，否则是全体用户权限均可点击。默认 **false**
 2. 严格模式会对bot的执行策略产生影响，具体查看‘特性’一栏
 3. 严格模式产生的背景是，一个bot的按钮操作可以帮新手进行，这在/invite的操作流程得以体现。
+4. 严格模式还会影响代理类型的过滤行为，这是很多人排查「某个新协议测不了」时会忽略的一环。
 {% endtab %}
 
 {% tab title="特性" %}
 1. 类型： bool
 2. 严格模式下还会对订阅其中的代理类型进行检测和过滤，过滤其中不支持的代理类型。采用白名单模式，白名单目前维护在程序内部，会根据Clash（mihomo）版本迭代更新。
+3. v1.12.0 起，严格模式启用时，解析 Clash 配置里的协议会走白名单模式，只有实际支持的协议才会被读取。
+4. 如果你发现某个新协议测不了，通常就是它还没进白名单，等待开发者补充即可。
 {% endtab %}
 
 {% tab title="配置示例" %}
@@ -417,9 +420,10 @@ bot: #此行不需要重复写，配置文件有一行就行
 1. 类型： list\[Command]
 2. 此配置的默认值为：\[] 即不配置任何自定义指令
 3. 指令可绑定一个\[规则]\([https://koipy.gitbook.io/koipy/doc/guan-yu-gui-ze](https://koipy.gitbook.io/koipy/doc/guan-yu-gui-ze)) ，从而可被视作 “测试”指令，就像自带的 /speed /topo 那样
-4. 当command.name=\<invite的内置规则>、 enable=false 、attachToInvite=false rule=<任意名称>，会禁用内置的invite按钮
-5. 当name=invite的内置规则 enable=true attachToInvite=true rule=任意，text=任意，即可更改内置invite按钮的文本
-6. 当name=invite的内置规则 enable=true attachToInvite=true rule=invite内置规则 ，会复写内置invite的规则，后台会有DEBUG日志提示
+4. 当 `name` 为某个 invite 内置按钮名且 `enable=false` 时，会同时禁用对应指令和 invite 按钮
+5. 当 `name` 为某个 invite 内置按钮名、`enable=true` 且 `attachToInvite=false` 时，仅隐藏 invite 按钮，不禁用对应指令
+6. 当 `enable=true`、`attachToInvite=true` 时，非空 `text` 会修改按钮文本，`rule` 可指定 invite 使用的测试规则
+7. invite 内置按钮名称：\['test', 'analyze', 'speed', 'full', 'ping', 'udptype', 'uspeed']，其中拓扑按钮使用 `analyze`
 {% endtab %}
 
 {% tab title="配置示例" %}
@@ -427,14 +431,14 @@ bot: #此行不需要重复写，配置文件有一行就行
 ```yaml
 bot: #此行不需要重复写，配置文件有一行就行
   commands: # bot的指令设置
-  # 内置invite规则名称：['test', 'analyze', 'speed', 'full', 'ping', 'udptype']
+  # invite内置按钮名称：['test', 'analyze', 'speed', 'full', 'ping', 'udptype', 'uspeed']，其中拓扑按钮使用analyze
   - name: "ping" # 指令名称
     title: "PING测试" # 绘图时任务标题
     enable: true # 是否启用该指令， 默认true。未启用时，无法使用该指令。
     rule: "ping" # 将该指令升级为测试指令，写对应的规则名，会读取你配置好的规则，读取不到则判定该指令为普通指令，而非测试指令。普通指令相当于 /help /version 这些，等于仅修改描述文本，而无实际测试功能
     pin: true # 是否固定指令，固定指令后会始终显示在TG客户端的指令列表中，默认false
     text: "" # 指令的提示文本，默认空时自动使用name的值
-    attachToInvite: true # 是否附加到invite指令中选择的按钮，让invite也能享受到此规则背后的script选择，默认true
+    attachToInvite: true # 是否显示在invite按钮中，默认true；内置按钮设为false时仅隐藏按钮，不禁用对应指令
 ```
 {% endcode %}
 {% endtab %}

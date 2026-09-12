@@ -69,6 +69,38 @@ description: 测试梦开始的地方
 
 * 如果你是通过回复或引用消息、文件发起测试，想要使用过滤器，那么第一个参数（本该是订阅链接或规则）可以用任意字符代替，但不能留空，koipy 不会读取它。
 
+## 测试项按钮
+
+进入测试项选择页面后，除了常规的延迟、速度、流媒体解锁项之外，还有一些值得单独说明的按钮：
+
+* **🕵️‍♂️ 劫持检测**：快速发起「测速劫持检测」。对应内置测试项 `TEST_HIJACK_DETECTION`，它不经过 js 脚本的 macro 兼容层，由 koipy 直接使用 miaospeed 的原生 macro 接口，因此需要 miaospeed 后端版本 > 4.6.2。
+* **上行测试**：v1.12.0 起，`/test` 的测试项里可以选择上行测试，但需要后端把 `option.apiVersion` 写成 `3` 才会真正生效。
+
+## 同族指令
+
+`/test` 是通用入口，bot 还内置了几个带默认测试项的同族指令，用来省去挑选项的步骤：
+
+| 指令 | 说明 |
+| --- | --- |
+| `/test` | 完整测试，测试项由你自己勾选 |
+| `/speed` | 下行速度测试，默认勾选延迟与下行速度项 |
+| `/uspeed` | 上行速度测试，默认勾选延迟与上行速度项 |
+| `/topo` | 拓扑测试，等价于 `/analyze`，默认勾选入口与出口分析项 |
+
+它们的用法、位置参数与指令参数与 `/test` 完全一致。
+
+{% content-ref url="speed.md" %}
+[speed.md](speed.md)
+{% endcontent-ref %}
+
+{% content-ref url="uspeed.md" %}
+[uspeed.md](uspeed.md)
+{% endcontent-ref %}
+
+{% content-ref url="topo.md" %}
+[topo.md](topo.md)
+{% endcontent-ref %}
+
 ## 指令参数
 
 详见：

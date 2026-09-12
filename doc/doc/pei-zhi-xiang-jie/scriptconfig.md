@@ -229,6 +229,32 @@ scriptConfig:
 {% endtab %}
 {% endtabs %}
 
+## 内置脚本清单
+
+发布包在 `resources/scripts/builtin/` 下自带了一批脚本，可以直接在 `content` 里按相对路径引用：
+
+| 脚本文件 | 说明 |
+| --- | --- |
+| `youtube.js` | Youtube 解锁检测 |
+| `disney+.js` | Disney+ 解锁检测 |
+| `openai.js` | OpenAI 解锁检测 |
+| `netflix.js` | Netflix 解锁检测 |
+| `tiktok.js` | Tiktok 解锁检测 |
+| `wikipedia.js` | 维基百科解锁检测 |
+| `Claude.js` | Claude 解锁检测 |
+| `bilibili.js` | Bilibili 解锁检测 |
+| `copilot.js` | 微软 Copilot 解锁检测 |
+| `spotify.js` | Spotify 解锁检测 |
+| `viu.js` | Viu 解锁检测 |
+| `iprisk.js` | IP 风险检测 |
+| `dns.js` | DNS 区域检测 |
+| `hijack.js` | 测速劫持检测 |
+| `ssh22.js` | SSH 22 端口相关检测 |
+
+{% hint style="info" %}
+`hijack.js` 是 v1.12.2 起加入的脚本，用于检测测速是否被劫持，需要 miaospeed 后端版本 > 4.6.2。它与内置测试项 `TEST_HIJACK_DETECTION` 的区别在于：`TEST_HIJACK_DETECTION` 不经过 js 脚本的 macro 兼容层，由 koipy 直接调用 miaospeed 的原生 macro 接口。
+{% endhint %}
+
 ## 预留脚本名称
 
 以下名称会被 koipy 识别为内置测试项。它们既可以写进 `scriptConfig.scripts` 里用于覆写排序或特殊逻辑，也可以直接写进 `rules[].script` 里使用。
@@ -258,6 +284,10 @@ scriptConfig:
 
 {% hint style="info" %}
 如果你只是想在规则里调用这些内置项，其实不一定非要先在 `scriptConfig.scripts` 里写一份；直接在 `rules[].script` 中写这些预留名称，当前源码也能识别。把它们显式写进 `scriptConfig.scripts` 的主要意义，是覆写 `rank`、统一管理、或让某些项出现在可选列表中。
+{% endhint %}
+
+{% hint style="warning" %}
+上行测速相关项（`USPEED_*`）需要后端把 `option.apiVersion` 写成 `3`，并且后端启动时带上 `-upload` 参数，否则不会真正生效。
 {% endhint %}
 
 ## GEOIP 特殊处理

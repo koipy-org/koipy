@@ -106,6 +106,25 @@ docker run -itd \
 koipy/koipy:arm64
 ```
 
+* dev 测试通道镜像：
+
+```bash
+docker run -itd \
+--name=koipy-app \
+--network=host \
+--restart=always \
+-v ./config.yaml:/app/config.yaml \
+koipy/koipy:dev
+```
+
+{% hint style="info" %}
+`dev` 标签对应开发分支，更新最频繁，适合想尝鲜新功能的用户，但可能包含不稳定的改动。追求稳定请使用默认标签。
+{% endhint %}
+
+{% hint style="warning" %}
+从 v2.1.0 起，koipy 不再内置 ffmpeg 相关依赖。如果你需要 `output=video` 生成视频类型的结果图，需要根据运行日志的提示自行安装第三方依赖包。
+{% endhint %}
+
 {% hint style="info" %}
 Windows 用户注意
 

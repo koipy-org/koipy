@@ -1,7 +1,7 @@
 # 配置模板
 
 1. 以下是 koipy 启动配置文件模板，内容按最新版本整理。
-2. 这页只做当前模板的镜像说明，不再作为历史模板的长期参考。
+2. 这页只做当前模板的镜像说明，不能作为历史模板的长期参考。
 3. 如果你要开始测试，请至少配置一个后端。后端可以是本地，也可以是远程服务器。
 
 <details>
@@ -54,17 +54,17 @@ bot:
   inviteBlacklistDomain: [] # 邀请测试里禁止测试包含的域名远程更新地址，多个用逗号隔开。样例：https://raw.githubusercontent.com/koipy-org/koihub/master/proxypool_domain.txt
   autoResetCommands: false # 是否自动重置bot指令，默认false。开启后，每次启动时会清除原来固定在TG前端的指令
   commands: # bot的指令设置
-    # 特殊情况说明：1. 当name=invite的内置规则 enable=false attachToInvite=false rule=任意，会禁用内置的invite按钮
-    # 2. 当name=invite的内置规则 enable=true attachToInvite=true rule=任意，text=任意，即可更改内置invite按钮的文本
-    # 3. 当name=invite的内置规则 enable=true attachToInvite=true rule=invite内置规则 ，会复写内置invite的规则，后台会有DEBUG日志提示
-    # 内置invite规则名称：['test', 'analyze', 'speed', 'full', 'ping', 'udptype', 'uspeed']
+    # invite按钮说明：1. 当name为某个invite内置按钮名且enable=false时，会同时禁用对应指令和invite按钮
+    # 2. 当name为某个invite内置按钮名、enable=true且attachToInvite=false时，仅隐藏invite按钮
+    # 3. enable=true、attachToInvite=true时，非空text会修改按钮文本，rule可指定invite使用的测试规则
+    # invite内置按钮名称：['test', 'analyze', 'speed', 'full', 'ping', 'udptype', 'uspeed']，其中拓扑按钮使用analyze
     - name: "ping" # 指令名称
       title: "PING测试" # 绘图时任务标题
       enable: true # 是否启用该指令， 默认true。未启用时，无法使用该指令。
       rule: "ping" # 将该指令升级为测试指令，写对应的规则名，会读取你配置好的规则，读取不到则判定该指令为普通指令，而非测试指令。普通指令相当于 /help /version 这些，等于仅修改描述文本，而无实际测试功能
       pin: true # 是否固定指令，固定指令后会始终显示在TG客户端的指令列表中，默认false
       text: "" # 指令的提示文本，默认空时自动使用name的值
-      attachToInvite: true # 是否附加到invite指令中选择的按钮，让invite也能享受到此规则背后的script选择，默认true
+      attachToInvite: true # 是否显示在invite按钮中，默认true；内置按钮设为false时仅隐藏按钮，不禁用对应指令
     - name: "nf"
       rule: "nf"
       enable: true
@@ -368,7 +368,7 @@ slaveConfig: # 后端配置
   # 1. 并发模式（所有后端同时开始测速）
   # 2. 流水线模式（当第一个测速后端测完第一个节点，第二个后端才开始发送测速任务，以此类推）
   # 3. 串行模式（前一个后端全部测完后下一个才开始）
-  speedScheduling: pipeline
+  speedScheduling: pipeline 
   geoClustering: true # 是否开启拓扑结果的聚类排序，默认为true。开启后会将结果相同或相近的后端排列在一起，提高绘图时的单元格合并率，使图片更整洁。
   slaves: # 后端列表，注意是数组类型
     - type: miaospeed # 固定值，目前只这个支持
@@ -378,10 +378,23 @@ slaveConfig: # 后端配置
       path: "/" # websocket的连接路径，只有路径正确才能正确连接，请填写复杂的路径，防止路径被爆破。可以有效避免miaospeed服务被网络爬虫扫描到.
       skipCertVerify: true # 跳过证书验证，如果你不知道在做什么，请写此默认值
       tls: true # 启用加密连接，如果你不知道在做什么，请写此默认值
+      mtls: false # 启用双向TLS WebSocket客户端证书认证，默认false，需注意必须同时tls=true，否则启动会报错
+      clientCertFile: "" # mwss=true时必填，客户端证书文件路径
+      clientKeyFile: "" # mwss=true时可选，客户端私钥文件路径；证书文件已包含私钥时可留空
+      caCertFile: "" # 可选，为当前后端添加额外信任的CA证书；这会附加在koipy自带可信根证书后面
       invoker: "1114514" # bot调用者，请删掉此行或者随便填一个字符串
       buildtoken: "MIAOKO4|580JxAo049R|GEnERAl|1X571R930|T0kEN" # 默认编译token  如果你不知道在做什么，请写此默认值
       comment: "本地miaospeed后端" # 后端备注，显示在bot页面的
       hidden: false # 是否隐藏此后端
+      # 以下5项用于反向连接（msr-v1）：后端在 NAT 后面时，由后端主动访问 koipy。
+      # 启动后端时需要加 -connect，指向本机可被后端访问到的地址，例如：
+      #   miaospeed -connect wss://your-koipy-host:8766/reverse -token "密码"
+      # 反向连接没有 IP 白名单，token 就是唯一的门禁，所以监听在公网时请务必开启 reverseTLS。
+      reverse: false # 是否启用反向连接，默认false；开启后该后端不再需要address/path，也不需要能被koipy访问
+      reverseListen: "" # 反向监听地址，格式 host:port，例如 "0.0.0.0:8766"；留空则用默认0.0.0.0:8766。每个反向后端必须用独立端口，否则启动时按后端逐个报冲突
+      reverseTLS: false # 反向监听是否启用TLS；开启后必须填 reverseCertFile，且证书要被后端主机信任（后端不会跳过证书校验）
+      reverseCertFile: "" # reverseTLS=true时必填，koipy侧服务器证书路径；相对路径以koipy的主程序所在目录为基准
+      reverseKeyFile: "" # 可选，服务器私钥路径；证书文件已包含私钥时可留空
       # proxy: http://username:password@proxy.example.com:7890 # 为此后端设置专门的http代理（暂时仅支持http代理）
       option: # 可选配置，请注意部分值设置得太大会不生效，比如taskTimeout设置成10000以上，就不会生效。
         downloadDuration: 8 # 测试时长

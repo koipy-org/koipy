@@ -26,3 +26,16 @@ bot:
 * 享受所有测试指令的指令参数支持，也享受过滤器支持。
 * `/re` 指令仍然生效。
 
+## 关于 attachToInvite
+
+`attachToInvite` 决定这条映射出来的指令是否出现在 `/invite` 的测试项按钮中：
+
+* 设为 `true` 时，被邀请方可以选择这条指令对应的规则进行测试
+* 设为 `false` 时，该选项不会出现在 invite 的按钮里
+
+对于内置测试指令（`test`、`analyze`、`topo`、`speed`、`uspeed`），同样可以通过为同名指令设置 `attachToInvite: false` 来移除 invite 中的内置按钮，按钮文案取自该指令的 `text` 字段。
+
+{% hint style="info" %}
+对内置测试指令的移除效果从 v2.1.0 起被支持。
+{% endhint %}
+

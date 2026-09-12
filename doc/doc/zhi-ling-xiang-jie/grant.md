@@ -16,3 +16,37 @@
 * 可以通过在 /subinfo 指令中使用规则名作为参数查询流量信息
 * 可以选择任意后端进行测试
 * ~~装逼~~
+
+## 用法
+
+```
+/grant <TG UID>
+```
+
+也可以直接回复一条目标消息，然后发送 `/grant`，此时不需要写 UID。
+
+## 取消授权
+
+```
+/ungrant <TG UID>
+```
+
+`/ungrant` 是 `/grant` 的反向操作，会把目标从用户名单里移除。同样支持回复消息的方式。
+
+## 特性
+
+* 需要**管理员权限**。
+* 支持一次授权多个目标，UID 之间用空格隔开。
+* 这里修改的是 `user` 名单，不是 `admin`。管理员请直接改配置文件里的 `admin`。
+* 修改后会立即写入配置文件并重载。
+* 配置里的 `user` 名单同时支持写 UID 和用户名（大小写不敏感）。
+
+## 相关配置
+
+{% content-ref url="../pei-zhi-xiang-jie/user.md" %}
+[user.md](../pei-zhi-xiang-jie/user.md)
+{% endcontent-ref %}
+
+{% content-ref url="../pei-zhi-xiang-jie/admin.md" %}
+[admin.md](../pei-zhi-xiang-jie/admin.md)
+{% endcontent-ref %}
