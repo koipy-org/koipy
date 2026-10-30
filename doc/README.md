@@ -1,5 +1,15 @@
 # koipy主页
 
+## 🔔文档迁移通知
+
+由于gitbook存在性能问题，浏览文档过程会造成卡顿，现已将文档迁移至：
+
+{% embed url="https://doc.koipy.dev" %}
+
+此文档站点会继续保留一段时间，但**不再更新**
+
+##
+
 ## 介绍
 
 koipy 读作 `/ˈkɒpi/`，音同 "copy"，也可以读作 `/ˈkɒpaɪ/`。
@@ -26,13 +36,11 @@ koipy 后续版本的代码保持**闭源**。如果你愿意接受闭源产品�
 * 给代理服务器（节点）进行网络拓扑分析（检测入口和出口）
 * 以**访客模式**在任意聊天中被召唤即可发起测试，无需将bot拉入群组
 
-
-
 ## 结果展示
 
 ![连通性测试+速度测试](https://raw.githubusercontent.com/koipy-org/koipy/master/resources/image/example.png)
 
-![拓扑测试](.gitbook/assets/image%20%2818%29.png)
+![拓扑测试](<.gitbook/assets/image (18).png>)
 
 ## 如何开始
 
