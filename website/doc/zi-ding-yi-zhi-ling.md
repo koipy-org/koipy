@@ -38,13 +38,13 @@ bot:
 
 类似于这样的效果：
 
-![固定在 TG 前端页面](/assets/image-11.png)
+![固定在 TG 前端页面](../assets/image-11.png)
 
 ## 附加到 invite 的按钮中
 
 可实现这样的效果：
 
-![附加到 invite 的按钮中](/assets/image-12.png)
+![附加到 invite 的按钮中](../assets/image-12.png)
 
 `attachToInvite` 控制的是这条指令是否出现在 `/invite` 的测试项按钮里：
 

@@ -2,7 +2,7 @@
 
 如果你遇到以下情况：
 
-![](/assets/image-17.png)
+![](../../assets/image-17.png)
 
 通常是因为 koipy 仅**原生支持** Clash 配置格式的订阅文件。
 
@@ -30,7 +30,7 @@ https://www.google.com
 
 示例：
 
-![](/assets/image-15.png)
+![](../../assets/image-15.png)
 
 ## 订阅解析
 
@@ -47,7 +47,7 @@ koipy bot 会按 YAML 格式解析内容，并仅读取其中的 `proxies` 字�
 
 使用方式请参阅 koipy 的配置文件。配置好订阅转换后，就可以实现以下效果：
 
-![](/assets/image-16.png)
+![](../../assets/image-16.png)
 
 ### 订阅转换注意事项
 

@@ -9,7 +9,7 @@ koipy 需要激活码（授权码），获取激活码方式如下：
 
 你的 `bot-token` 前面的数字就是 `botid`，例如：
 
-![botID 示例](/assets/image-7.png)
+![botID 示例](./assets/image-7.png)
 
 ## 激活条件
 

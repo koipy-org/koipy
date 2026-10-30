@@ -6,7 +6,7 @@
 
 ping测试入口如图所示
 
-![](/assets/image-14.png)
+![](../../assets/image-14.png)
 
 ### 测试项详情：
 

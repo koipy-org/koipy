@@ -14,7 +14,7 @@ koipy的拓扑测试可以用来查看节点**入口** 与**出口** 之间的�
 
 在了解拓扑测试之前，我们需要了解一下传统的典型网络拓扑图：
 
-![作者 NetworkTopologies.png: Maksim / 衍生作品: Malyszkz - 基于如下对象的个人作品： NetworkTopologies.png，公有领域，https://commons.wikimedia.org/w/index.php?curid=15006915](/assets/NetworkTopologies.svg)
+![作者 NetworkTopologies.png: Maksim / 衍生作品: Malyszkz - 基于如下对象的个人作品： NetworkTopologies.png，公有领域，https://commons.wikimedia.org/w/index.php?curid=15006915](../../assets/NetworkTopologies.svg)
 
 在这里，我们引出两个名词（入口和出口）
 
@@ -38,19 +38,19 @@ koipy的拓扑测试可以用来查看节点**入口** 与**出口** 之间的�
 
 如果一个域名能够被DNS服务器解析出多个IP结果，那么会在拓扑结果图中显示的簇为 IP的数量
 
-![多IP结果解析示意图](/assets/image-2.png)
+![多IP结果解析示意图](../../assets/image-2.png)
 
 ### 双栈测试
 
 如果一个域名能够被DNS服务器解析出IPV4和IPV6地址，那么会在拓扑结果图中栈显示为数字4和6
 
-![双栈结果解析示意图（红色框部分）](/assets/image-4.png)
+![双栈结果解析示意图（红色框部分）](../../assets/image-4.png)
 
 ### 出口数量
 
 一份配置文件中，往往有多个入口地址，koipy会将相同的入口地址的节点进行统计，统计得到的节点数量即为出口数量，入口会进行编号，每个编号的入口对应出口分析中的入口编号，下图展现的是，编号1的入口和其对应的出口节点
 
-![](/assets/image-6.png)
+![](../../assets/image-6.png)
 
 ### 入口详细地区
 
@@ -82,7 +82,7 @@ koipy的拓扑测试可以用来查看节点**入口** 与**出口** 之间的�
 
 koipy会对出口IP进行统计分析，对**相同的出口IP**进行累加，形成节点簇，在大部分情况下，如果这些节点簇大于1，那么我们可以近似认为（下面会讲到特殊情况）这些节点**是复用的**
 
-![节点复用示意图（三个节点出口IP均相同，来自两个入口）](/assets/image.png)
+![节点复用示意图（三个节点出口IP均相同，来自两个入口）](../../assets/image.png)
 
 复用原因：
 
@@ -95,7 +95,7 @@ koipy会对出口IP进行统计分析，对**相同的出口IP**进行累加，�
 
 坏掉了自然就无法获取到出口IP，这个时候koipy会把它们合并，簇会大于1，无法确定复用情况
 
-![编号27和28的节点不可用，被合并的示意图](/assets/image-1.png)
+![编号27和28的节点不可用，被合并的示意图](../../assets/image-1.png)
 
 2. 代理服务器的负载均衡
 
@@ -111,7 +111,7 @@ koipy会对出口IP进行统计分析，对**相同的出口IP**进行累加，�
 
 绿色方框表示8\~17号节点AS编号均相同
 
-![](/assets/image-13.png)
+![](../../assets/image-13.png)
 
 ## IP信息查询
 

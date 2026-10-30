@@ -132,7 +132,7 @@ bot: #此行不需要重复写，配置文件有一行就行
 2. 群组id获取方法，在想要的群组发送/id，就会有bot给你发送相关的群组信息，其中就有群组id
 3.  群组id如图所示
 
-    ![](/assets/image-22.png)
+    ![](../../assets/image-22.png)
 
 
 <p class="gb-tab">特性</p>

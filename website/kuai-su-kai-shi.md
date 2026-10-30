@@ -148,7 +148,7 @@ docker logs -f koipy-app
 
 不出意外你将看到类似提示：
 
-![](/assets/image-10.png)
+![](./assets/image-10.png)
 
 更多配置设置请查看：
 

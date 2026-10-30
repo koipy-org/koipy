@@ -33,7 +33,7 @@ koipy 后续版本的代码保持**闭源**。如果你愿意接受闭源产品�
 
 ![连通性测试+速度测试](https://raw.githubusercontent.com/koipy-org/koipy/master/resources/image/example.png)
 
-![拓扑测试](/assets/image-18.png)
+![拓扑测试](./assets/image-18.png)
 
 ## 如何开始
 

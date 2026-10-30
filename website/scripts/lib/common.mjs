@@ -16,7 +16,9 @@ export const LEGACY_DOC_ROOT =
 
 export const VITEPRESS_DIR = path.join(SITE_ROOT, '.vitepress')
 export const SIDEBAR_FILE = path.join(VITEPRESS_DIR, 'sidebar.json')
-export const PUBLIC_ASSETS = path.join(SITE_ROOT, 'public', 'assets')
+
+/** 文档配图目录（md 里用相对路径引用，GitHub 预览也能正常显示） */
+export const ASSETS_DIR = path.join(SITE_ROOT, 'assets')
 
 /** 生成/工具目录，不参与站点内容 */
 export const KEEP_DIRS = new Set([

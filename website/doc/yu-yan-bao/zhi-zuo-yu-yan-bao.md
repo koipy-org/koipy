@@ -4,7 +4,7 @@
 
 你只需要替换相应的文本即可：
 
-![](/assets/image-8.png)
+![](../../assets/image-8.png)
 
 ## 语言包示例
 

@@ -18,10 +18,10 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import {
+  ASSETS_DIR,
   KEEP_DIRS,
   KEEP_FILES,
   LEGACY_DOC_ROOT,
-  PUBLIC_ASSETS,
   SIDEBAR_FILE,
   SITE_ROOT,
   SKIP_FILES,
@@ -191,6 +191,8 @@ function convertGitbook(text) {
 
 function rewriteLinks(text, fileRel) {
   const dir = path.posix.dirname(fileRel)
+  // 配图放在站点根的 assets/，md 里按自身位置写相对路径
+  const assetPrefix = path.posix.relative(dir === '.' ? '' : dir, 'assets')
 
   return text.replace(
     /(!?)\[([^\]]*)\]\(([^()\s]+(?:\s[^()]*)?)\)/g,
@@ -202,7 +204,8 @@ function rewriteLinks(text, fileRel) {
 
       if (bang) {
         const name = safeName(path.posix.basename(abs))
-        return `![${label}](/assets/${name})`
+        const prefix = assetPrefix.startsWith('.') ? assetPrefix : './' + assetPrefix
+        return `![${label}](${prefix}/${name})`
       }
       if (!/\.md$/i.test(abs)) return all
 
@@ -260,17 +263,17 @@ function main() {
   const assetDir = path.join(LEGACY_DOC_ROOT, '.gitbook', 'assets')
   let assets = 0
   if (fs.existsSync(assetDir)) {
-    fs.mkdirSync(PUBLIC_ASSETS, { recursive: true })
+    fs.mkdirSync(ASSETS_DIR, { recursive: true })
     for (const f of fs.readdirSync(assetDir)) {
       const src = path.join(assetDir, f)
       if (!fs.statSync(src).isFile()) continue
-      fs.copyFileSync(src, path.join(PUBLIC_ASSETS, safeName(f)))
+      fs.copyFileSync(src, path.join(ASSETS_DIR, safeName(f)))
       assets++
     }
   }
 
   console.log(`✓ 转换 ${converted} 篇文档`)
-  console.log(`✓ 复制 ${assets} 个资源 -> public/assets`)
+  console.log(`✓ 复制 ${assets} 个资源 -> assets/`)
   console.log(
     `  提示：KEEP_DIRS = ${[...KEEP_DIRS].join(', ')}；已存在的 ${[...KEEP_FILES].join(', ')} 不会被覆盖`
   )

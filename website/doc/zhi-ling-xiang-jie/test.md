@@ -32,25 +32,25 @@ description: 测试梦开始的地方
 
 可以回复一个订阅链接进行测试，如图：
 
-![](/assets/image-23.png)
+![](../../assets/image-23.png)
 
 ### 用法5:
 
 回复一个文件进行测试，如图：
 
-![](/assets/image-24.png)
+![](../../assets/image-24.png)
 
 ### 用法6:
 
 同时也支持通过引用一条消息/文件进行测试：
 
-![](/assets/image-25.png)
+![](../../assets/image-25.png)
 
-![](/assets/image-26.png)
+![](../../assets/image-26.png)
 
-![](/assets/image-27.png)
+![](../../assets/image-27.png)
 
-![](/assets/image-28.png)
+![](../../assets/image-28.png)
 
 ## 位置参数
 

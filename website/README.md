@@ -12,7 +12,8 @@ website/
 │   ├── config.mts        # 站点配置：导航、侧边栏、搜索
 │   ├── sidebar.json      # 侧边栏（手工维护，也可由迁移脚本生成）
 │   └── theme/            # 默认主题 + 少量自定义样式
-├── public/               # 静态资源（logo、favicon、文档配图）
+├── public/               # 只在 config 里用到的静态资源（logo、favicon）
+├── assets/               # 文档配图（md 里用相对路径引用）
 ├── scripts/
 │   ├── import-from-gitbook.mjs   # 一次性迁移工具（会覆盖 md，谨慎）
 │   └── lib/common.mjs
@@ -60,6 +61,8 @@ git add website && git commit -m "docs: ..." && git push
 
 - 站内链接用绝对路径：`[配置模板](/pei-zhi-mu-ban)`、`[network](/doc/pei-zhi-xiang-jie/network)`
 - 目录首页写 `index.md`，链接写 `/doc/xxx/`
-- 图片放 `public/assets/`，引用 `/assets/xxx.png`
+- 图片放 `assets/`，**md 里用相对路径**：根目录的 md 写 `./assets/x.png`，
+  `doc/xxx.md` 写 `../assets/x.png`。这样 GitHub 网页预览也能正常显示图片
+  （写成 `/assets/x.png` 只有站点能看，GitHub 会 404）
 - 提示块用 VitePress 容器：`::: tip 提示` / `::: warning 注意` / `::: danger 警告`
 - 表格、代码块、任务列表都是标准 Markdown，直接写
