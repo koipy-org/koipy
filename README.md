@@ -5,5 +5,5 @@ koipy是[fulltclash](https://github.com/AirportR/FullTclash)的下游分支。�
 
 ## 文档
 
-最新版使用文档: https://koipy.gitbook.io/koipy
+最新版使用文档: https://doc.koipy.dev
 
