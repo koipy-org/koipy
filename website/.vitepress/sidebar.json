@@ -1,0 +1,399 @@
+[
+  {
+    "text": "开始",
+    "items": [
+      {
+        "text": "koipy主页",
+        "link": "/"
+      },
+      {
+        "text": "快速开始",
+        "link": "/kuai-su-kai-shi"
+      },
+      {
+        "text": "配置模板",
+        "link": "/pei-zhi-mu-ban"
+      },
+      {
+        "text": "激活",
+        "link": "/ji-huo"
+      },
+      {
+        "text": "友情链接",
+        "link": "/you-qing-lian-jie"
+      }
+    ]
+  },
+  {
+    "text": "文档",
+    "items": [
+      {
+        "text": "配置详解",
+        "link": "/doc/pei-zhi-xiang-jie/",
+        "items": [
+          {
+            "text": "必填配置",
+            "link": "/doc/pei-zhi-xiang-jie/bi-tian-pei-zhi"
+          },
+          {
+            "text": "bot",
+            "link": "/doc/pei-zhi-xiang-jie/bot"
+          },
+          {
+            "text": "network",
+            "link": "/doc/pei-zhi-xiang-jie/network"
+          },
+          {
+            "text": "subscription",
+            "link": "/doc/pei-zhi-xiang-jie/subscription"
+          },
+          {
+            "text": "image",
+            "link": "/doc/pei-zhi-xiang-jie/image"
+          },
+          {
+            "text": "runtime",
+            "link": "/doc/pei-zhi-xiang-jie/runtime"
+          },
+          {
+            "text": "scriptConfig",
+            "link": "/doc/pei-zhi-xiang-jie/scriptconfig"
+          },
+          {
+            "text": "webapi",
+            "link": "/doc/pei-zhi-xiang-jie/webapi"
+          },
+          {
+            "text": "slaveConfig",
+            "link": "/doc/pei-zhi-xiang-jie/slaveconfig"
+          },
+          {
+            "text": "subconverter",
+            "link": "/doc/pei-zhi-xiang-jie/subconverter"
+          },
+          {
+            "text": "admin",
+            "link": "/doc/pei-zhi-xiang-jie/admin"
+          },
+          {
+            "text": "translation",
+            "link": "/doc/pei-zhi-xiang-jie/translation"
+          },
+          {
+            "text": "log-level",
+            "link": "/doc/pei-zhi-xiang-jie/log-level"
+          },
+          {
+            "text": "user",
+            "link": "/doc/pei-zhi-xiang-jie/user"
+          }
+        ],
+        "collapsed": true
+      },
+      {
+        "text": "指令详解",
+        "link": "/doc/zhi-ling-xiang-jie/",
+        "items": [
+          {
+            "text": "/test",
+            "link": "/doc/zhi-ling-xiang-jie/test"
+          },
+          {
+            "text": "/speed",
+            "link": "/doc/zhi-ling-xiang-jie/speed"
+          },
+          {
+            "text": "/uspeed",
+            "link": "/doc/zhi-ling-xiang-jie/uspeed"
+          },
+          {
+            "text": "/topo",
+            "link": "/doc/zhi-ling-xiang-jie/topo"
+          },
+          {
+            "text": "/invite",
+            "link": "/doc/zhi-ling-xiang-jie/invite"
+          },
+          {
+            "text": "/rule",
+            "link": "/doc/zhi-ling-xiang-jie/rule"
+          },
+          {
+            "text": "/log",
+            "link": "/doc/zhi-ling-xiang-jie/log"
+          },
+          {
+            "text": "/remove",
+            "link": "/doc/zhi-ling-xiang-jie/remove"
+          },
+          {
+            "text": "/help",
+            "link": "/doc/zhi-ling-xiang-jie/help"
+          },
+          {
+            "text": "/about",
+            "link": "/doc/zhi-ling-xiang-jie/about"
+          },
+          {
+            "text": "/version",
+            "link": "/doc/zhi-ling-xiang-jie/version"
+          },
+          {
+            "text": "/id",
+            "link": "/doc/zhi-ling-xiang-jie/id"
+          },
+          {
+            "text": "/demo",
+            "link": "/doc/zhi-ling-xiang-jie/demo"
+          },
+          {
+            "text": "/license",
+            "link": "/doc/zhi-ling-xiang-jie/license"
+          },
+          {
+            "text": "/lang",
+            "link": "/doc/zhi-ling-xiang-jie/lang"
+          },
+          {
+            "text": "/re",
+            "link": "/doc/zhi-ling-xiang-jie/re"
+          },
+          {
+            "text": "/checkslave",
+            "link": "/doc/zhi-ling-xiang-jie/checkslave"
+          },
+          {
+            "text": "/subinfo",
+            "link": "/doc/zhi-ling-xiang-jie/subinfo"
+          },
+          {
+            "text": "/reload",
+            "link": "/doc/zhi-ling-xiang-jie/reload"
+          },
+          {
+            "text": "/reboot",
+            "link": "/doc/zhi-ling-xiang-jie/reboot"
+          },
+          {
+            "text": "/get、/set、/del",
+            "link": "/doc/zhi-ling-xiang-jie/cfg"
+          },
+          {
+            "text": "/setantigroup",
+            "link": "/doc/zhi-ling-xiang-jie/setantigroup"
+          },
+          {
+            "text": "/leave",
+            "link": "/doc/zhi-ling-xiang-jie/leave"
+          },
+          {
+            "text": "/grant",
+            "link": "/doc/zhi-ling-xiang-jie/grant"
+          },
+          {
+            "text": "/nightshift",
+            "link": "/doc/zhi-ling-xiang-jie/nightshift"
+          },
+          {
+            "text": "/panel",
+            "link": "/doc/zhi-ling-xiang-jie/panel"
+          },
+          {
+            "text": "指令参数",
+            "link": "/doc/zhi-ling-xiang-jie/zhi-ling-can-shu"
+          },
+          {
+            "text": "位置参数",
+            "link": "/doc/zhi-ling-xiang-jie/wei-zhi-can-shu"
+          }
+        ],
+        "collapsed": true
+      },
+      {
+        "text": "自定义指令",
+        "link": "/doc/zi-ding-yi-zhi-ling"
+      },
+      {
+        "text": "关于规则",
+        "link": "/doc/guan-yu-gui-ze/",
+        "items": [
+          {
+            "text": "指令映射",
+            "link": "/doc/guan-yu-gui-ze/zhi-ling-ying-she"
+          }
+        ],
+        "collapsed": true
+      },
+      {
+        "text": "回调功能",
+        "link": "/doc/hui-tiao-gong-neng"
+      },
+      {
+        "text": "以旁路模式运行bot",
+        "link": "/doc/yi-pang-lu-mo-shi-yun-xing-bot"
+      },
+      {
+        "text": "访客模式",
+        "link": "/doc/fang-ke-mo-shi"
+      },
+      {
+        "text": "MiaoSpeed后端",
+        "link": "/doc/miaospeed-hou-duan/",
+        "items": [
+          {
+            "text": "介绍",
+            "link": "/doc/miaospeed-hou-duan/jie-shao"
+          },
+          {
+            "text": "快速体验",
+            "link": "/doc/miaospeed-hou-duan/kuai-su-ti-yan"
+          },
+          {
+            "text": "搭建指南",
+            "link": "/doc/miaospeed-hou-duan/da-jian-zhi-nan/",
+            "items": [
+              {
+                "text": "docker使用",
+                "link": "/doc/miaospeed-hou-duan/da-jian-zhi-nan/docker-shi-yong"
+              }
+            ]
+          },
+          {
+            "text": "测试脚本编写",
+            "link": "/doc/miaospeed-hou-duan/ce-shi-jiao-ben-bian-xie/",
+            "items": [
+              {
+                "text": "第一个测试脚本",
+                "link": "/doc/miaospeed-hou-duan/ce-shi-jiao-ben-bian-xie/di-yi-ge-ce-shi-jiao-ben"
+              },
+              {
+                "text": "预设函数",
+                "link": "/doc/miaospeed-hou-duan/ce-shi-jiao-ben-bian-xie/yu-she-han-shu/",
+                "items": [
+                  {
+                    "text": "发起POST请求",
+                    "link": "/doc/miaospeed-hou-duan/ce-shi-jiao-ben-bian-xie/yu-she-han-shu/fa-qi-post-qing-qiu"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "text": "MMDB数据库",
+            "link": "/doc/miaospeed-hou-duan/mmdb-shu-ju-ku"
+          },
+          {
+            "text": "历史过往",
+            "link": "/doc/miaospeed-hou-duan/li-shi-guo-wang"
+          }
+        ],
+        "collapsed": true
+      },
+      {
+        "text": "语言包",
+        "link": "/doc/yu-yan-bao/",
+        "items": [
+          {
+            "text": "导入语言包",
+            "link": "/doc/yu-yan-bao/dao-ru-yu-yan-bao"
+          },
+          {
+            "text": "制作语言包",
+            "link": "/doc/yu-yan-bao/zhi-zuo-yu-yan-bao"
+          }
+        ],
+        "collapsed": true
+      },
+      {
+        "text": "问题答疑",
+        "link": "/doc/wen-ti-da-yi/",
+        "items": [
+          {
+            "text": "无法获取订阅",
+            "link": "/doc/wen-ti-da-yi/wu-fa-huo-qu-ding-yue"
+          },
+          {
+            "text": "关于连通性测试",
+            "link": "/doc/wen-ti-da-yi/guan-yu-lian-tong-xing-ce-shi"
+          },
+          {
+            "text": "关于拓扑测试",
+            "link": "/doc/wen-ti-da-yi/guan-yu-tuo-pu-ce-shi"
+          },
+          {
+            "text": "后端安全性",
+            "link": "/doc/wen-ti-da-yi/hou-duan-an-quan-xing"
+          }
+        ],
+        "collapsed": true
+      },
+      {
+        "text": "更新日志",
+        "link": "/doc/geng-xin-ri-zhi/",
+        "items": [
+          {
+            "text": "v2.1.X",
+            "link": "/doc/geng-xin-ri-zhi/v2.1.x"
+          },
+          {
+            "text": "v2.0.X",
+            "link": "/doc/geng-xin-ri-zhi/v2.0.x"
+          },
+          {
+            "text": "v1.12.X",
+            "link": "/doc/geng-xin-ri-zhi/v1.12.x"
+          },
+          {
+            "text": "v1.11.X",
+            "link": "/doc/geng-xin-ri-zhi/v1.11.x"
+          },
+          {
+            "text": "v1.10.X",
+            "link": "/doc/geng-xin-ri-zhi/v1.10.x"
+          },
+          {
+            "text": "v1.9.X",
+            "link": "/doc/geng-xin-ri-zhi/v1.9.x"
+          },
+          {
+            "text": "v1.8.X",
+            "link": "/doc/geng-xin-ri-zhi/v1.8.x"
+          },
+          {
+            "text": "v1.7.X",
+            "link": "/doc/geng-xin-ri-zhi/v1.7.x"
+          },
+          {
+            "text": "v1.6.X",
+            "link": "/doc/geng-xin-ri-zhi/v1.6.x"
+          },
+          {
+            "text": "v1.5.X",
+            "link": "/doc/geng-xin-ri-zhi/v1.5.x"
+          },
+          {
+            "text": "v1.4.2",
+            "link": "/doc/geng-xin-ri-zhi/v1.4.2"
+          },
+          {
+            "text": "v1.4",
+            "link": "/doc/geng-xin-ri-zhi/v1.4"
+          },
+          {
+            "text": "v1.3",
+            "link": "/doc/geng-xin-ri-zhi/v1.3"
+          }
+        ],
+        "collapsed": true
+      },
+      {
+        "text": "合作开发",
+        "link": "/doc/he-zuo-kai-fa"
+      },
+      {
+        "text": "赞助支持",
+        "link": "/doc/zan-zhu-zhi-chi"
+      }
+    ]
+  }
+]

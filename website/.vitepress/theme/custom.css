@@ -1,0 +1,21 @@
+/**
+ * GitBook 的 {% tab title="..." %} 在转换后渲染为 <p class="gb-tab">，
+ * 这里把它做成小标签的样子，避免和正文标题混淆。
+ */
+.vp-doc p.gb-tab {
+  display: inline-block;
+  margin: 22px 0 10px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0.02em;
+  color: var(--vp-c-brand-1);
+  background-color: var(--vp-c-brand-soft);
+  border-radius: 999px;
+}
+
+/* 首页的示例截图不需要圆角阴影以外的额外样式 */
+.vp-doc img {
+  border-radius: 6px;
+}

@@ -1,0 +1,11 @@
+[Unit]
+Description=每分钟检查 koipy 文档站是否有更新
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=1min
+AccuracySec=10s
+Unit=koipy-docs.service
+
+[Install]
+WantedBy=timers.target

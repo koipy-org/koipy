@@ -1,0 +1,15 @@
+{
+  "name": "koipy-website",
+  "private": true,
+  "type": "module",
+  "description": "koipy 文档站（VitePress）",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "migrate": "node scripts/import-from-gitbook.mjs --force"
+  },
+  "devDependencies": {
+    "vitepress": "2.0.0-alpha.21"
+  }
+}

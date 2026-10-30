@@ -1,0 +1,12 @@
+[Unit]
+Description=拉取 koipy 仓库并重新构建文档站
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# 按实际路径修改
+ExecStart=/opt/koipy/website/deploy/update.sh
+User=root
+StandardOutput=journal
+StandardError=journal
